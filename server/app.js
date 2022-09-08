@@ -10,6 +10,8 @@ const connectToDB = require("./src/db/Connect");
 // Middleware imports
 const errorHandler = require("./src/middleware/ErrorHandler");
 const pathNotFoundHandler = require("./src/middleware/PathNotFound");
+//Routes imports
+const authRoutes = require("./src/routes/AuthRoutes")
 
 const PORT = process.env.PORT || 5000;
 
