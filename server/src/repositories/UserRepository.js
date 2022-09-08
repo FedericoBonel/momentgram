@@ -1,8 +1,13 @@
 const User = require("../models/User");
+const { deleteManyMomentsBy } = require("../repositories/MomentRepository");
+const {
+    deleteManyCommentsBy,
+} = require("../repositories/MomentCommentRepository");
+const { deleteManyLikesBy } = require("../repositories/MomentLikeRepository");
+const { deleteManyFollowersBy } = require("../repositories/FollowerRepository");
 
 const getUserBy = async (filters = {}) => {
-    const foundUser = await User.findOne(filters);
-    return foundUser;
+    return await User.findOne(filters);
 };
 
 const createUser = async (newUser) => {
@@ -20,8 +25,41 @@ const updateUserBy = async (filters, updatedUser) => {
     return savedUser;
 };
 
-// TODO Delete user, should access moments repository and delete those that where created by the user to delete
-// Same with MomentComments, Followers, and Momentlikes
-// Basically a cascade operation
+const deleteUserBy = async (filters) => {
+    const deletedUser = await User.findOneAndDelete(filters);
 
-module.exports = { getUserBy, createUser, updateUserBy };
+    if (!deletedUser) return null;
+
+    // Cascade the operation to all the rest of collections
+
+    const deletedMoments = await deleteManyMomentsBy({
+        createdBy: deletedUser._id,
+    });
+
+    const deletedLikes = await deleteManyLikesBy({
+        createdBy: deletedUser._id,
+    });
+
+    const deletedComments = await deleteManyCommentsBy({
+        createdBy: deletedUser._id,
+    });
+
+    const deletedFollowing = await deleteManyFollowersBy({
+        follower: deletedUser._id,
+    });
+
+    const deletedFollowers = await deleteManyFollowersBy({
+        followed: deletedUser._id,
+    });
+
+    return {
+        deletedUser: deletedUser._id,
+        deletedMoments: deletedMoments.deletedCount,
+        deletedLikes: deletedLikes.deletedCount,
+        deletedComments: deletedComments.deletedCount,
+        deletedFollowing: deletedFollowing.deletedCount,
+        deletedFollowers: deletedFollowers.deletedCount,
+    };
+};
+
+module.exports = { getUserBy, createUser, updateUserBy, deleteUserBy };

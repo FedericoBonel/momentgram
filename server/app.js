@@ -10,6 +10,7 @@ const connectToDB = require("./src/db/Connect");
 // Middleware imports
 const errorHandler = require("./src/middleware/ErrorHandler");
 const pathNotFoundHandler = require("./src/middleware/PathNotFound");
+const requestLogger = require("./src/middleware/Logger")
 //Routes imports
 const authRoutes = require("./src/routes/AuthRoutes")
 
@@ -22,7 +23,7 @@ const app = express();
 app.use(cors());
 
 // Prev routing middleware
-app.use(express.json());
+app.use(requestLogger, express.json());
 
 // Routes
 app.use(`${API_BASE_URL}/auth`, authRoutes)

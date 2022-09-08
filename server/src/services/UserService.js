@@ -18,6 +18,7 @@ const EXPIRATION_TIME = process.env.EXPIRATION_TIME;
 const getUserById = async (id) => {
     const foundUser = await getUserBy({ id: id });
 
+    // TODO Check if user is unvalid, if so delete it and register the new one
     if (!foundUser) {
         throw new NotFoundError(`User with id: ${id} not found`);
     }
@@ -61,8 +62,16 @@ const updateUserById = async (id, updatedUser) => {
 const authenticateUser = async (email, password) => {
     const savedUser = await getUserBy({ email: email });
 
-    if (!(savedUser && await bcryptjs.compare(password, savedUser.password))) {
-        throw new UnauthorizedError(`User with incorrect email or password`);
+    if (
+        !(
+            savedUser &&
+            savedUser.validated &&
+            (await bcryptjs.compare(password, savedUser.password))
+        )
+    ) {
+        throw new UnauthorizedError(
+            `User not validated yet or with incorrect email or password`
+        );
     }
 
     const newToken = generateToken(savedUser);
