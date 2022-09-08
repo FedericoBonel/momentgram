@@ -14,6 +14,7 @@ const pathNotFoundHandler = require("./src/middleware/PathNotFound");
 const authRoutes = require("./src/routes/AuthRoutes")
 
 const PORT = process.env.PORT || 5000;
+const API_BASE_URL = process.env.API_BASE_URL || "/api/v1"
 
 const app = express();
 
@@ -24,7 +25,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-
+app.use(`${API_BASE_URL}/auth`, authRoutes)
 
 // Error handling
 app.use(pathNotFoundHandler);

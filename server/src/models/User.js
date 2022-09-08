@@ -24,24 +24,24 @@ const userSchema = new mongoose.Schema(
         firstName: {
             type: String,
             minlength: 2,
-            maxlength: 30,
+            maxlength: 50,
             required: [true, "Please provide a first name"],
         },
         lastName: {
             type: String,
             minlength: 2,
-            maxlength: 30,
+            maxlength: 50,
             required: [true, "Please provide a last name"],
         },
         birthDate: {
             type: Date,
             required: [true, "Please provide a birth date"],
             validate: {
-                validator: (v) => v.getFullYear() < new Date().getFullYear,
+                validator: (v) => v.getFullYear() < new Date().getFullYear(),
                 message: (props) => `${props.value} is an invalid birth date`,
             },
         },
-        validated: { type: Boolean },
+        validated: { type: Boolean, default: false },
     },
     { timestamps: true }
 );

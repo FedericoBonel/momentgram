@@ -26,7 +26,7 @@ const getUserById = async (id) => {
 };
 
 const registerUser = async (newUser) => {
-    const userWithEmail = getUserBy({ email: newUser.email });
+    const userWithEmail = await getUserBy({ email: newUser.email });
 
     if (userWithEmail) {
         throw new BadRequestError(`User with that email exists already`);
@@ -61,7 +61,7 @@ const updateUserById = async (id, updatedUser) => {
 const authenticateUser = async (email, password) => {
     const savedUser = await getUserBy({ email: email });
 
-    if (!savedUser || (await bcryptjs.compare(password, savedUser.password))) {
+    if (!(savedUser && await bcryptjs.compare(password, savedUser.password))) {
         throw new UnauthorizedError(`User with incorrect email or password`);
     }
 

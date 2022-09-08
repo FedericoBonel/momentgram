@@ -1,7 +1,8 @@
 const User = require("../models/User");
 
 const getUserBy = async (filters = {}) => {
-    return await User.findOne(filters);
+    const foundUser = await User.findOne(filters);
+    return foundUser;
 };
 
 const createUser = async (newUser) => {
