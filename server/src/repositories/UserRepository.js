@@ -1,10 +1,8 @@
 const User = require("../models/User");
-const { deleteManyMomentsBy } = require("../repositories/MomentRepository");
-const {
-    deleteManyCommentsBy,
-} = require("../repositories/MomentCommentRepository");
-const { deleteManyLikesBy } = require("../repositories/MomentLikeRepository");
-const { deleteManyFollowersBy } = require("../repositories/FollowerRepository");
+const { deleteManyMomentsBy } = require("./MomentRepository");
+const { deleteManyCommentsBy } = require("./MomentCommentRepository");
+const { deleteManyLikesBy } = require("./MomentLikeRepository");
+const { deleteManyFollowersBy } = require("./FollowerRepository");
 
 const getUserBy = async (filters = {}) => {
     return await User.findOne(filters);

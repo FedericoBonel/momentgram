@@ -2,8 +2,12 @@ const Moment = require("../models/Moment");
 const { deleteManyCommentsBy } = require("./MomentCommentRepository");
 const { deleteManyLikesBy } = require("./MomentLikeRepository");
 
-const getMomentBy = async (filters) => {
-    return await Moment.find(filters);
+const getMomentBy = async (filters, skip = 0, limit = 20) => {
+    return await Moment.find(filters).skip(skip).limit(limit);
+};
+
+const getNumberMomentsBy = async (filters) => {
+    return await Moment.count(filters);
 };
 
 const createMoment = async (newMoment) => {
@@ -51,6 +55,7 @@ const deleteManyMomentsBy = async (filters) => {
 
 module.exports = {
     getMomentBy,
+    getNumberMomentsBy,
     createMoment,
     updateMomentBy,
     deleteMomentBy,

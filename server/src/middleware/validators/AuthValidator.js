@@ -30,8 +30,13 @@ const validateUserSchema = [
     body("lastName")
         .isString("Please provide a last name")
         .isLength({ min: 2, max: 50 })
-        .withMessage("lastName must be 2, to 50 characters long"),
+        .withMessage("lastName must be 2 to 50 characters long"),
     body("birthDate").isISO8601().withMessage("Please provide a valid date"),
+    body("description")
+        .isString()
+        .isLength({ min: 1, max: 150 })
+        .withMessage("Description must be 1 to 150 characters long")
+        .optional(),
     checkValidation,
 ];
 

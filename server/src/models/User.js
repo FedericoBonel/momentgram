@@ -41,6 +41,11 @@ const userSchema = new mongoose.Schema(
                 message: (props) => `${props.value} is an invalid birth date`,
             },
         },
+        description: {
+            type: String,
+            minlength: 1,
+            maxlength: 150,
+        },
         validated: { type: Boolean, default: false },
     },
     { timestamps: true }

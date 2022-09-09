@@ -5,7 +5,13 @@ const {
     getUserBy,
     createUser,
     updateUserBy,
+    deleteUserBy,
 } = require("../repositories/UserRepository");
+const {
+    getNumberFollowersOf,
+    getNumberFollowingOf,
+} = require("../services/FollowerService");
+const { getNumberMomentsOf } = require("../services/MomentService");
 const {
     NotFoundError,
     BadRequestError,
@@ -16,20 +22,31 @@ const SECRET = process.env.SECRET;
 const EXPIRATION_TIME = process.env.EXPIRATION_TIME;
 
 const getUserById = async (id) => {
-    const foundUser = await getUserBy({ id: id });
+    const foundUser = await getUserBy({ _id: id });
 
-    // TODO Check if user is unvalid, if so delete it and register the new one
     if (!foundUser) {
         throw new NotFoundError(`User with id: ${id} not found`);
     }
 
-    return foundUser;
+    const numberOfFollowers = await getNumberFollowersOf(foundUser._id);
+    const numberOfFollowing = await getNumberFollowingOf(foundUser._id);
+    const numberMoments = await getNumberMomentsOf(foundUser._id);
+
+    return {
+        _id: foundUser._id,
+        username: foundUser.username,
+        email: foundUser.username,
+        description: foundUser.description,
+        numberFollowers: numberOfFollowers,
+        numberFollowing: numberOfFollowing,
+        numberMoments: numberMoments,
+    };
 };
 
 const registerUser = async (newUser) => {
     const userWithEmail = await getUserBy({ email: newUser.email });
 
-    if (userWithEmail) {
+    if (userWithEmail && userWithEmail.validated) {
         throw new BadRequestError(`User with that email exists already`);
     }
 
@@ -92,9 +109,14 @@ const generateToken = (user) => {
     });
 };
 
+const deleteUserById = async (id) => {
+    return await deleteUserBy({ _id: id });
+};
+
 module.exports = {
     getUserById,
     registerUser,
     updateUserById,
     authenticateUser,
+    deleteUserById,
 };
