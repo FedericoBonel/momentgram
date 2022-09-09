@@ -2,7 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const { SuccessPayload } = require("../payloads");
 
 const { getUserById } = require("../services/UserService");
-const { getMomentsOf } = require("../services/FollowerService");
+const { getMomentsOf } = require("../services/MomentService");
 const {
     getFollowersOf,
     getFollowingsOf,
@@ -34,4 +34,13 @@ const getUserFollowings = async (req, res) => {
     res.status(StatusCodes.OK).json(new SuccessPayload(followings))
 }
 
-module.exports = { getUser, getUserFollowers, getUserFollowings };
+const getUserMoments = async (req, res) => {
+    const { id: userId } = req.params;
+    const { page, limit } = req.query;
+
+    const moments = await getMomentsOf(userId, page && page, limit && limit);
+
+    res.status(StatusCodes.OK).json(new SuccessPayload(moments))
+}
+
+module.exports = { getUser, getUserFollowers, getUserFollowings, getUserMoments };

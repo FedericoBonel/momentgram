@@ -4,6 +4,10 @@ const getCommentBy = async (filters) => {
     return await MomentComment.find(filters);
 };
 
+const getNumberCommentsBy = async (filters) => {
+    return await MomentComment.count(filters);
+}
+
 const createComment = async (newComment) => {
     return await MomentComment.create(newComment);
 };
@@ -24,6 +28,7 @@ const deleteManyCommentsBy = async (filters) => {
 
 module.exports = {
     getCommentBy,
+    getNumberCommentsBy,
     createComment,
     updateCommentBy,
     deleteCommentBy,
