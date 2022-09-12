@@ -14,6 +14,7 @@ const requestLogger = require("./src/middleware/Logger");
 //Routes imports
 const authRoutes = require("./src/routes/AuthRoutes");
 const userRoutes = require("./src/routes/UserRoutes");
+const momentRoutes = require("./src/routes/MomentRoutes");
 
 const PORT = process.env.PORT || 5000;
 const API_BASE_URL = process.env.API_BASE_URL || "/api/v1";
@@ -24,11 +25,12 @@ const app = express();
 app.use(cors());
 
 // Prev routing middleware
-app.use(requestLogger, express.json());
+app.use(requestLogger, express.static("public"), express.json());
 
 // Routes
 app.use(`${API_BASE_URL}/auth`, authRoutes);
 app.use(`${API_BASE_URL}/users`, userRoutes);
+app.use(`${API_BASE_URL}/moments`, momentRoutes);
 
 // Error handling
 app.use(pathNotFoundHandler);

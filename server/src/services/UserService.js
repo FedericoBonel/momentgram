@@ -10,6 +10,7 @@ const {
 const {
     getNumberFollowersOf,
     getNumberFollowingOf,
+    checkFollows,
 } = require("../services/FollowerService");
 const { getNumberMomentsOf } = require("../services/MomentService");
 const {
@@ -21,26 +22,14 @@ const {
 const SECRET = process.env.SECRET;
 const EXPIRATION_TIME = process.env.EXPIRATION_TIME;
 
-const getUserById = async (id) => {
+const getUserById = async (id, userId = null) => {
     const foundUser = await getUserBy({ _id: id });
 
     if (!foundUser) {
         throw new NotFoundError(`User with id: ${id} not found`);
     }
 
-    const numberOfFollowers = await getNumberFollowersOf(foundUser._id);
-    const numberOfFollowing = await getNumberFollowingOf(foundUser._id);
-    const numberMoments = await getNumberMomentsOf(foundUser._id);
-
-    return {
-        _id: foundUser._id,
-        username: foundUser.username,
-        email: foundUser.username,
-        description: foundUser.description,
-        numberFollowers: numberOfFollowers,
-        numberFollowing: numberOfFollowing,
-        numberMoments: numberMoments,
-    };
+    return await createUserBody(foundUser, userId);
 };
 
 const registerUser = async (newUser) => {
@@ -110,7 +99,33 @@ const generateToken = (user) => {
 };
 
 const deleteUserById = async (id) => {
-    return await deleteUserBy({ _id: id });
+    const deleteResult = await deleteUserBy({ _id: id });
+
+    if (!deleteResult) {
+        throw new NotFoundError(`User with id ${id} not found`);
+    }
+
+    return deleteResult;
+};
+
+const createUserBody = async (foundUser, userId) => {
+    const numberOfFollowers = await getNumberFollowersOf(foundUser._id);
+    const numberOfFollowing = await getNumberFollowingOf(foundUser._id);
+    const numberMoments = await getNumberMomentsOf(foundUser._id);
+    const isFollowing = userId
+        ? await checkFollows(userId, foundUser._id)
+        : null;
+
+    return {
+        _id: foundUser._id,
+        username: foundUser.username,
+        email: foundUser.username,
+        description: foundUser.description,
+        numberFollowers: numberOfFollowers,
+        numberFollowing: numberOfFollowing,
+        numberMoments: numberMoments,
+        isFollowing: isFollowing,
+    };
 };
 
 module.exports = {

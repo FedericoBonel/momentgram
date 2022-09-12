@@ -1,15 +1,19 @@
 const MomentLike = require("../models/MomentLike");
 
-const getLikeBy = async (filters) => {
-    return await MomentLike.find(filters);
+const getLikeBy = async (filters, skip = 0, limit = 20) => {
+    return await MomentLike.find(filters)
+        .skip(skip)
+        .limit(limit)
+        .populate("createdBy moment")
+        .sort("-createdAt");
 };
 
 const getNumberLikesBy = async (filters) => {
-    return await MomentLike.count(filters)
-}
+    return await MomentLike.count(filters);
+};
 
-const createLike = async (newComment) => {
-    return await MomentLike.create(newComment);
+const createLike = async (newLike) => {
+    return await MomentLike.create(newLike);
 };
 
 const updateLikeBy = async (filters, newComment) => {
@@ -24,7 +28,7 @@ const deleteLikeBy = async (filters) => {
 
 const deleteManyLikesBy = async (filters) => {
     return await MomentLike.deleteMany(filters);
-}
+};
 
 module.exports = {
     getLikeBy,
@@ -32,5 +36,5 @@ module.exports = {
     createLike,
     updateLikeBy,
     deleteLikeBy,
-    deleteManyLikesBy
+    deleteManyLikesBy,
 };

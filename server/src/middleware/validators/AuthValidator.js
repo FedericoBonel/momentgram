@@ -19,7 +19,7 @@ const validateUserSchema = [
         .isString()
         .withMessage("Please provide a name")
         .isLength({ min: 4, max: 20 })
-        .withMessage("Name must be a string with length 4 to 20"),
+        .withMessage("Username must be a string with length 4 to 20"),
     body("password").isString().withMessage("Please provide a password"),
     body("email").isEmail().withMessage("Please provide a valid email"),
     body("firstName")

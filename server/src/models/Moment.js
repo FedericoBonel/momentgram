@@ -9,14 +9,6 @@ const imageSchema = new mongoose.Schema({
         type: Number,
         required: [true, "Please provide an image size in bytes"],
     },
-    height: {
-        type: Number,
-        required: [true, "Please provide an image height"],
-    },
-    width: {
-        type: Number,
-        required: [true, "Please provide an image width"],
-    },
 });
 
 const momentSchema = new mongoose.Schema(
@@ -30,9 +22,14 @@ const momentSchema = new mongoose.Schema(
         description: {
             type: String,
             maxlength: 256,
-            required: [true, "Please provide a description"],
         },
-        img: imageSchema,
+        img: {
+            type: [imageSchema],
+            validate: [
+                (array) => array.length < 5,
+                `{PATH} Exceeds the limit of images allowed`,
+            ],
+        },
         createdBy: {
             type: mongoose.Types.ObjectId,
             ref: "User",
@@ -41,6 +38,6 @@ const momentSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-const momentModel = mongoose.model("Moment", momentSchema)
+const momentModel = mongoose.model("Moment", momentSchema);
 
 module.exports = momentModel;

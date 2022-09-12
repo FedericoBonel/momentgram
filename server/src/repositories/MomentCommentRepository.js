@@ -1,19 +1,22 @@
 const MomentComment = require("../models/MomentComment");
 
-const getCommentBy = async (filters) => {
-    return await MomentComment.find(filters);
+const getCommentBy = async (filters, skip = 0, limit = 20) => {
+    return await MomentComment.find(filters)
+        .skip(skip)
+        .limit(limit)
+        .populate("createdBy");
 };
 
 const getNumberCommentsBy = async (filters) => {
     return await MomentComment.count(filters);
-}
+};
 
 const createComment = async (newComment) => {
     return await MomentComment.create(newComment);
 };
 
-const updateCommentBy = async (filters, newComment) => {
-    return await MomentComment.findOneAndUpdate(filters, newComment, {
+const updateCommentBy = async (filters, comment) => {
+    return await MomentComment.findOneAndUpdate(filters, comment, {
         new: true,
     });
 };

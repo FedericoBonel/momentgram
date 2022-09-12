@@ -2,20 +2,31 @@ const Moment = require("../models/Moment");
 const { deleteManyCommentsBy } = require("./MomentCommentRepository");
 const { deleteManyLikesBy } = require("./MomentLikeRepository");
 
-const getMomentBy = async (filters, skip = 0, limit = 20) => {
-    return await Moment.find(filters).skip(skip).limit(limit);
+const getMomentBy = async (
+    filters,
+    skip = 0,
+    limit = 20,
+    order = "createdAt"
+) => {
+    return await Moment.find(filters)
+        .skip(skip)
+        .limit(limit)
+        .populate("createdBy")
+        .sort(order);
 };
 
 const getNumberMomentsBy = async (filters) => {
     return await Moment.count(filters);
 };
 
-const createMoment = async (newMoment) => {
+const create = async (newMoment) => {
     return await Moment.create(newMoment);
 };
 
 const updateMomentBy = async (filters, updatedMoment) => {
-    return await Moment.findOneAndUpdate(filters, updatedMoment, { new: true });
+    return await Moment.findOneAndUpdate(filters, updatedMoment, {
+        new: true,
+    }).populate("createdBy");
 };
 
 const deleteMomentBy = async (filters) => {
@@ -24,7 +35,6 @@ const deleteMomentBy = async (filters) => {
     if (!deletedMoment) return null;
 
     // Cascade the operation
-
     const deletedComments = await deleteManyCommentsBy({
         moment: deletedMoment._id,
     });
@@ -56,7 +66,7 @@ const deleteManyMomentsBy = async (filters) => {
 module.exports = {
     getMomentBy,
     getNumberMomentsBy,
-    createMoment,
+    create,
     updateMomentBy,
     deleteMomentBy,
     deleteManyMomentsBy,
