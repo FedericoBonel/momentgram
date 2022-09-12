@@ -1,5 +1,5 @@
 const path = require("path");
-const {nanoid} = require("nanoid");
+const { nanoid } = require("nanoid");
 
 const {
     getNumberMomentsBy,
@@ -101,14 +101,17 @@ const getMomentsOf = async (userId, page = 1, limit = 20) => {
     const storedMoments = await getMomentBy({ createdBy: userId }, skip, limit);
 
     // Get the number of likes and comments
-
     return await createListOfMomentBodies(storedMoments);
 };
 
-const momentExists = async (userId, momentId) => {
-    return (
-        (await getMomentBy({ createdBy: userId, _id: momentId })).length !== 0
-    );
+const getMomentByUser = async (userId, momentId) => {
+    const savedMoment = await getMomentBy({ createdBy: userId, _id: momentId });
+
+    if (savedMoment.length === 0) {
+        throw new NotFoundError(`Moment with id ${momentId} not found`)
+    }
+
+    return savedMoment;
 };
 
 const getNumberMomentsOf = async (userId) => {
@@ -162,8 +165,8 @@ const createSingleMomentBody = async (momentDoc) => {
 
     return {
         ...momentDoc.toObject(),
-        numberComments: numberComments,
-        numberLikes: numberLikes,
+        numberComments,
+        numberLikes,
         createdBy: {
             _id: momentDoc.createdBy._id,
             username: momentDoc.createdBy.username,
@@ -177,7 +180,7 @@ const addImagesTo = async (userId, momentId, images) => {
 
     let newImages = [];
     for (let file of fileNames) {
-        const extension = path.extname(images[file].name)
+        const extension = path.extname(images[file].name);
         images[file].id = nanoid();
         const dir = path.join(
             __dirname,
@@ -203,7 +206,7 @@ const addImagesTo = async (userId, momentId, images) => {
 
         newImages.push(savedImage);
     }
-    await addImageTo(userId, momentId, newImages);
+    return await addImageTo(userId, momentId, newImages);
 };
 
 const addImageTo = async (userId, momentId, images) => {
@@ -229,5 +232,5 @@ module.exports = {
     deleteMomentById,
     updateMomentById,
     addImagesTo,
-    momentExists,
+    getMomentByUser,
 };

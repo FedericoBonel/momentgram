@@ -87,5 +87,5 @@ module.exports = {
     getUserMoments,
     followUser,
     unfollowUser,
-    deleteAccount
+    deleteAccount,
 };

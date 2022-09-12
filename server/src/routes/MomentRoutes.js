@@ -14,7 +14,7 @@ const {
     getComments,
     updateComment,
     deleteComment,
-    uploadImage
+    uploadImage,
 } = require("../controllers/MomentController");
 const authenticateToken = require("../middleware/JwtAuth");
 const {
@@ -25,12 +25,14 @@ const {
     validateExtensions,
     checkFileExists,
     checkFileLimit,
-    checkMomentExists
+    checkMomentExists,
 } = require("../middleware/fileupload");
 
 const momentRoutes = Router();
 
 momentRoutes.use(authenticateToken);
+
+// Moments -------------------------------------------------------------
 momentRoutes
     .route("/")
     .get(getMoments)
@@ -40,6 +42,7 @@ momentRoutes
     .get(getMomentById)
     .put(validateMomentSchema, updateMoment)
     .delete(deleteMoment);
+// Moment images -------------------------------------------------------------
 momentRoutes
     .route("/:id/images")
     .post(
@@ -50,11 +53,13 @@ momentRoutes
         checkFileLimit,
         uploadImage
     );
+// Moment likes -------------------------------------------------------------
 momentRoutes
     .route("/:id/likes")
     .get(getMomentLikes)
     .post(likeMoment)
     .delete(stopLikingMoment);
+// Moment comments -------------------------------------------------------------
 momentRoutes
     .route("/:id/comments")
     .post(validateMomentCommentSchema, addComment)

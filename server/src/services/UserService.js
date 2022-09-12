@@ -109,22 +109,22 @@ const deleteUserById = async (id) => {
 };
 
 const createUserBody = async (foundUser, userId) => {
-    const numberOfFollowers = await getNumberFollowersOf(foundUser._id);
-    const numberOfFollowing = await getNumberFollowingOf(foundUser._id);
+    const numberFollowers = await getNumberFollowersOf(foundUser._id);
+    const numberFollowing = await getNumberFollowingOf(foundUser._id);
     const numberMoments = await getNumberMomentsOf(foundUser._id);
     const isFollowing = userId
         ? await checkFollows(userId, foundUser._id)
-        : null;
+        : undefined;
 
     return {
         _id: foundUser._id,
         username: foundUser.username,
         email: foundUser.username,
         description: foundUser.description,
-        numberFollowers: numberOfFollowers,
-        numberFollowing: numberOfFollowing,
-        numberMoments: numberMoments,
-        isFollowing: isFollowing,
+        numberFollowers,
+        numberFollowing,
+        numberMoments,
+        isFollowing,
     };
 };
 

@@ -13,14 +13,18 @@ const authenticateToken = require("../middleware/JwtAuth");
 
 const userRouter = Router();
 
+// Users -------------------------------------------------------------
 userRouter.route("/").delete(authenticateToken, deleteAccount);
 userRouter.route("/:id").get(authenticateToken, getUser);
+// User followers -------------------------------------------------------------
 userRouter
     .route("/:id/followers")
     .get(getUserFollowers)
     .post(authenticateToken, followUser)
     .delete(authenticateToken, unfollowUser);
+// User followings -------------------------------------------------------------
 userRouter.route("/:id/followings").get(getUserFollowings);
+// User moments -------------------------------------------------------------
 userRouter.route("/:id/moments").get(getUserMoments);
 
 module.exports = userRouter;

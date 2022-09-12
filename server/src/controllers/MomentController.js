@@ -1,5 +1,4 @@
 const { StatusCodes } = require("http-status-codes");
-const path = require("path");
 
 const { SuccessPayload } = require("../payloads");
 const {
@@ -159,10 +158,10 @@ const uploadImage = async (req, res) => {
     const { _id: userId } = req.user;
     const { id: momentId } = req.params;
     const files = req.files;
-    
+
     const updatedMoment = await addImagesTo(userId, momentId, files);
 
-    res.status(StatusCodes.OK).json(new SuccessPayload(updatedMoment));
+    res.status(StatusCodes.CREATED).json(new SuccessPayload(updatedMoment));
 };
 
 module.exports = {
