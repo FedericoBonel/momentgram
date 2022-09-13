@@ -1,0 +1,22 @@
+.container_home {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--color-background);
+}
+
+.container_home-heroimg {
+    object-fit: fill;
+    max-height: 450px;
+    border-radius: 108px;
+}
+
+
+
+@media screen and (max-width: 1024px) {
+    .container_home-heroimg {
+        display: none;
+    }
+}

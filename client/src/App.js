@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Navigate,
+} from "react-router-dom";
+import { useState } from "react";
+
+import { UserContext } from "./context/Context";
+import "./App.css";
+import PrivateRoute from "./routes/PrivateRoute";
+import PublicRoute from "./routes/PublicRoute";
+import { Home, SignUp } from "./pages";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [user, setUser] = useState(null);
+
+    return (
+        <Router>
+            <UserContext.Provider value={{ user, setUser }}>
+                <Routes>
+                    {/* Home page */}
+                    <Route path="/" element={<Home />} />
+                    {/* Private routes */}
+                    <Route path="/" element={<PrivateRoute />}>
+                        <Route path="/dashboard" />
+                        <Route path="/users/:username" />
+                    </Route>
+                    {/* Public routes */}
+                    <Route path="/" element={<PublicRoute />}>
+                        <Route path="/register" element={<SignUp />}/>
+                        <Route path="/users/verify/:verificationCode"/>
+                    </Route>
+                    {/* Errors */}
+                    <Route path="/error/:code" />
+                    <Route path="*" element={<Navigate to="/error/404" />} />
+                </Routes>
+            </UserContext.Provider>
+        </Router>
+    );
 }
 
 export default App;

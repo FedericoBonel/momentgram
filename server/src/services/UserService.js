@@ -36,12 +36,15 @@ const getUserById = async (id, userId = null) => {
 
 const registerUser = async (newUser, host) => {
     const userWithEmail = await getUserBy({ email: newUser.email });
+    const userWithUsername = await getUserBy({ username: newUser.username });
 
-    if (userWithEmail && userWithEmail.validated) {
-        throw new BadRequestError(`User with that email exists already`);
-    }
-    if (userWithEmail && !userWithEmail.validated) {
-        deleteUserBy({_id: userWithEmail._id});
+    if (userWithEmail || userWithUsername) {
+        if (userWithEmail?.validated || userWithUsername?.validated) {
+            throw new BadRequestError(`User with that email or username exists already`);
+        } else {
+            deleteUserBy({ _id: userWithEmail?._id });
+            deleteUserBy({ _id: userWithUsername?._id });
+        }
     }
 
     newUser.password = await bcryptjs.hash(newUser.password, 12);
@@ -98,10 +101,13 @@ const verifyUserAccount = async (verificationCode) => {
 
     savedUser.validated = true;
 
-    await updateUserBy({
-        _id: savedUser._id,
-        verificationCode: savedUser.verificationCode,
-    }, savedUser);
+    await updateUserBy(
+        {
+            _id: savedUser._id,
+            verificationCode: savedUser.verificationCode,
+        },
+        savedUser
+    );
 
     return { username: savedUser.username, firstName: savedUser.firstName };
 };
@@ -126,7 +132,6 @@ const updateUserById = async (id, updatedUser) => {
 
     return await createUserBody(savedUser, null);
 };
-
 
 const deleteUserById = async (id) => {
     const deleteResult = await deleteUserBy({ _id: id });

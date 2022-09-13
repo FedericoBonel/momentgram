@@ -1,0 +1,95 @@
+.container_loginform {
+    margin: 32px;
+    padding: 32px;
+    background: white;
+    border: 1px solid lightgray;
+    text-align: center;
+    width: 352px;
+}
+
+.container_loginform-title {
+    margin: 32px 0;
+    font-size: var(--size-mgtitle);
+    font-weight: 500;
+}
+
+.container_loginform a {
+    text-decoration: none;
+    color: var(--color-button);
+    font-weight: 600;
+}
+
+.container_loginform form {
+    display: flex;
+    flex-direction: column;
+}
+
+.container_loginform form > input {
+    margin: 4px auto;
+    padding: 8px;
+    font-size: 0.8rem;
+    width: 268px;
+    border-radius: var(--radius-btn);
+    border: 1px solid lightgray;
+    background: var(--color-background);
+}
+
+.container_loginform-submit {
+    width: 268px;
+    margin: 8px auto;
+    background: var(--color-button);
+    color: white;
+    border: none;
+    border-radius: var(--radius-btn);
+    padding: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.container_loginform-submit:hover {
+    filter: brightness(1.1);
+}
+
+.container_loginform-submit:disabled {
+    pointer-events: none;
+    filter: opacity(0.5);
+}
+
+.container_loginform-alert {
+    color: var(--color-alert);
+    font-size: 0.9rem;
+}
+
+.container_loginform-divisor {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    color: gray;
+    font-size: 0.9rem;
+    margin: 8px;
+}
+
+.container_loginform-divisor div {
+    width: 15%;
+}
+
+.container_loginform-divisor div > hr {
+    background-color: lightgray;
+    border: 0.5px solid transparent;
+}
+
+@media screen and (max-width: 425px) {
+    .container_loginform {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+}
