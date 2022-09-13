@@ -1,3 +1,3 @@
-# Happy times
+# MomentGram
 
-This repository is an memories sharing product developed using a MERN stack.
+This repository is a memories sharing application (an instagram clone) developed using the MERN tech stack.
