@@ -11,7 +11,7 @@ const {
 const { getFollowingsOf } = require("./FollowerService");
 const { getNumberCommentsOf } = require("./MomentCommentService");
 const { getNumberLikesOf } = require("./MomentLikeService");
-const { NotFoundError } = require("../errors");
+const { NotFoundError, BadRequestError } = require("../errors");
 
 /**
  * Creates a new moment for a specific user
@@ -210,6 +210,13 @@ const addImagesTo = async (userId, momentId, images) => {
 };
 
 const addImageTo = async (userId, momentId, images) => {
+    // verify the moment does not have images
+    const savedMoment = await getAMomentById(momentId);
+
+    if (savedMoment.img) {
+        throw new BadRequestError(`Moment with id ${momentId} already has images`)
+    }
+
     const updatedMoment = await updateMomentBy(
         { createdBy: userId, _id: momentId },
         { $push: { img: images } }

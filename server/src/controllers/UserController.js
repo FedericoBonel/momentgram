@@ -1,7 +1,12 @@
 const { StatusCodes } = require("http-status-codes");
 const { SuccessPayload } = require("../payloads");
 
-const { getUserById, deleteUserById } = require("../services/UserService");
+const {
+    getUserById,
+    deleteUserById,
+    updateUserById,
+    verifyUserAccount,
+} = require("../services/UserService");
 const { getMomentsOf } = require("../services/MomentService");
 const {
     getFollowersOf,
@@ -80,6 +85,23 @@ const deleteAccount = async (req, res) => {
     res.status(StatusCodes.OK).json(new SuccessPayload(deletedResult));
 };
 
+const updateUser = async (req, res) => {
+    const { _id: userId } = req.user;
+    const updatedUser = req.body;
+
+    const savedUser = await updateUserById(userId, updatedUser);
+
+    res.status(StatusCodes.OK).json(new SuccessPayload(savedUser));
+};
+
+const verifyUser = async (req, res) => {
+    const { verificationCode } = req.params;
+
+    const verifiedUser = await verifyUserAccount(verificationCode);
+
+    res.status(StatusCodes.OK).json(new SuccessPayload(verifiedUser));
+};
+
 module.exports = {
     getUser,
     getUserFollowers,
@@ -88,4 +110,6 @@ module.exports = {
     followUser,
     unfollowUser,
     deleteAccount,
+    updateUser,
+    verifyUser,
 };

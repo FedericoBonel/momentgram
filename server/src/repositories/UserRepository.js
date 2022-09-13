@@ -10,7 +10,7 @@ const getUserBy = async (filters = {}) => {
 
 const createUser = async (newUser) => {
     // Make sure that the id is not set
-    const { _id, ...user } = newUser;
+    const { _id, validated, ...user } = newUser;
 
     return await User.create(user);
 };

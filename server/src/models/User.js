@@ -47,6 +47,7 @@ const userSchema = new mongoose.Schema(
             maxlength: 150,
         },
         validated: { type: Boolean, default: false },
+        verificationCode: { type: String },
     },
     { timestamps: true }
 );

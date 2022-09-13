@@ -8,13 +8,15 @@ const {
     followUser,
     unfollowUser,
     deleteAccount,
+    updateUser,
+    verifyUser
 } = require("../controllers/UserController");
 const authenticateToken = require("../middleware/JwtAuth");
 
 const userRouter = Router();
 
 // Users -------------------------------------------------------------
-userRouter.route("/").delete(authenticateToken, deleteAccount);
+userRouter.route("/").all(authenticateToken).delete(deleteAccount).put(updateUser);
 userRouter.route("/:id").get(authenticateToken, getUser);
 // User followers -------------------------------------------------------------
 userRouter
@@ -26,5 +28,7 @@ userRouter
 userRouter.route("/:id/followings").get(getUserFollowings);
 // User moments -------------------------------------------------------------
 userRouter.route("/:id/moments").get(getUserMoments);
+// User verification --------------------------------------------------------
+userRouter.route("/verify/:verificationCode").get(verifyUser)
 
 module.exports = userRouter;

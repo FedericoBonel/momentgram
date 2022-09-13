@@ -1,5 +1,6 @@
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { nanoid } = require("nanoid");
 
 const {
     getUserBy,
@@ -11,8 +12,9 @@ const {
     getNumberFollowersOf,
     getNumberFollowingOf,
     checkFollows,
-} = require("../services/FollowerService");
-const { getNumberMomentsOf } = require("../services/MomentService");
+} = require("./FollowerService");
+const { getNumberMomentsOf } = require("./MomentService");
+const { sendVerificationEmail } = require("./EmailService");
 const {
     NotFoundError,
     BadRequestError,
@@ -32,14 +34,20 @@ const getUserById = async (id, userId = null) => {
     return await createUserBody(foundUser, userId);
 };
 
-const registerUser = async (newUser) => {
+const registerUser = async (newUser, host) => {
     const userWithEmail = await getUserBy({ email: newUser.email });
 
     if (userWithEmail && userWithEmail.validated) {
         throw new BadRequestError(`User with that email exists already`);
     }
+    if (userWithEmail && !userWithEmail.validated) {
+        deleteUserBy({_id: userWithEmail._id});
+    }
 
     newUser.password = await bcryptjs.hash(newUser.password, 12);
+    newUser.verificationCode = nanoid();
+
+    await sendVerificationEmail(newUser, host);
 
     const savedUser = await createUser(newUser);
 
@@ -48,21 +56,6 @@ const registerUser = async (newUser) => {
         email: savedUser.email,
         username: savedUser.username,
     };
-};
-
-/**
- * Updates the user with the given id
- * @param {String} id Can be any id, recommended to use the one received in the JWT
- * @param {any} updatedUser updated fields of the user
- */
-const updateUserById = async (id, updatedUser) => {
-    const savedUser = await updateUserBy({ _id: id }, updatedUser);
-
-    if (!updatedUser) {
-        throw new NotFoundError(`User with ${id} not found`);
-    }
-
-    return savedUser;
 };
 
 const authenticateUser = async (email, password) => {
@@ -92,11 +85,48 @@ const authenticateUser = async (email, password) => {
     };
 };
 
-const generateToken = (user) => {
-    return jwt.sign({ _id: user._id, email: user.email }, SECRET, {
-        expiresIn: EXPIRATION_TIME,
+const verifyUserAccount = async (verificationCode) => {
+    const savedUser = await getUserBy({
+        verificationCode: verificationCode,
     });
+
+    if (!savedUser || savedUser.validated) {
+        throw new NotFoundError(
+            `User with verification code ${verificationCode} not found`
+        );
+    }
+
+    savedUser.validated = true;
+
+    await updateUserBy({
+        _id: savedUser._id,
+        verificationCode: savedUser.verificationCode,
+    }, savedUser);
+
+    return { username: savedUser.username, firstName: savedUser.firstName };
 };
+
+/**
+ * Updates the user with the given id
+ * @param {String} id Can be any id, recommended to use the one received in the JWT
+ * @param {any} updatedUser updated fields of the user
+ */
+const updateUserById = async (id, updatedUser) => {
+    const { email, _id, ...changes } = updatedUser;
+
+    if (changes.password) {
+        changes.password = await bcryptjs.hash(changes.password, 12);
+    }
+
+    const savedUser = await updateUserBy({ _id: id }, changes);
+
+    if (!savedUser) {
+        throw new NotFoundError(`User with ${id} not found`);
+    }
+
+    return await createUserBody(savedUser, null);
+};
+
 
 const deleteUserById = async (id) => {
     const deleteResult = await deleteUserBy({ _id: id });
@@ -106,6 +136,12 @@ const deleteUserById = async (id) => {
     }
 
     return deleteResult;
+};
+
+const generateToken = (user) => {
+    return jwt.sign({ _id: user._id, email: user.email }, SECRET, {
+        expiresIn: EXPIRATION_TIME,
+    });
 };
 
 const createUserBody = async (foundUser, userId) => {
@@ -119,7 +155,7 @@ const createUserBody = async (foundUser, userId) => {
     return {
         _id: foundUser._id,
         username: foundUser.username,
-        email: foundUser.username,
+        email: foundUser.email,
         description: foundUser.description,
         numberFollowers,
         numberFollowing,
@@ -134,4 +170,5 @@ module.exports = {
     updateUserById,
     authenticateUser,
     deleteUserById,
+    verifyUserAccount,
 };
