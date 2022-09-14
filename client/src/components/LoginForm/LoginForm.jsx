@@ -45,7 +45,7 @@ const LoginForm = ({ setUser }) => {
                 submitStatus: "idle",
                 warningMessage: "",
             });
-        } else if (result.resCode === 400) {
+        } else if (result.resCode === 401 || result.resCode === 400) {
             setLoginForm((prevLoginForm) => ({
                 ...prevLoginForm,
                 submitStatus: "rejected",

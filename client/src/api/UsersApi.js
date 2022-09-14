@@ -37,9 +37,25 @@ const registerUser = async (user) => {
 
         return { ...payload.data, resCode };
     } catch (error) {
-        console.log(`An error ocurred during user authentication: ${error}`);
+        console.log(`An error ocurred during user registration: ${error}`);
         return { resCode: 500 };
     }
 };
 
-export { authenticateUser, registerUser };
+const verifyAccount = async (verificationCode) => {
+    try {
+        const verifyUri = `${USERS_URI}/users/verify/${verificationCode}`
+        const response = await fetch(verifyUri);
+    
+        const payload = await response.json();
+        const resCode = response.status;
+    
+        return {...payload.data, resCode};
+        
+    } catch (error) {
+        console.log(`An error ocurred during user verification: ${error}`);
+        return { resCode: 500 };   
+    }
+}
+
+export { authenticateUser, registerUser, verifyAccount };

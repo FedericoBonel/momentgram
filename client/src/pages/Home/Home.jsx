@@ -7,7 +7,7 @@ import { LoginForm } from "../../components";
 import { UserContext } from "../../context/Context";
 
 const Home = () => {
-    const { user, setUser } = useContext(UserContext);
+    const { user, validateUser } = useContext(UserContext);
 
     return (
         <>
@@ -18,7 +18,7 @@ const Home = () => {
                     src={MomentGramLogo}
                     alt="momentgram-logo"
                 />
-                <LoginForm setUser={setUser}/>
+                <LoginForm setUser={validateUser}/>
             </main>
         </>
     );

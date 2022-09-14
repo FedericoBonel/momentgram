@@ -13,8 +13,6 @@
     border-radius: 108px;
 }
 
-
-
 @media screen and (max-width: 1024px) {
     .container_home-heroimg {
         display: none;
