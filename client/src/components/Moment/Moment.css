@@ -1,0 +1,112 @@
+.container_moment {
+    width: 425px;
+    margin: 0 auto 24px auto;
+    background: white;
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    text-align: start;
+}
+
+.container_moment a {
+    text-decoration: none;
+}
+
+.container_moment-headers {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 8px 16px;
+}
+
+.container_moment-headersusrimg {
+    height: 30px;
+    margin: 0 16px 0 0;
+}
+
+.container_moment-headers h2 {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.container_moment-headers p {
+    font-size: 0.7rem;
+    margin: 4px 0;
+    padding: 0;
+}
+
+.container_moment-img {
+    object-fit: cover;
+    width: 423px;
+    height: 600px;
+}
+
+.container_moment-likes {
+    color: inherit;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin: 0 0 16px 16px;
+}
+
+.container_moment-description {
+    color: inherit;
+    font-size: 0.9rem;
+    margin: 8px 16px;
+}
+
+.container_moment-description a {
+    color: inherit;
+}
+
+.container_moment-comments {
+    color: gray;
+    font-size: 0.9rem;
+    margin: 0 16px;
+}
+
+.container_moment-date {
+    color: gray;
+    font-size: 0.7rem;
+    margin: 8px 16px;
+}
+
+.container_moment-actions button {
+    font-size: 1.5rem;
+    border: none;
+    background: none;
+    margin: 8px 0 0 16px;
+    cursor: pointer;
+}
+
+.container_moment-newcomment {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    border-top: 1px solid lightgray;
+    padding: 16px 0;
+}
+
+.container_moment-newcomment textarea {
+    width: 320px;
+    height: 32px;
+    padding: 4px 8px;
+    resize: none;
+    border: none;
+    border-radius: var(--radius-btn);
+    font-family: inherit;
+}
+
+.container_moment-newcomment button {
+    background: none;
+    border: none;
+    border-radius: var(--radius-btn);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-button);
+}
+
+.container_moment-newcomment button:disabled {
+    filter: opacity(0.5);
+    pointer-events: none;
+}

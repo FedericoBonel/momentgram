@@ -14,8 +14,12 @@ import PublicRoute from "./routes/PublicRoute";
 import { Home, SignUp, VerifyAccount, Dashboard } from "./pages";
 import { PrivateLayout, PublicLayout } from "./layouts";
 
+const savedCookie = cookies.get("user");
+
 function App() {
-    const [user, setUser] = useState(cookies.get("user") || null);
+    const [user, setUser] = useState(
+        savedCookie ? JSON.parse(savedCookie) : null
+    );
 
     const validateUser = (user) => {
         cookies.set("user", JSON.stringify(user), { expires: 7 });
@@ -39,6 +43,8 @@ function App() {
                     <Route element={<PrivateRoute />}>
                         <Route element={<PrivateLayout />}>
                             <Route path="/dashboard" element={<Dashboard />} />
+                            <Route path="/moments/:momentId" />
+                            <Route path="/moments/:momentId/likes" />
                             <Route path="/users/:username" />
                         </Route>
                     </Route>

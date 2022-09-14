@@ -25,10 +25,7 @@ const Navbar = () => {
                 </li>
                 <li>
                     <div className="container_navbar-addbtn">
-                        <FontAwesomeIcon
-                            container_navbar-addbtnicon
-                            icon={faPlus}
-                        />
+                        <FontAwesomeIcon icon={faPlus} />
                     </div>
                 </li>
                 <li>
