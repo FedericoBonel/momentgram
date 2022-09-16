@@ -1,0 +1,38 @@
+.container_newcomment {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    border-top: 1px solid lightgray;
+    padding: 8px;
+    height: 13%;
+}
+
+.container_newcomment textarea {
+    width: 70%;
+    height: 32px;
+    padding: 8px;
+    resize: none;
+    border: none;
+    border-radius: var(--radius-btn);
+    font-family: inherit;
+}
+
+.container_newcomment textarea::-webkit-scrollbar {
+    display: none;
+}
+
+.container_newcomment button {
+    background: none;
+    border: none;
+    border-radius: var(--radius-btn);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-button);
+}
+
+.container_newcomment button:disabled {
+    filter: opacity(0.5);
+    pointer-events: none;
+}

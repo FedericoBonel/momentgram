@@ -12,11 +12,13 @@ const getNumberCommentsOf = async (momentId) => {
 };
 
 const addCommentTo = async (userId, momentId, comment) => {
-    return await createComment({
-        createdBy: userId,
-        moment: momentId,
-        comment: comment,
-    });
+    return createCommentBody(
+        await createComment({
+            createdBy: userId,
+            moment: momentId,
+            comment: comment,
+        })
+    );
 };
 
 const getCommentsFor = async (momentId, page = 1, limit = 20) => {
@@ -70,7 +72,9 @@ const deleteCommentById = async (userId, momentId, commentId) => {
     });
 
     if (!deletedComment) {
-        throw new NotFoundError(`Comment with id ${commentId} and momentId: ${momentId} not found!`)
+        throw new NotFoundError(
+            `Comment with id ${commentId} and momentId: ${momentId} not found!`
+        );
     }
 
     return deletedComment;

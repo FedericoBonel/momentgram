@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
@@ -53,7 +53,7 @@ const Dashboard = () => {
     }, [user, invalidateUser, navigate, page]);
 
     const renderedMoments = moments.data.map((moment) => (
-        <Moment moment={moment} key={moment._id} />
+        <Moment moment={moment} key={moment._id} token={user.token}/>
     ));
 
     const renderedLoadBtn = !disableMore ? (

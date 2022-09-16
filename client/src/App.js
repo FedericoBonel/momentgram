@@ -11,7 +11,7 @@ import { UserContext } from "./context/Context";
 import "./App.css";
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
-import { Home, SignUp, VerifyAccount, Dashboard } from "./pages";
+import { Home, SignUp, VerifyAccount, Dashboard, MomentPage } from "./pages";
 import { PrivateLayout, PublicLayout } from "./layouts";
 
 const savedCookie = cookies.get("user");
@@ -43,7 +43,11 @@ function App() {
                     <Route element={<PrivateRoute />}>
                         <Route element={<PrivateLayout />}>
                             <Route path="/dashboard" element={<Dashboard />} />
-                            <Route path="/moments/:momentId" />
+                            <Route path="/moments/create" />
+                            <Route
+                                path="/moments/:momentId"
+                                element={<MomentPage />}
+                            />
                             <Route path="/moments/:momentId/likes" />
                             <Route path="/users/:username" />
                         </Route>

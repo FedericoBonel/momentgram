@@ -24,9 +24,11 @@ const Navbar = () => {
                     </Link>
                 </li>
                 <li>
-                    <div className="container_navbar-addbtn">
-                        <FontAwesomeIcon icon={faPlus} />
-                    </div>
+                    <Link to="/moments/create">
+                        <div className="container_navbar-addbtn">
+                            <FontAwesomeIcon icon={faPlus} />
+                        </div>
+                    </Link>
                 </li>
                 <li>
                     <div>

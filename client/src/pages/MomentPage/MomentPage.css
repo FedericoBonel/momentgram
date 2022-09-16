@@ -1,0 +1,49 @@
+.container_smoment {
+    text-align: center;
+    padding: 28px 0;
+    min-height: 100vh;
+    background: var(--color-background);
+}
+
+.container_smoment a {
+    text-decoration: none;
+}
+
+.container_smoment-card {
+    margin: auto;
+    max-width: 920px;
+    max-height: 600px;
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    border: 1px lightgray solid;
+    background: white;
+}
+
+.container_smoment-img {
+    object-fit: cover;
+    width: 65%;
+    border-right: 1px lightgray solid;
+}
+
+.container_smoment-spinner {
+    color: var(--color-button);
+    margin: auto;
+}
+
+.cotainer_smoment-right {
+    width: 35%;
+}
+
+.container_smoment-comts {
+    padding: 8px 16px;
+    height: 360px;
+    width: 100%;
+    overflow-y: auto;
+    border-top: 1px lightgray solid;
+    border-bottom: 1px lightgray solid;
+}
+.container_smoment-comts::-webkit-scrollbar {
+    display: none;
+}
+

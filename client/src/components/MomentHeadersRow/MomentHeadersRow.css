@@ -1,0 +1,22 @@
+.container_headerrow {
+    padding: 8px 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.container_headerrow h2 {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.container_headerrow p {
+    font-size: 0.7rem;
+    margin: 4px 0;
+    padding: 0;
+}
+
+.container_headerrow-usrimg {
+    height: 30px;
+    margin: 0 16px 0 0;
+}

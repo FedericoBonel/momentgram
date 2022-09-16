@@ -1,0 +1,32 @@
+.container_comment {
+    word-wrap: break-word;
+    padding: 8px 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.container_comment-usrimg {
+    height: 30px;
+    margin: 0 16px 0 0;
+}
+
+.container_comment h2 {
+    font-size: 0.9rem;
+    margin: 0 4px;
+}
+
+.container_comment p {
+    font-size: 0.9rem;
+    margin: 0 4px;
+    padding: 0;
+}
+
+.container_comment div {
+    word-wrap: break-word;
+    max-width: 80%;
+}
+
+.container_comment-date {
+    color: gray;
+}

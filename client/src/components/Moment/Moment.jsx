@@ -1,45 +1,25 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faUserCircle,
-    faComment,
-    faHeart,
-} from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { useState, memo } from "react";
+import { memo, useState } from "react";
 
 import "./Moment.css";
+import {
+    MomentLikesRow,
+    MomentActionsRow,
+    MomentComment,
+    MomentCommentForm,
+    MomentDateRow,
+    MomentHeadersRow,
+} from "../";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-let Moment = ({ moment }) => {
-    const oneDayMs = 1000 * 60 * 60 * 24;
-
-    const diffDates =
-        new Date().getTime() - new Date(moment.createdAt).getTime();
-
-    const madeAgo = Math.round(diffDates / oneDayMs);
-
-    const [comment, setComment] = useState("");
-
-    const canComment = Boolean(comment);
-
-    const onChange = (e) => {
-        setComment(e.target.value);
-    };
+let Moment = ({ moment, token }) => {
+    const [newComment, setNewComment] = useState();
 
     return (
         <article className="container_moment">
             {/* Headers */}
-            <div className="container_moment-headers">
-                <FontAwesomeIcon
-                    icon={faUserCircle}
-                    className="container_moment-headersusrimg"
-                />
-                <div>
-                    <h2>{moment.createdBy.username}</h2>
-                    <p>{moment.location}</p>
-                </div>
-            </div>
+            <MomentHeadersRow moment={moment} />
             {/* Images */}
             <img
                 className="container_moment-img"
@@ -47,22 +27,9 @@ let Moment = ({ moment }) => {
                 alt="moment-img"
             />
             {/* Interactions */}
-            <div className="container_moment-actions">
-                <button>
-                    <FontAwesomeIcon icon={faHeart} />
-                </button>
-                <button>
-                    <FontAwesomeIcon icon={faComment} flip="horizontal" />
-                </button>
-            </div>
+            <MomentActionsRow />
             {/* Likes */}
-            <Link
-                to={`/moments/${moment._id}/likes`}
-                className="container_moment-likes"
-            >
-                Liked by {moment.numberLikes} person
-                {moment.numberLikes > 1 && "s"}
-            </Link>
+            <MomentLikesRow moment={moment} />
             {/* Description */}
             <p className="container_moment-description">
                 <b>
@@ -75,27 +42,24 @@ let Moment = ({ moment }) => {
             {/* Comments */}
             <Link
                 className="container_moment-comments"
-                to={`/moments/${moment._id}#comments`}
+                to={`/moments/${moment._id}`}
             >
                 View all {moment.numberComments} comment
                 {moment.numberComments > 1 && "s"}
             </Link>
+            {newComment && (
+                <div className="container_moment-newcmmt">
+                    <MomentComment comment={newComment} />
+                </div>
+            )}
             {/* Date */}
-            <p className="container_moment-date">
-                {madeAgo > 0
-                    ? `${madeAgo} DAY${madeAgo > 1 && "S"} AGO`
-                    : "TODAY"}
-            </p>
+            <MomentDateRow dateString={moment.createdAt} />
             {/* New comment */}
-            <form className="container_moment-newcomment">
-                <textarea
-                    name="newComment"
-                    placeholder="Add a comment..."
-                    value={comment}
-                    onChange={onChange}
-                />
-                <button disabled={!canComment}>Post</button>
-            </form>
+            <MomentCommentForm
+                momentId={moment._id}
+                token={token}
+                addComment={setNewComment}
+            />
         </article>
     );
 };

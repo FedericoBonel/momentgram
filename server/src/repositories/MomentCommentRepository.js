@@ -4,6 +4,7 @@ const getCommentBy = async (filters, skip = 0, limit = 20) => {
     return await MomentComment.find(filters)
         .skip(skip)
         .limit(limit)
+        .sort("-createdAt")
         .populate("createdBy");
 };
 
@@ -12,7 +13,8 @@ const getNumberCommentsBy = async (filters) => {
 };
 
 const createComment = async (newComment) => {
-    return await MomentComment.create(newComment);
+    const savedComment = await MomentComment.create(newComment);
+    return await savedComment.populate("createdBy");
 };
 
 const updateCommentBy = async (filters, comment) => {
