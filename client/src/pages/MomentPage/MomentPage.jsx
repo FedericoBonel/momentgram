@@ -12,7 +12,11 @@ import {
     MomentDateRow,
     MomentHeadersRow,
 } from "../../components";
-import { getMomentById, getMomentComments } from "../../api/MomentsApi";
+import {
+    getMomentById,
+    getMomentComments,
+    deleteComment,
+} from "../../api/MomentsApi";
 import { UserContext } from "../../context/Context";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -33,6 +37,25 @@ const MomentPage = () => {
             ...prevComments,
             data: [newComment, ...prevComments.data],
         }));
+    };
+
+    const onDeleteComment = async (commentId) => {
+        const deletedComment = await deleteComment(
+            user.token,
+            moment.data._id,
+            commentId
+        );
+
+        if (deletedComment.resCode === 200) {
+            setMomentComments((prevComments) => ({
+                ...prevComments,
+                data: prevComments.data.filter(
+                    (comment) => comment._id !== commentId
+                ),
+            }));
+        } else {
+            navigate(`/error/${deletedComment.resCode}`);
+        }
     };
 
     useEffect(() => {
@@ -75,7 +98,12 @@ const MomentPage = () => {
     }, [momentId, user, navigate]);
 
     const renderedComments = momentComments.data.map((comment) => (
-        <MomentComment comment={comment} key={comment._id} />
+        <MomentComment
+            comment={comment}
+            key={comment._id}
+            user={user}
+            onDelete={() => onDeleteComment(comment._id)}
+        />
     ));
 
     const renderedMoment = moment.submitStatus === "success" && (
@@ -96,6 +124,7 @@ const MomentPage = () => {
                             ...moment.data,
                             comment: moment.data.description,
                         }}
+                        user={user}
                     />
                     {momentComments.submitStatus === "success" &&
                         renderedComments}

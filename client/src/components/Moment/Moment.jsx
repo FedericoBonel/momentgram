@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { memo, useState } from "react";
 
 import "./Moment.css";
@@ -10,11 +10,27 @@ import {
     MomentDateRow,
     MomentHeadersRow,
 } from "../";
+import { deleteComment } from "../../api/MomentsApi";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-let Moment = ({ moment, token }) => {
+let Moment = ({ moment, user }) => {
+    const navigate = useNavigate();
     const [newComment, setNewComment] = useState();
+
+    const onDeleteComment = async (commentId) => {
+        const deletedComment = await deleteComment(
+            user.token,
+            moment._id,
+            commentId
+        );
+
+        if (deletedComment.resCode === 200) {
+            setNewComment();
+        } else {
+            navigate(`/error/${deletedComment.resCode}`);
+        }
+    };
 
     return (
         <article className="container_moment">
@@ -49,7 +65,13 @@ let Moment = ({ moment, token }) => {
             </Link>
             {newComment && (
                 <div className="container_moment-newcmmt">
-                    <MomentComment comment={newComment} />
+                    <MomentComment
+                        comment={newComment}
+                        user={user}
+                        onDelete={() =>
+                            onDeleteComment(newComment._id)
+                        }
+                    />
                 </div>
             )}
             {/* Date */}
@@ -57,7 +79,7 @@ let Moment = ({ moment, token }) => {
             {/* New comment */}
             <MomentCommentForm
                 momentId={moment._id}
-                token={token}
+                token={user.token}
                 addComment={setNewComment}
             />
         </article>

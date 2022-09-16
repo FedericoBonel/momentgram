@@ -73,7 +73,7 @@ const postNewComment = async (token, momentId, comment) => {
                 authorization: `Bearer ${token}`,
             },
             method: "POST",
-            body: JSON.stringify({ comment}),
+            body: JSON.stringify({ comment }),
         });
 
         const payload = await response.json();
@@ -86,4 +86,31 @@ const postNewComment = async (token, momentId, comment) => {
     }
 };
 
-export { getMomentsFor, getMomentById, getMomentComments, postNewComment };
+const deleteComment = async (token, momentId, commentId) => {
+    const momentUri = `${BASE_BACKEND_URL}/moments/${momentId}/comments/${commentId}`;
+    try {
+        const response = await fetch(momentUri, {
+            headers: {
+                accept: "application/json",
+                authorization: `Bearer ${token}`,
+            },
+            method: "DELETE",
+        });
+
+        const payload = await response.json();
+        const resCode = response.status;
+
+        return { comment: payload.data, resCode };
+    } catch (error) {
+        console.log(`An error ocurred during moments fetching: ${error}`);
+        return { resCode: 500 };
+    }
+};
+
+export {
+    getMomentsFor,
+    getMomentById,
+    getMomentComments,
+    postNewComment,
+    deleteComment,
+};

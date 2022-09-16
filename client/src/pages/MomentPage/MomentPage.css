@@ -1,8 +1,6 @@
 .container_smoment {
     text-align: center;
     padding: 28px 0;
-    min-height: 100vh;
-    background: var(--color-background);
 }
 
 .container_smoment a {

@@ -53,7 +53,7 @@ const Dashboard = () => {
     }, [user, invalidateUser, navigate, page]);
 
     const renderedMoments = moments.data.map((moment) => (
-        <Moment moment={moment} key={moment._id} token={user.token}/>
+        <Moment moment={moment} key={moment._id} user={user}/>
     ));
 
     const renderedLoadBtn = !disableMore ? (
