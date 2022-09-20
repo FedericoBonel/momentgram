@@ -19,7 +19,7 @@ const Navbar = () => {
             />
             <ul className="container_navbar-links">
                 <li>
-                    <Link to="/">
+                    <Link to="/dashboard">
                         <FontAwesomeIcon icon={faHome} />
                     </Link>
                 </li>

@@ -101,6 +101,7 @@
     height: 300px;
     overflow-x: none;
     overflow-y: scroll;
+    flex: 3;
 }
 
 .container_momentform-descinp:focus {

@@ -1,7 +1,7 @@
 .container_usrmoments {
     margin: 0 auto;
     width: 90%;
-    max-width: 850px;
+    max-width: 935px;
 }
 
 .container_usrmoments-topbr {
@@ -36,8 +36,8 @@
 
 .container_usrmoments-moment {
     position: relative;
-    width: 260px;
-    height: 260px;
+    width: 100%;
+    height: 286px;
 }
 
 .container_usrmoments-moment:hover > .container_surmoments-moment_ovrlay {
