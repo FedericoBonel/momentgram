@@ -8,6 +8,8 @@ import MomentComment from "./MomentComment/MomentComment";
 import MomentCommentForm from "./MomentCommentForm/MomentCommentForm";
 import MomentDateRow from "./MomentDateRow/MomentDateRow";
 import MomentHeadersRow from "./MomentHeadersRow/MomentHeadersRow";
+import MomentForm from "./MomentForm/MomentForm";
+import MomentCommentList from "./MomentCommentList/MomentCommentList";
 
 export {
     LoginForm,
@@ -20,4 +22,6 @@ export {
     MomentCommentForm,
     MomentDateRow,
     MomentHeadersRow,
+    MomentForm, 
+    MomentCommentList
 };

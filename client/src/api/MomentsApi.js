@@ -42,6 +42,57 @@ const getMomentById = async (token, momentId) => {
     }
 };
 
+const createMoment = async (token, moment) => {
+    const momentsUri = `${BASE_BACKEND_URL}/moments`;
+    try {
+        // Create base moment
+        const response = await fetch(momentsUri, {
+            headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${token}`,
+            },
+            method: "POST",
+            body: JSON.stringify({
+                location: moment.location,
+                description: moment.description,
+            }),
+        });
+
+        const payload = await response.json();
+        const resCode = response.status;
+
+        console.log(payload);
+
+        if (resCode !== 201) {
+            return { resCode };
+        }
+
+        // Save image
+        const newMomentUri = `${BASE_BACKEND_URL}/moments/${payload.data._id}/images`;
+        let formData = new FormData();
+        formData.append("image", moment.images);
+
+        const imageSavedRes = await fetch(newMomentUri, {
+            headers: {
+                authorization: `Bearer ${token}`,
+            },
+            method: "POST",
+            body: formData,
+        });
+
+        const finalPayload = await imageSavedRes.json();
+        const finalResCode = imageSavedRes.status;
+
+        if (resCode === 201) {
+            return { moment: finalPayload.data, resCode: finalResCode };
+        } else {
+            return { resCode: finalResCode };
+        }
+    } catch (error) {
+        console.log(`An error happened during moment creation`);
+    }
+};
+
 const getMomentComments = async (token, momentId, page) => {
     const momentUri = `${BASE_BACKEND_URL}/moments/${momentId}/comments?page=${page}`;
     try {
@@ -110,6 +161,7 @@ const deleteComment = async (token, momentId, commentId) => {
 export {
     getMomentsFor,
     getMomentById,
+    createMoment,
     getMomentComments,
     postNewComment,
     deleteComment,

@@ -10,13 +10,27 @@ import {
     MomentDateRow,
     MomentHeadersRow,
 } from "../";
-import { deleteComment } from "../../api/MomentsApi";
+import { deleteComment, postNewComment } from "../../api/MomentsApi";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 let Moment = ({ moment, user }) => {
     const navigate = useNavigate();
     const [newComment, setNewComment] = useState();
+
+    const onAddComment = async (comment) => {
+        const postedComment = await postNewComment(
+            user.token,
+            moment._id,
+            comment
+        );
+
+        if (postedComment.resCode === 201) {
+            setNewComment(postedComment.comment);
+        } else {
+            navigate(`/error/${newComment.resCode}`);
+        }
+    };
 
     const onDeleteComment = async (commentId) => {
         const deletedComment = await deleteComment(
@@ -68,20 +82,14 @@ let Moment = ({ moment, user }) => {
                     <MomentComment
                         comment={newComment}
                         user={user}
-                        onDelete={() =>
-                            onDeleteComment(newComment._id)
-                        }
+                        onDelete={() => onDeleteComment(newComment._id)}
                     />
                 </div>
             )}
             {/* Date */}
             <MomentDateRow dateString={moment.createdAt} />
             {/* New comment */}
-            <MomentCommentForm
-                momentId={moment._id}
-                token={user.token}
-                addComment={setNewComment}
-            />
+            <MomentCommentForm addComment={onAddComment} />
         </article>
     );
 };

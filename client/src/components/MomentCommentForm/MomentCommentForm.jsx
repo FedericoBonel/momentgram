@@ -1,13 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 import "./MomentCommentForm.css";
-import { postNewComment } from "../../api/MomentsApi";
 
-const MomentCommentForm = ({ token, momentId, addComment }) => {
-    const navigate = useNavigate();
+const MomentCommentForm = ({ addComment }) => {
     const [comment, setComment] = useState({ data: "", submitStatus: "idle" });
 
     const canComment = Boolean(comment.data);
@@ -27,14 +24,9 @@ const MomentCommentForm = ({ token, momentId, addComment }) => {
             submitStatus: "loading",
         }));
 
-        const newComment = await postNewComment(token, momentId, comment.data);
+        await addComment(comment.data);
 
-        if (newComment.resCode === 201) {
-            addComment(newComment.comment);
-            setComment({ data: "", submitStatus: "idle" });
-        } else {
-            navigate(`/error/${newComment.resCode}`);
-        }
+        setComment({ data: "", submitStatus: "idle" });
     };
 
     return (

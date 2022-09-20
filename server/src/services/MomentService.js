@@ -213,7 +213,7 @@ const addImageTo = async (userId, momentId, images) => {
     // verify the moment does not have images
     const savedMoment = await getAMomentById(momentId);
 
-    if (savedMoment.img) {
+    if (savedMoment.img?.length) {
         throw new BadRequestError(`Moment with id ${momentId} already has images`)
     }
 

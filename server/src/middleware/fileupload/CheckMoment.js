@@ -1,4 +1,3 @@
-const { NotFoundError } = require("../../errors");
 const { getMomentByUser } = require("../../services/MomentService");
 
 const checkMomentExists = async (req, res, next) => {

@@ -36,7 +36,7 @@ const MomentComment = ({ comment, user, onDelete }) => {
                     <p className="container_comment-date">{`${getDaysAgoFrom(
                         comment.createdAt
                     )}d`}</p>
-                    {user.user.id === comment.createdBy._id && (
+                    {user.user.id === comment.createdBy._id && onDelete && (
                         <FontAwesomeIcon
                             onClick={() => options(true)}
                             icon={faEllipsis}
