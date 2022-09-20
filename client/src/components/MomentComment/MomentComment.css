@@ -6,6 +6,11 @@
     align-items: center;
 }
 
+.container_comment a {
+    text-decoration: none;
+    color: inherit;
+}
+
 .container_comment-usrimg {
     height: 30px;
     margin: 0 16px 0 0;

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle, faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
@@ -25,12 +26,16 @@ const MomentComment = ({ comment, user, onDelete }) => {
 
     const renderedComment = (
         <div className="container_comment">
-            <FontAwesomeIcon
-                className="container_comment-usrimg"
-                icon={faUserCircle}
-            />
+            <Link to={`/users/${comment.createdBy.username}`}>
+                <FontAwesomeIcon
+                    className="container_comment-usrimg"
+                    icon={faUserCircle}
+                />
+            </Link>
             <div className="container_comment-usrinfo">
-                <h2>{comment.createdBy.username}</h2>
+                <Link to={`/users/${comment.createdBy.username}`}>
+                    <h2>{comment.createdBy.username}</h2>
+                </Link>
                 <p>{comment.comment}</p>
                 <div className="container_comment-usrinfo_btm">
                     <p className="container_comment-date">{`${getDaysAgoFrom(

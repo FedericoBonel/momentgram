@@ -18,6 +18,7 @@ import {
     Dashboard,
     MomentPage,
     NewMoment,
+    UserProfile,
 } from "./pages";
 import { PrivateLayout, PublicLayout } from "./layouts";
 
@@ -59,7 +60,10 @@ function App() {
                                 element={<MomentPage />}
                             />
                             <Route path="/moments/:momentId/likes" />
-                            <Route path="/users/:username" />
+                            <Route
+                                path="/users/:username"
+                                element={<UserProfile />}
+                            />
                         </Route>
                     </Route>
                     {/* Public routes */}

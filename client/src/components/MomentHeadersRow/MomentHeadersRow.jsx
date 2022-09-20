@@ -1,17 +1,23 @@
+import { Link } from "react-router-dom";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 
 import "./MomentHeadersRow.css";
 
-const MomentHeadersRow = ({moment}) => {
+const MomentHeadersRow = ({ moment }) => {
     return (
         <div className="container_headerrow">
-            <FontAwesomeIcon
-                icon={faUserCircle}
-                className="container_headerrow-usrimg"
-            />
+            <Link to={`/users/${moment.createdBy.username}`}>
+                <FontAwesomeIcon
+                    icon={faUserCircle}
+                    className="container_headerrow-usrimg"
+                />
+            </Link>
             <div>
-                <h2>{moment.createdBy.username}</h2>
+                <Link to={`/users/${moment.createdBy.username}`}>
+                    <h2>{moment.createdBy.username}</h2>
+                </Link>
                 <p>{moment.location}</p>
             </div>
         </div>

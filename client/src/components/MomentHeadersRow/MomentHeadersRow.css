@@ -5,6 +5,11 @@
     align-items: center;
 }
 
+.container_headerrow a {
+    color: inherit;
+    text-decoration: none;
+}
+
 .container_headerrow h2 {
     font-size: 0.9rem;
     margin: 0;

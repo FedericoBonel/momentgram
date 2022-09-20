@@ -58,4 +58,8 @@ const verifyAccount = async (verificationCode) => {
     }
 }
 
+const getUserByUsername = async (token, username) => {
+    
+}
+
 export { authenticateUser, registerUser, verifyAccount };

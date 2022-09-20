@@ -8,6 +8,10 @@ const getUserBy = async (filters = {}) => {
     return await User.findOne(filters);
 };
 
+const getUsersBy = async (filters = {}, skip, limit) => {
+    return await User.find(filters).skip(skip).limit(limit);
+};
+
 const createUser = async (newUser) => {
     // Make sure that the id is not set
     const { _id, validated, ...user } = newUser;
@@ -60,4 +64,10 @@ const deleteUserBy = async (filters) => {
     };
 };
 
-module.exports = { getUserBy, createUser, updateUserBy, deleteUserBy };
+module.exports = {
+    getUserBy,
+    getUsersBy,
+    createUser,
+    updateUserBy,
+    deleteUserBy,
+};

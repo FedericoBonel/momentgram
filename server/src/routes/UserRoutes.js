@@ -2,6 +2,7 @@ const { Router } = require("express");
 
 const {
     getUser,
+    getUsersByQuery,
     getUserFollowers,
     getUserFollowings,
     getUserMoments,
@@ -9,14 +10,19 @@ const {
     unfollowUser,
     deleteAccount,
     updateUser,
-    verifyUser
+    verifyUser,
 } = require("../controllers/UserController");
 const authenticateToken = require("../middleware/JwtAuth");
 
 const userRouter = Router();
 
 // Users -------------------------------------------------------------
-userRouter.route("/").all(authenticateToken).delete(deleteAccount).put(updateUser);
+userRouter
+    .route("/")
+    .all(authenticateToken)
+    .get(getUsersByQuery)
+    .delete(deleteAccount)
+    .put(updateUser);
 userRouter.route("/:id").get(authenticateToken, getUser);
 // User followers -------------------------------------------------------------
 userRouter
@@ -29,6 +35,6 @@ userRouter.route("/:id/followings").get(getUserFollowings);
 // User moments -------------------------------------------------------------
 userRouter.route("/:id/moments").get(getUserMoments);
 // User verification --------------------------------------------------------
-userRouter.route("/verify/:verificationCode").get(verifyUser)
+userRouter.route("/verify/:verificationCode").get(verifyUser);
 
 module.exports = userRouter;

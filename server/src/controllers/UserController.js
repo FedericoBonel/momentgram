@@ -3,6 +3,7 @@ const { SuccessPayload } = require("../payloads");
 
 const {
     getUserById,
+    getUsersByFilters,
     deleteUserById,
     updateUserById,
     verifyUserAccount,
@@ -20,6 +21,27 @@ const getUser = async (req, res) => {
     const { id: userId } = req.params;
 
     const user = await getUserById(userId, loggedUserId);
+
+    res.status(StatusCodes.OK).json(new SuccessPayload(user));
+};
+
+const getUsersByQuery = async (req, res) => {
+    const { _id: userId } = req.user;
+    const { username, email, firstName, lastName, page, limit } = req.query;
+
+    let filters = {};
+
+    username && (filters.username = username);
+    email && (filters.email = email);
+    firstName && (filters.firstName = firstName);
+    lastName && (filters.lastName = lastName);
+
+    const user = await getUsersByFilters(
+        filters,
+        userId,
+        page && page,
+        limit && limit
+    );
 
     res.status(StatusCodes.OK).json(new SuccessPayload(user));
 };
@@ -104,6 +126,7 @@ const verifyUser = async (req, res) => {
 
 module.exports = {
     getUser,
+    getUsersByQuery,
     getUserFollowers,
     getUserFollowings,
     getUserMoments,

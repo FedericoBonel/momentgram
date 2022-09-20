@@ -4,6 +4,7 @@ const { nanoid } = require("nanoid");
 
 const {
     getUserBy,
+    getUsersBy,
     createUser,
     updateUserBy,
     deleteUserBy,
@@ -34,13 +35,34 @@ const getUserById = async (id, userId = null) => {
     return await createUserBody(foundUser, userId);
 };
 
+const getUsersByFilters = async (
+    filters,
+    page = 1,
+    limit = 20,
+    userId = null
+) => {
+    const skip = (page - 1) * limit;
+    
+    const usersFound = await getUsersBy(filters, skip, limit);
+
+    let usersBodies = [];
+
+    for (const user of usersFound) {
+        usersBodies.push(await createUserBody(user, userId));
+    }
+
+    return usersBodies;
+};
+
 const registerUser = async (newUser, host) => {
     const userWithEmail = await getUserBy({ email: newUser.email });
     const userWithUsername = await getUserBy({ username: newUser.username });
 
     if (userWithEmail || userWithUsername) {
         if (userWithEmail?.validated || userWithUsername?.validated) {
-            throw new BadRequestError(`User with that email or username exists already`);
+            throw new BadRequestError(
+                `User with that email or username exists already`
+            );
         } else {
             deleteUserBy({ _id: userWithEmail?._id });
             deleteUserBy({ _id: userWithUsername?._id });
@@ -176,4 +198,5 @@ module.exports = {
     authenticateUser,
     deleteUserById,
     verifyUserAccount,
+    getUsersByFilters,
 };

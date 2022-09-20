@@ -10,6 +10,8 @@ import MomentDateRow from "./MomentDateRow/MomentDateRow";
 import MomentHeadersRow from "./MomentHeadersRow/MomentHeadersRow";
 import MomentForm from "./MomentForm/MomentForm";
 import MomentCommentList from "./MomentCommentList/MomentCommentList";
+import ProfileHeader from "./ProfileHeader/ProfileHeader";
+import ProfileMomentsList from "./ProfileMomentList/ProfileMomentsList";
 
 export {
     LoginForm,
@@ -22,6 +24,8 @@ export {
     MomentCommentForm,
     MomentDateRow,
     MomentHeadersRow,
-    MomentForm, 
-    MomentCommentList
+    MomentForm,
+    MomentCommentList,
+    ProfileHeader,
+    ProfileMomentsList,
 };
