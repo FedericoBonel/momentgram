@@ -6,7 +6,7 @@ const getMomentBy = async (
     filters,
     skip = 0,
     limit = 20,
-    order = "createdAt"
+    order = "-createdAt"
 ) => {
     return await Moment.find(filters)
         .skip(skip)

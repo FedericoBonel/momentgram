@@ -38,9 +38,9 @@ const getUsersByQuery = async (req, res) => {
 
     const user = await getUsersByFilters(
         filters,
-        userId,
         page && page,
-        limit && limit
+        limit && limit,
+        userId
     );
 
     res.status(StatusCodes.OK).json(new SuccessPayload(user));

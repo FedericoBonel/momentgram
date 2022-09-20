@@ -63,7 +63,7 @@ let Moment = ({ moment, user }) => {
             {/* Description */}
             <p className="container_moment-description">
                 <b>
-                    <Link to={`/users/${moment.createdBy._id}`}>
+                    <Link to={`/users/${moment.createdBy.username}`}>
                         {moment.createdBy.username}
                     </Link>
                 </b>{" "}

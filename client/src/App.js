@@ -11,6 +11,7 @@ import { UserContext } from "./context/Context";
 import "./App.css";
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
+import ScrollToTop from "./routes/ScrollToTop";
 import {
     Home,
     SignUp,
@@ -41,6 +42,7 @@ function App() {
 
     return (
         <Router>
+            <ScrollToTop />
             <UserContext.Provider
                 value={{ user, validateUser, invalidateUser }}
             >

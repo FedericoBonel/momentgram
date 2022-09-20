@@ -1,0 +1,79 @@
+.container_usrmoments {
+    margin: 0 auto;
+    width: 90%;
+    max-width: 850px;
+}
+
+.container_usrmoments-topbr {
+    border-top: 1px lightgray solid;
+    height: fit-content;
+}
+
+.container_usrmoments-topbr_link {
+    margin: auto;
+    padding: 16px 0;
+    width: fit-content;
+    border-top: 1px black solid;
+}
+
+.container_usrmoments-topbr_link a {
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.container_usrmoments-topbr_link:active {
+    filter: opacity(0.5);
+}
+
+.container_usrmoments-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.container_usrmoments-moment {
+    position: relative;
+    width: 260px;
+    height: 260px;
+}
+
+.container_usrmoments-moment:hover > .container_surmoments-moment_ovrlay {
+    display: flex;
+}
+
+.container_surmoments-moment_ovrlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.container_surmoments-moment_ovrlayback {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    background: black;
+    filter: opacity(0.3);
+}
+
+.container_surmoments-moment_ovrlay p {
+    color: white;
+    z-index: 1;
+    margin: 8px;
+    font-size: 1.1rem;
+}
+
+.container_usrmoments-moment img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
