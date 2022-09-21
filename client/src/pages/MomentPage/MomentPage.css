@@ -19,9 +19,10 @@
 }
 
 .container_smoment-img {
-    object-fit: cover;
+    object-fit: contain;
     width: 65%;
     border-right: 1px lightgray solid;
+    background: black;
 }
 
 .container_smoment-spinner {

@@ -1,5 +1,5 @@
 .container_moment {
-    width: 425px;
+    width: 472px;
     margin: 0 auto 24px auto;
     background: white;
     border: 1px solid lightgray;
@@ -13,8 +13,9 @@
 
 .container_moment-img {
     object-fit: cover;
-    width: 423px;
-    height: 600px;
+    width: 470px;
+    max-height: 600px;
+    min-height: 300px;
 }
 
 .container_moment-description {

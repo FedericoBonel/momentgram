@@ -58,7 +58,7 @@ const MomentForm = ({ user }) => {
                         type="file"
                         name="images"
                         id="images"
-                        accept="images/*"
+                        accept="image/png, image/jpg, image/jpeg"
                         onChange={onChange}
                     />
 

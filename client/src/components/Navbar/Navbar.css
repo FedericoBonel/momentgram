@@ -32,6 +32,10 @@
     align-items: center;
 }
 
+.container_navbar-links > li:active {
+    filter: opacity(0.5);
+}
+
 .container_navbar-links a {
     text-decoration: none;
     color: inherit;

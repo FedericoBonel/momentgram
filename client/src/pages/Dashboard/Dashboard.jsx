@@ -50,25 +50,28 @@ const Dashboard = () => {
         loadMoments();
     }, [user, navigate, page]);
 
-    const onLikeMoment = useCallback(async (momentId, isLiked) => {
-        const { resCode } = isLiked
-            ? await disLikeMoment(user.token, momentId)
-            : await likeMoment(user.token, momentId);
+    const onLikeMoment = useCallback(
+        async (momentId, isLiked) => {
+            const { resCode } = isLiked
+                ? await disLikeMoment(user.token, momentId)
+                : await likeMoment(user.token, momentId);
 
-        if (resCode === 201 || resCode === 200) {
-            setMoments((prevMoments) => ({
-                ...prevMoments,
-                data: prevMoments.data.map((moment) => {
-                    if (moment._id === momentId) {
-                        return { ...moment, isLiked: !moment.isLiked };
-                    }
-                    return moment;
-                }),
-            }));
-        } else {
-            navigate(`/error/${resCode}`);
-        }
-    }, [user.token, navigate]);
+            if (resCode === 201 || resCode === 200) {
+                setMoments((prevMoments) => ({
+                    ...prevMoments,
+                    data: prevMoments.data.map((moment) => {
+                        if (moment._id === momentId) {
+                            return { ...moment, isLiked: !moment.isLiked };
+                        }
+                        return moment;
+                    }),
+                }));
+            } else {
+                navigate(`/error/${resCode}`);
+            }
+        },
+        [user.token, navigate]
+    );
 
     const renderedMoments = moments.data.map((moment) => (
         <Moment
