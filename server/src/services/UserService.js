@@ -42,7 +42,7 @@ const getUsersByFilters = async (
     userId = null
 ) => {
     const skip = (page - 1) * limit;
-    
+
     const usersFound = await getUsersBy(filters, skip, limit);
 
     let usersBodies = [];
@@ -144,6 +144,16 @@ const updateUserById = async (id, updatedUser) => {
 
     if (changes.password) {
         changes.password = await bcryptjs.hash(changes.password, 12);
+    }
+
+    if (changes.username) {
+        const foundUser = await getUserBy({ username: changes.username });
+
+        if (foundUser) {
+            throw new BadRequestError(
+                `There already exists a user with username: ${changes.username}`
+            );
+        }
     }
 
     const savedUser = await updateUserBy({ _id: id }, changes);

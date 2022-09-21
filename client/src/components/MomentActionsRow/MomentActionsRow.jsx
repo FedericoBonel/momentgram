@@ -3,14 +3,19 @@ import { faComment, faHeart } from "@fortawesome/free-solid-svg-icons";
 
 import "./MomentActionsRow.css";
 
-const MomentActionsRow = () => {
+const MomentActionsRow = ({ isLiked, onLike }) => {
     return (
         <div className="container_actions">
             <button>
                 <FontAwesomeIcon icon={faComment} flip="horizontal" />
             </button>
-            <button>
-                <FontAwesomeIcon icon={faHeart} />
+            <button onClick={onLike}>
+                <FontAwesomeIcon
+                    icon={faHeart}
+                    className={`${
+                        isLiked ? "fa-beat container_actions-animation" : ""
+                    }`}
+                />
             </button>
         </div>
     );

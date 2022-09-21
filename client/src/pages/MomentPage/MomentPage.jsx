@@ -11,7 +11,7 @@ import {
     MomentDateRow,
     MomentHeadersRow,
 } from "../../components";
-import { getMomentById } from "../../api/MomentsApi";
+import { getMomentById, likeMoment, disLikeMoment } from "../../api/MomentsApi";
 import { UserContext } from "../../context/Context";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -43,6 +43,21 @@ const MomentPage = () => {
         fetchMoment();
     }, [momentId, user, navigate]);
 
+    const onLikeMoment = async (momentId, isLiked) => {
+        const { resCode } = isLiked
+            ? await disLikeMoment(user.token, momentId)
+            : await likeMoment(user.token, momentId);
+
+        if (resCode === 201 || resCode === 200) {
+            setMoment((prevMoment) => ({
+                ...prevMoment,
+                data: { ...prevMoment.data, isLiked: !prevMoment.data.isLiked },
+            }));
+        } else {
+            navigate(`/error/${resCode}`);
+        }
+    };
+
     const renderedMoment = moment.submitStatus === "success" && (
         <div className="container_smoment-card">
             {/* Image */}
@@ -55,7 +70,10 @@ const MomentPage = () => {
                 {/* Headers */}
                 <MomentHeadersRow moment={moment.data} />
                 {/* Interactions */}
-                <MomentActionsRow />
+                <MomentActionsRow
+                    onLike={() => onLikeMoment(moment.data._id, moment.data.isLiked)}
+                    isLiked={moment.data.isLiked}
+                />
                 {/* Likes */}
                 <MomentLikesRow moment={moment.data} />
                 {/* Date */}

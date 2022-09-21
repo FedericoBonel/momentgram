@@ -10,7 +10,10 @@ const {
 } = require("../repositories/MomentRepository");
 const { getFollowingsOf } = require("./FollowerService");
 const { getNumberCommentsOf } = require("./MomentCommentService");
-const { getNumberLikesOf } = require("./MomentLikeService");
+const {
+    getNumberLikesOf,
+    getLikeByUserAndMoment,
+} = require("./MomentLikeService");
 const { NotFoundError, BadRequestError } = require("../errors");
 
 /**
@@ -30,17 +33,18 @@ const createMoment = async (userId, newMoment) => {
 /**
  * Gets one moment by id
  * @param {String} momentId Id of the moment you need
+ * @param {String} userId Optional id of the logged user that requests the moment
  * @throws {NotFoundError} If the moment does not exist
  * @returns The moment if it exists
  */
-const getAMomentById = async (momentId) => {
+const getAMomentById = async (momentId, userId = null) => {
     const foundMoment = await getMomentBy({ _id: momentId });
 
     if (foundMoment.length === 0) {
         throw new NotFoundError(`Moment with id: ${momentId} not found`);
     }
 
-    return createSingleMomentBody(foundMoment[0]);
+    return createSingleMomentBody(foundMoment[0], userId);
 };
 
 /**
@@ -85,7 +89,7 @@ const getMomentsFor = async (userId, page = 1, limit = 20) => {
         "-createdAt"
     );
 
-    return await createListOfMomentBodies(momentsForUser);
+    return await createListOfMomentBodies(momentsForUser, userId);
 };
 
 /**
@@ -101,14 +105,14 @@ const getMomentsOf = async (userId, page = 1, limit = 20) => {
     const storedMoments = await getMomentBy({ createdBy: userId }, skip, limit);
 
     // Get the number of likes and comments
-    return await createListOfMomentBodies(storedMoments);
+    return await createListOfMomentBodies(storedMoments, userId);
 };
 
 const getMomentByUser = async (userId, momentId) => {
     const savedMoment = await getMomentBy({ createdBy: userId, _id: momentId });
 
     if (savedMoment.length === 0) {
-        throw new NotFoundError(`Moment with id ${momentId} not found`)
+        throw new NotFoundError(`Moment with id ${momentId} not found`);
     }
 
     return savedMoment;
@@ -150,18 +154,21 @@ const updateMomentById = async (userId, momentId, updatedMoment) => {
     return await createSingleMomentBody(savedMoment);
 };
 
-const createListOfMomentBodies = async (moments) => {
+const createListOfMomentBodies = async (moments, userId = null) => {
     // Get the number of likes and comments
     let momentsToReturn = [];
     for (const momentDoc of moments) {
-        momentsToReturn.push(await createSingleMomentBody(momentDoc));
+        momentsToReturn.push(await createSingleMomentBody(momentDoc, userId));
     }
     return momentsToReturn;
 };
 
-const createSingleMomentBody = async (momentDoc) => {
+const createSingleMomentBody = async (momentDoc, userId = null) => {
     const numberComments = await getNumberCommentsOf(momentDoc._id);
     const numberLikes = await getNumberLikesOf(momentDoc._id);
+    const isLiked = userId
+        ? (await getLikeByUserAndMoment(userId, momentDoc._id)) !== undefined
+        : undefined;
 
     return {
         ...momentDoc.toObject(),
@@ -172,6 +179,7 @@ const createSingleMomentBody = async (momentDoc) => {
             username: momentDoc.createdBy.username,
             email: momentDoc.createdBy.email,
         },
+        isLiked,
     };
 };
 
@@ -214,7 +222,9 @@ const addImageTo = async (userId, momentId, images) => {
     const savedMoment = await getAMomentById(momentId);
 
     if (savedMoment.img?.length) {
-        throw new BadRequestError(`Moment with id ${momentId} already has images`)
+        throw new BadRequestError(
+            `Moment with id ${momentId} already has images`
+        );
     }
 
     const updatedMoment = await updateMomentBy(

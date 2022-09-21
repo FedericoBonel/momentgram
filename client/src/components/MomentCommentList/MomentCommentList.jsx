@@ -57,7 +57,7 @@ const MomentCommentList = ({ user, moment }) => {
         };
 
         fetchComments();
-    }, [moment, navigate, user, commentPage]);
+    }, [moment._id, navigate, user, commentPage]);
 
     const addComment = async (newComment) => {
         const savedComment = await postNewComment(

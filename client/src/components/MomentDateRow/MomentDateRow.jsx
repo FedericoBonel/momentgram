@@ -5,7 +5,7 @@ const MomentDateRow = ({dateString}) => {
     const madeAgo = getDaysAgoFrom(dateString);
     return (
         <p className="container_daterow">
-            {madeAgo > 0 ? `${madeAgo} DAY${madeAgo > 1 && "S"} AGO` : "TODAY"}
+            {madeAgo > 0 ? `${madeAgo} DAY${madeAgo > 1 ? "S" : ""} AGO` : "TODAY"}
         </p>
     );
 };

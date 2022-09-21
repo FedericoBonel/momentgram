@@ -42,8 +42,9 @@ const getMoments = async (req, res) => {
 
 const getMomentById = async (req, res) => {
     const { id: momentId } = req.params;
+    const { _id: userId } = req.user;
 
-    const foundMoment = await getAMomentById(momentId);
+    const foundMoment = await getAMomentById(momentId, userId && userId);
 
     res.status(StatusCodes.OK).json(new SuccessPayload(foundMoment));
 };

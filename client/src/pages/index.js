@@ -5,6 +5,7 @@ import Dashboard from "./Dashboard/Dashboard";
 import MomentPage from "./MomentPage/MomentPage";
 import NewMoment from "./NewMoment/NewMoment";
 import UserProfile from "./UserProfile/UserProfile";
+import Error from "./Error/Error";
 
 export {
     Home,
@@ -14,4 +15,5 @@ export {
     MomentPage,
     NewMoment,
     UserProfile,
+    Error
 };

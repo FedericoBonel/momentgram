@@ -9,3 +9,9 @@
 .container_actions button:hover {
     filter: opacity(0.5);
 }
+
+.container_actions-animation {
+    --fa-animation-duration: 0.5s;
+    --fa-animation-iteration-count: 1;
+    color: red;
+}

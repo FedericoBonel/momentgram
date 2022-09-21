@@ -6,6 +6,12 @@ const {
     deleteLikeBy,
 } = require("../repositories/MomentLikeRepository");
 
+const getLikeByUserAndMoment = async (userId, momentId) => {
+    const likes = await getLikeBy({ moment: momentId, createdBy: userId });
+
+    return likes.length ? likes[0] : undefined;
+};
+
 const getNumberLikesOf = async (momentId) => {
     return await getNumberLikesBy({ moment: momentId });
 };
@@ -35,10 +41,10 @@ const createLikeBody = (like) => {
 };
 
 const addLikeTo = async (userId, momentId) => {
-    const savedLike = await getLikeBy({createdBy: userId, moment: momentId});
+    const savedLike = await getLikeBy({ createdBy: userId, moment: momentId });
 
     if (savedLike.length > 0) {
-        throw new BadRequestError("The post is already liked by the user")
+        throw new BadRequestError("The post is already liked by the user");
     }
 
     return await createLike({ moment: momentId, createdBy: userId });
@@ -48,4 +54,10 @@ const deleteLikeFrom = async (userId, momentId) => {
     return await deleteLikeBy({ moment: momentId, createdBy: userId });
 };
 
-module.exports = { getNumberLikesOf, getLikesOf, addLikeTo, deleteLikeFrom };
+module.exports = {
+    getLikeByUserAndMoment,
+    getNumberLikesOf,
+    getLikesOf,
+    addLikeTo,
+    deleteLikeFrom,
+};

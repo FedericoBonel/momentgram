@@ -14,7 +14,7 @@ import { deleteComment, postNewComment } from "../../api/MomentsApi";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-let Moment = ({ moment, user }) => {
+let Moment = ({ moment, user, onLikeMoment }) => {
     const navigate = useNavigate();
     const [newComment, setNewComment] = useState();
 
@@ -57,7 +57,10 @@ let Moment = ({ moment, user }) => {
                 alt="moment-img"
             />
             {/* Interactions */}
-            <MomentActionsRow />
+            <MomentActionsRow
+                isLiked={moment.isLiked}
+                onLike={() => onLikeMoment(moment._id, moment.isLiked)}
+            />
             {/* Likes */}
             <MomentLikesRow moment={moment} />
             {/* Description */}

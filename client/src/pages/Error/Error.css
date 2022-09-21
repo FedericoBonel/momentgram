@@ -1,0 +1,14 @@
+.container_error {
+    min-height: 100vh;
+    text-align: center;
+    padding: 23px 0;
+}
+
+.container_error h2 {
+    margin-bottom: 23px;
+}
+
+.container_error a {
+    text-decoration: none;
+    color: var(--color-button);
+}

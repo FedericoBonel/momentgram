@@ -1,17 +1,17 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 import "./Dashboard.css";
-import { getMomentsFor } from "../../api/MomentsApi";
+import { getMomentsFor, likeMoment, disLikeMoment } from "../../api/MomentsApi";
 import { UserContext } from "../../context/Context";
 import { Moment } from "../../components";
 
 const Dashboard = () => {
     const navigate = useNavigate();
 
-    const { user, invalidateUser } = useContext(UserContext);
+    const { user } = useContext(UserContext);
 
     const [moments, setMoments] = useState({
         data: [],
@@ -42,18 +42,41 @@ const Dashboard = () => {
                         submitStatus: "success",
                     }));
                 }
-            } else if (serverMoments.resCode === 401) {
-                invalidateUser();
             } else {
-                navigate("/error/500");
+                navigate(`/error/${serverMoments.resCode}`);
             }
         };
 
         loadMoments();
-    }, [user, invalidateUser, navigate, page]);
+    }, [user, navigate, page]);
+
+    const onLikeMoment = useCallback(async (momentId, isLiked) => {
+        const { resCode } = isLiked
+            ? await disLikeMoment(user.token, momentId)
+            : await likeMoment(user.token, momentId);
+
+        if (resCode === 201 || resCode === 200) {
+            setMoments((prevMoments) => ({
+                ...prevMoments,
+                data: prevMoments.data.map((moment) => {
+                    if (moment._id === momentId) {
+                        return { ...moment, isLiked: !moment.isLiked };
+                    }
+                    return moment;
+                }),
+            }));
+        } else {
+            navigate(`/error/${resCode}`);
+        }
+    }, [user.token, navigate]);
 
     const renderedMoments = moments.data.map((moment) => (
-        <Moment moment={moment} key={moment._id} user={user}/>
+        <Moment
+            moment={moment}
+            key={moment._id}
+            user={user}
+            onLikeMoment={onLikeMoment}
+        />
     ));
 
     const renderedLoadBtn = !disableMore ? (

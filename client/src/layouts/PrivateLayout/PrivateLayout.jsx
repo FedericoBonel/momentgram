@@ -5,11 +5,11 @@ import { UserContext } from "../../context/Context";
 import { Navbar } from "../../components";
 
 const PrivateLayout = () => {
-    const { user } = useContext(UserContext);
+    const { user, invalidateUser } = useContext(UserContext);
     
     return (
         <>
-            <Navbar user={user} />
+            <Navbar user={user.user} onLogout={invalidateUser}/>
             <Outlet />
         </>
     );

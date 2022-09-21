@@ -20,6 +20,7 @@ import {
     MomentPage,
     NewMoment,
     UserProfile,
+    Error,
 } from "./pages";
 import { PrivateLayout, PublicLayout } from "./layouts";
 
@@ -79,7 +80,7 @@ function App() {
                         </Route>
                     </Route>
                     {/* Errors */}
-                    <Route path="/error/:code" />
+                    <Route path="/error/:code" element={<Error />} />
                     <Route path="*" element={<Navigate to="/error/404" />} />
                 </Routes>
             </UserContext.Provider>
