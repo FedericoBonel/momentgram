@@ -14,7 +14,7 @@ Simple,
         
 3. Set up your MongoDB database, this could be on MongoDB Atlas or on a docker container.
 4. Set up your SMTP server for sending verification emails when registering users (you could use gmail here or any other you want).
-5. Set your environment variables (either by running the app.js with those variables declared or adding a .env file):
+5. Set your environment variables (either by running the app.js with those variables declared or adding a .env file to the /server folder):
         
         PORT=Your desired port
         MONGODB_URI=mongodb+srv://user:password@yourMongDBUrl/yourDatabase?retryWrites=true&w=majority
