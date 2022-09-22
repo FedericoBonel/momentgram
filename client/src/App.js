@@ -67,6 +67,7 @@ function App() {
                                 path="/users/:username"
                                 element={<UserProfile />}
                             />
+                            <Route path="/users/settings"/>
                         </Route>
                     </Route>
                     {/* Public routes */}
