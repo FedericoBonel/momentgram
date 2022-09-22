@@ -6,7 +6,8 @@ This is the backend of the system, it was developed using nodejs, mongodb, Mongo
 
 Simple, 
 
-1. Clone this repository.
+1. Install nodeJS
+2. Clone this repository.
 
 2. Go to the server folder:
 
@@ -26,7 +27,11 @@ Simple,
         EMAIL_USER=Your SMTP server user (if using gmail, this will be your gmail)
         EMAIL_PASS=Your SMTP server password (if using gmail, you'll need to generate an application password)
 
-6. Run the app.js file:
+6. Install the application to download dependencies:
+        
+        npm install
+        
+8. Run the app.js file:
 
         node app.js
         
