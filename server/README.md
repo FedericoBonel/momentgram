@@ -6,16 +6,16 @@ This is the backend of the system, it was developed using nodejs, mongodb, Mongo
 
 Simple, 
 
-1. Install nodeJS
+1. Install nodeJS.
 2. Clone this repository.
 
-2. Go to the server folder:
+3. Go to the server folder:
 
         cd ./server
         
-3. Set up your MongoDB database, this could be on MongoDB Atlas or on a docker container.
-4. Set up your SMTP server for sending verification emails when registering users (you could use gmail here or any other you want).
-5. Set your environment variables (either by running the app.js with those variables declared or adding a .env file to the /server folder):
+4. Set up your MongoDB database, this could be on MongoDB Atlas or on a docker container.
+5. Set up your SMTP server for sending verification emails when registering users (you could use gmail here or any other you want).
+6. Set your environment variables (either by running the app.js with those variables declared or adding a .env file to the /server folder):
         
         PORT=Your desired port
         MONGODB_URI=mongodb+srv://user:password@yourMongDBUrl/yourDatabase?retryWrites=true&w=majority
@@ -27,7 +27,7 @@ Simple,
         EMAIL_USER=Your SMTP server user (if using gmail, this will be your gmail)
         EMAIL_PASS=Your SMTP server password (if using gmail, you'll need to generate an application password)
 
-6. Install the application to download dependencies:
+7. Install the application to download dependencies:
         
         npm install
         
@@ -35,7 +35,7 @@ Simple,
 
         node app.js
         
-7. Done and done! You can now make http requests to the domain you are using and the PORT and API_BASE_URL you set up on your env file, so if you are running this on your computer you would request to: http://localhost:{PORT}{API_BASE_URL}
+9. Done and done! You can now make http requests to the domain you are using and the PORT and API_BASE_URL you set up on your env file, so if you are running this on your computer you would request to: http://localhost:{PORT}{API_BASE_URL}
 
 ## Code Organization
 
