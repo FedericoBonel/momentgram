@@ -2,7 +2,7 @@
 
 This repository is a memories and pictures sharing web application (i.e. an instagram clone) developed using the MERN tech stack.
 
-<img src="/AmbroBook.gif" width="700px">
+![preview](./Preview.gif)
 
 ## What is included in this repo?
 
