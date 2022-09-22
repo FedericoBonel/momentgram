@@ -2,6 +2,36 @@
 
 This is the backend of the system, it was developed using nodejs, mongodb, Mongoose as the database API, and ExpressJS.
 
+## How to use this?
+
+Simple, 
+
+1. Clone this repository.
+
+2. Go to the server folder:
+
+        cd ./server
+        
+3. Set up your MongoDB database, this could be on MongoDB Atlas or on a docker container.
+4. Set up your SMTP server for sending verification emails when registering users (you could use gmail here or any other you want).
+5. Set your enviroment variables (either by running the app.js with those variables declared or adding a .env file):
+        
+        PORT=Your desired port
+        MONGODB_URI=mongodb+srv://user:password@yourMongDBUrl/yourDatabase?retryWrites=true&w=majority
+        SECRET=The secret used to sign your JWTs
+        EXPIRATION_TIME=The expiration time of your JWTs (i.g. "30d")
+        API_BASE_URL=Your desired base API url (i.g. "/api/v1")
+        MAX_IMG_SIZE=Your desired max image file size on MB (i.g. 5)
+        EMAIL_HOST=Your desired SMTP host for sending the verification emails (i.g. smtp.gmail.com)
+        EMAIL_USER=Your SMTP server user (if using gmail, this will be your gmail)
+        EMAIL_PASS=Your SMTP server password (if using gmail, you'll need to generate an application password)
+
+6. Run the app.js file:
+
+        node app.js
+        
+7. Done and done! You can now make http requests to the domain you are using and the PORT and API_BASE_URL you set up on your env file, so if you are running this on your computer you would request to: http://localhost:{PORT}{API_BASE_URL}
+
 ## Code Organization
 
 The code is structured and modularized in 4 main layers as follows:
