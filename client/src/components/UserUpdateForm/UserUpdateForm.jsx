@@ -8,7 +8,7 @@ import { getUserByUsername, updateUserInfo } from "../../api/UsersApi";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-const UserUpdateForm = ({ user }) => {
+const UserUpdateForm = ({ user, validateUser }) => {
     const navigate = useNavigate();
     const [userInfo, setUserInfo] = useState({
         data: {
@@ -60,6 +60,14 @@ const UserUpdateForm = ({ user }) => {
             setUserInfo({
                 submitStatus: "idle",
                 data: updateRes.updatedUser,
+            });
+            validateUser({
+                token: user.token,
+                user: {
+                    id: updateRes.updatedUser._id,
+                    email: updateRes.updatedUser.email,
+                    username: updateRes.updatedUser.username,
+                },
             });
         } else {
             navigate(`/error/${updateRes.resCode}`);

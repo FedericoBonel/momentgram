@@ -5,7 +5,7 @@ import { UserContext } from "../../context/Context";
 import { UserUpdateForm, PasswordUpdateForm } from "../../components";
 
 const UserSettings = () => {
-    const { user } = useContext(UserContext);
+    const { user, validateUser } = useContext(UserContext);
     const [menuToDisplay, setMenuToDisplay] = useState("userinfo"); // "password" || "userinfo"
 
     return (
@@ -37,10 +37,10 @@ const UserSettings = () => {
                 </ul>
                 <div className="container_usrsettings-form">
                     {menuToDisplay === "userinfo" && (
-                        <UserUpdateForm user={user} />
+                        <UserUpdateForm user={user} validateUser={validateUser}/>
                     )}
                     {menuToDisplay === "password" && (
-                        <PasswordUpdateForm user={user} />
+                        <PasswordUpdateForm user={user}/>
                     )}
                 </div>
             </div>

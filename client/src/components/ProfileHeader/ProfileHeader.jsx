@@ -57,7 +57,7 @@ const ProfileHeader = ({ user, userData, onFollow }) => {
                             )}
                         </button>
                     ) : (
-                        <Link to={`/users/settings`}>
+                        <Link to={`/profile/settings`}>
                             <button>
                                 <FontAwesomeIcon icon={faGear} />
                             </button>
