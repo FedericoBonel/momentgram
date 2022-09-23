@@ -11,6 +11,10 @@
     align-items: center;
 }
 
+.container_usrupd-form_usrrow p {
+    font-size: 1.3rem;
+}
+
 .container_usrupd-form_profimg {
     border-radius: 100%;
     width: 42px;

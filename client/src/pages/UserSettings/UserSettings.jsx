@@ -12,12 +12,36 @@ const UserSettings = () => {
         <main className="container_usrsettings">
             <div className="container_usrsettings-card">
                 <ul className="container_usrsettings-links">
-                    <li>Edit profile</li>
-                    <li>Change password</li>
+                    <li
+                        onClick={() => setMenuToDisplay("userinfo")}
+                        className={`container_usrsettings-link
+                            ${
+                                menuToDisplay === "userinfo" &&
+                                `container_usrsettings-selected`
+                            }
+                        `}
+                    >
+                        Edit profile
+                    </li>
+                    <li
+                        onClick={() => setMenuToDisplay("password")}
+                        className={`container_usrsettings-link
+                            ${
+                                menuToDisplay === "password" &&
+                                `container_usrsettings-selected`
+                            }
+                        `}
+                    >
+                        Change password
+                    </li>
                 </ul>
                 <div className="container_usrsettings-form">
-                    {menuToDisplay === "userinfo" && <UserUpdateForm user={user}/>}
-                    {menuToDisplay === "password" && <PasswordUpdateForm />}
+                    {menuToDisplay === "userinfo" && (
+                        <UserUpdateForm user={user} />
+                    )}
+                    {menuToDisplay === "password" && (
+                        <PasswordUpdateForm user={user} />
+                    )}
                 </div>
             </div>
         </main>

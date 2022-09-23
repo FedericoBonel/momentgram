@@ -116,8 +116,6 @@ const followUser = async (token, userId) => {
         const payload = await response.json();
         const resCode = response.status;
 
-        console.log(payload);
-
         return { follow: payload.data, resCode };
     } catch (error) {
         console.log(`An error ocurred during user following: ${error}`);

@@ -17,16 +17,35 @@
 
 .container_usrsettings-links {
     list-style: none;
-    padding: 32px 32px 0 32px;
     width: 25%;
     text-align: left;
     border-right: 1px lightgray solid;
 }
 
-.container_usrsettings-links > li {
-    margin-bottom: 32px;
+.container_usrsettings-link {
+    padding: 16px 32px;
+    cursor: pointer;
+}
+
+.container_usrsettings-link:hover {
+    background: var(--color-background);
+    border-left: 2px lightgray solid;
+}
+
+.container_usrsettings-link:active {
+    filter: opacity(0.5);
 }
 
 .container_usrsettings-form {
     width: 75%;
+}
+
+.container_usrsettings-selected {
+    font-weight: 600;
+    border-left: 2px black solid;
+}
+
+.container_usrsettings-selected:hover {
+    background: white;
+    border-left: 2px black solid;
 }

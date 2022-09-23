@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 import "./UserUpdateForm.css";
 import { getUserByUsername, updateUserInfo } from "../../api/UsersApi";
@@ -12,7 +14,7 @@ const UserUpdateForm = ({ user }) => {
         data: {
             firstName: "",
             lastName: "",
-            username: user.username,
+            username: "",
             description: "",
         },
         submitStatus: "loading",
@@ -47,6 +49,10 @@ const UserUpdateForm = ({ user }) => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        setUserInfo((prevInfo) => ({
+            ...prevInfo,
+            submitStatus: "submitting",
+        }));
 
         const updateRes = await updateUserInfo(user.token, userInfo.data);
 
@@ -143,6 +149,7 @@ const UserUpdateForm = ({ user }) => {
                             name="description"
                             value={userInfo.data.description}
                             onChange={onChange}
+                            maxLength="250"
                         />
                         <small>
                             Add a description of your profile so users know what
@@ -150,7 +157,12 @@ const UserUpdateForm = ({ user }) => {
                         </small>
                     </div>
                 </div>
-                <button className="container_usrup-form_submit">Submit</button>
+                <button className="container_usrup-form_submit">
+                    Submit{" "}
+                    {userInfo.submitStatus === "submitting" && (
+                        <FontAwesomeIcon icon={faSpinner} spin />
+                    )}
+                </button>
             </form>
         </div>
     );
