@@ -1,0 +1,32 @@
+.container_usrsettings {
+    min-height: 100vh;
+    text-align: center;
+    padding: 32px;
+}
+
+.container_usrsettings-card {
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    max-width: 935px;
+    width: 70%;
+    background-color: white;
+    border-radius: 4px;
+    border: 1px lightgray solid;
+}
+
+.container_usrsettings-links {
+    list-style: none;
+    padding: 32px 32px 0 32px;
+    width: 25%;
+    text-align: left;
+    border-right: 1px lightgray solid;
+}
+
+.container_usrsettings-links > li {
+    margin-bottom: 32px;
+}
+
+.container_usrsettings-form {
+    width: 75%;
+}

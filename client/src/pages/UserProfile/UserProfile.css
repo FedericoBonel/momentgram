@@ -3,3 +3,17 @@
     text-align: center;
     padding: 24px 0;
 }
+
+.container_userprof-loadmore {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-top: 24px;
+    color: var(--color-button);
+}
+
+.container_userprof-nomore {
+    margin-top: 24px;
+}

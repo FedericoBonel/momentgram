@@ -20,6 +20,7 @@ import {
     MomentPage,
     NewMoment,
     UserProfile,
+    UserSettings,
     Error,
 } from "./pages";
 import { PrivateLayout, PublicLayout } from "./layouts";
@@ -67,7 +68,10 @@ function App() {
                                 path="/users/:username"
                                 element={<UserProfile />}
                             />
-                            <Route path="/users/settings"/>
+                            <Route
+                                path="/profile/settings"
+                                element={<UserSettings />}
+                            />
                         </Route>
                     </Route>
                     {/* Public routes */}

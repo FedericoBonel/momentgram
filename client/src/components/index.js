@@ -12,6 +12,8 @@ import MomentForm from "./MomentForm/MomentForm";
 import MomentCommentList from "./MomentCommentList/MomentCommentList";
 import ProfileHeader from "./ProfileHeader/ProfileHeader";
 import ProfileMomentsList from "./ProfileMomentList/ProfileMomentsList";
+import PasswordUpdateForm from "./PasswordUpdateForm/PasswordUpdateForm";
+import UserUpdateForm from "./UserUpdateForm/UserUpdateForm";
 
 export {
     LoginForm,
@@ -28,4 +30,6 @@ export {
     MomentCommentList,
     ProfileHeader,
     ProfileMomentsList,
+    UserUpdateForm,
+    PasswordUpdateForm
 };

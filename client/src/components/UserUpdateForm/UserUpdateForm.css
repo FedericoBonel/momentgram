@@ -1,0 +1,73 @@
+.container_usrupd-form {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.container_usrupd-form_usrrow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.container_usrupd-form_profimg {
+    border-radius: 100%;
+    width: 42px;
+    margin-right: 16px;
+}
+
+.container_usrupd-form_form {
+    text-align: start;
+}
+
+.container_usrupd-usr_input {
+    display: flex;
+    flex-direction: row;
+    margin: 16px 0;
+}
+
+.container_usrupd-usr_input aside {
+    width: 20%;
+    margin-right: 24px;
+    text-align: end;
+}
+
+.container_usrup-usr_input-r {
+    width: 80%;
+}
+
+.container_usrup-usr_input-r input,
+textarea {
+    width: 100%;
+    padding: 4px 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    border: 1px lightgray solid;
+    border-radius: 4px;
+}
+
+.container_usrup-usr_input-r textarea {
+    resize: vertical;
+}
+
+.container_usrup-usr_input-r small {
+    font-size: 0.8rem;
+    color: gray;
+}
+
+.container_usrup-form_submit {
+    cursor: pointer;
+    width: fit-content;
+    border: none;
+    border-radius: 4px;
+    background: var(--color-button);
+    color: white;
+    font-weight: 600;
+    padding: 8px;
+}
+
+.container_usrup-form_submit:disabled,
+.container_usrup-form_submit:active {
+    filter: opacity(0.5);
+}

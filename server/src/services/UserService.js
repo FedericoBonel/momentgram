@@ -136,7 +136,7 @@ const verifyUserAccount = async (verificationCode) => {
 
 /**
  * Updates the user with the given id
- * @param {String} id Can be any id, recommended to use the one received in the JWT
+ * @param {String} id Can be any user id, recommended to use the one received in the JWT
  * @param {any} updatedUser updated fields of the user
  */
 const updateUserById = async (id, updatedUser) => {
@@ -149,7 +149,7 @@ const updateUserById = async (id, updatedUser) => {
     if (changes.username) {
         const foundUser = await getUserBy({ username: changes.username });
 
-        if (foundUser) {
+        if (foundUser && foundUser._id.toString() !== id) {
             throw new BadRequestError(
                 `There already exists a user with username: ${changes.username}`
             );
@@ -192,6 +192,8 @@ const createUserBody = async (foundUser, userId) => {
     return {
         _id: foundUser._id,
         username: foundUser.username,
+        firstName: foundUser.firstName,
+        lastName: foundUser.lastName,
         email: foundUser.email,
         description: foundUser.description,
         numberFollowers,

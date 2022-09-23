@@ -81,8 +81,8 @@ const getUserByUsername = async (token, username) => {
     }
 };
 
-const getUserMomentsById = async (token, userId) => {
-    const usersUri = `${BACKEND_URI}/users/${userId}/moments`;
+const getUserMomentsById = async (token, userId, page) => {
+    const usersUri = `${BACKEND_URI}/users/${userId}/moments?page=${page}`;
     try {
         const response = await fetch(usersUri, {
             headers: {
@@ -97,7 +97,7 @@ const getUserMomentsById = async (token, userId) => {
 
         return { moments: payload.data, resCode };
     } catch (error) {
-        console.log(`An error ocurred during user fetching: ${error}`);
+        console.log(`An error ocurred during user moment fetching: ${error}`);
         return { resCode: 500 };
     }
 };
@@ -118,12 +118,12 @@ const followUser = async (token, userId) => {
 
         console.log(payload);
 
-        return { moments: payload.data, resCode };
+        return { follow: payload.data, resCode };
     } catch (error) {
-        console.log(`An error ocurred during user fetching: ${error}`);
+        console.log(`An error ocurred during user following: ${error}`);
         return { resCode: 500 };
     }
-}
+};
 
 const unfollowUser = async (token, userId) => {
     const usersUri = `${BACKEND_URI}/users/${userId}/followers`;
@@ -139,12 +139,35 @@ const unfollowUser = async (token, userId) => {
         const payload = await response.json();
         const resCode = response.status;
 
-        return { moments: payload.data, resCode };
+        return { unfollow: payload.data, resCode };
     } catch (error) {
-        console.log(`An error ocurred during user fetching: ${error}`);
+        console.log(`An error ocurred during user unfollowing: ${error}`);
         return { resCode: 500 };
     }
-}
+};
+
+const updateUserInfo = async (token, updatedUser) => {
+    const usersUri = `${BACKEND_URI}/users`;
+    try {
+        const response = await fetch(usersUri, {
+            headers: {
+                accept: "application/json",
+                authorization: `Bearer ${token}`,
+                "content-type": "application/json",
+            },
+            method: "PUT",
+            body: JSON.stringify(updatedUser),
+        });
+
+        const payload = await response.json();
+        const resCode = response.status;
+
+        return { updatedUser: payload.data, resCode };
+    } catch (error) {
+        console.log(`An error ocurred during user update: ${error}`);
+        return { resCode: 500 };
+    }
+};
 
 export {
     authenticateUser,
@@ -153,5 +176,6 @@ export {
     getUserByUsername,
     getUserMomentsById,
     followUser,
-    unfollowUser
+    unfollowUser,
+    updateUserInfo,
 };
