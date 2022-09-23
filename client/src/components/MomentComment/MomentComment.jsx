@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle, faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
 import "./MomentComment.css";
 import { getDaysAgoFrom } from "../../api/DateApi";
+import OutsideClickListener from "../OutsideClickListener/OutsideClickListener";
 
 const MomentComment = ({ comment, user, onDelete }) => {
     const [displayOptions, setDisplayOptions] = useState(false);
+
+    const referenceToOptions = useRef(null);
+    OutsideClickListener(referenceToOptions, () => setDisplayOptions(false));
 
     const options = (show) => {
         if (show) {
@@ -56,7 +60,7 @@ const MomentComment = ({ comment, user, onDelete }) => {
     const renderedOptions = (
         <>
             <div className="container_comment-options_back"></div>
-            <div className="container_comment-options">
+            <div ref={referenceToOptions} className="container_comment-options">
                 <button
                     className="container_comment-options-delete"
                     onClick={deleteComment}

@@ -11,10 +11,33 @@
     --size-mgtitle2: 1.5rem;
 }
 
+::-webkit-scrollbar {
+    width: 8px;
+    position: fixed;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+    border-left: 1px lightgray solid;
+    border-radius: 10px;
+  }
+
+
+  ::-webkit-scrollbar-thumb {
+    background: lightgray;
+    border-radius: 10px;
+  }
+
+  
+::-webkit-scrollbar-thumb:hover {
+    filter: opacity(0.5);
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    scroll-behavior: smooth;
 }
 
 body {
