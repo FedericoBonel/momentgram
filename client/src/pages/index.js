@@ -4,7 +4,7 @@ import VerifyAccount from "./VerifyAccount/VerifyAccount";
 import Dashboard from "./Dashboard/Dashboard";
 import MomentPage from "./MomentPage/MomentPage";
 import NewMoment from "./NewMoment/NewMoment";
-import UserProfile from "./UserProfile/UserProfile";
+import UserProfileProvider from "./UserProfile/UserProfileProvider";
 import UserSettings from "./UserSettings/UserSettings";
 import Error from "./Error/Error";
 
@@ -15,7 +15,7 @@ export {
     Dashboard,
     MomentPage,
     NewMoment,
-    UserProfile,
+    UserProfileProvider as UserProfile,
     UserSettings,
     Error,
 };

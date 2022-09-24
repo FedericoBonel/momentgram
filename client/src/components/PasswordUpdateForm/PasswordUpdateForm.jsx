@@ -6,7 +6,7 @@ const PasswordUpdateForm = ({ user }) => {
     const onSubmit = async (e) => {
         e.preventDefault();
 
-        // Todo
+        // Todo implement this
     };
 
     return (

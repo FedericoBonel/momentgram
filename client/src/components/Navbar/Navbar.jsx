@@ -19,9 +19,9 @@ const Navbar = ({ user, onLogout }) => {
             className="container_popup-menu swing-in-top-fwd"
             onClick={() => setShowMenu(false)}
         >
-            <a href={`/users/${user.username}`}>
+            <Link to={`/users/${user.username}`}>
                 <li>Profile</li>
-            </a>
+            </Link>
             <Link to={`/profile/settings`}>
                 <li>Settings</li>
             </Link>
