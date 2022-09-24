@@ -11,6 +11,7 @@ const {
     deleteAccount,
     updateUser,
     verifyUser,
+    updateUserPassword,
 } = require("../controllers/UserController");
 const authenticateToken = require("../middleware/JwtAuth");
 
@@ -23,6 +24,7 @@ userRouter
     .get(getUsersByQuery)
     .delete(deleteAccount)
     .put(updateUser);
+userRouter.route("/password").all(authenticateToken).post(updateUserPassword);
 userRouter.route("/:id").get(authenticateToken, getUser);
 // User followers -------------------------------------------------------------
 userRouter

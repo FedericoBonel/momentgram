@@ -1,8 +1,31 @@
+import { useState } from "react";
+
 import "./PasswordUpdateForm.css";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const PasswordUpdateForm = ({ user }) => {
+    const [passwordData, setPasswordData] = useState({
+        data: {
+            oldPassword: "",
+            newPassword: "",
+            confirmPassword: "",
+        },
+        submitStatus: "idle",
+    });
+
+    const onChange = (e) => {
+        setPasswordData((prevData) => ({
+            ...prevData,
+            data: { ...prevData.data, [e.target.name]: e.target.value },
+        }));
+    };
+
+    const canSave =
+        Boolean(passwordData.data.oldPassword) &&
+        Boolean(passwordData.data.newPassword) &&
+        passwordData.data.confirmPassword === passwordData.data.newPassword;
+
     const onSubmit = async (e) => {
         e.preventDefault();
 
@@ -33,9 +56,11 @@ const PasswordUpdateForm = ({ user }) => {
                     </aside>
                     <div className="container_passupd-form_input-r">
                         <input
-                            type="text"
+                            type="password"
                             id="oldPassword"
                             name="oldPassword"
+                            onChange={onChange}
+                            value={passwordData.data.oldPassword}
                         />
                     </div>
                 </div>
@@ -45,9 +70,11 @@ const PasswordUpdateForm = ({ user }) => {
                     </aside>
                     <div className="container_passupd-form_input-r">
                         <input
-                            type="text"
+                            type="password"
                             id="newPassword"
                             name="newPassword"
+                            onChange={onChange}
+                            value={passwordData.data.newPassword}
                         />
                     </div>
                 </div>
@@ -59,13 +86,18 @@ const PasswordUpdateForm = ({ user }) => {
                     </aside>
                     <div className="container_passupd-form_input-r">
                         <input
-                            type="text"
+                            type="password"
                             id="confirmPassword"
                             name="confirmPassword"
+                            onChange={onChange}
+                            value={passwordData.data.confirmPassword}
                         />
                     </div>
                 </div>
-                <button className="container_passupd-form_submit">
+                <button
+                    className="container_passupd-form_submit"
+                    disabled={!canSave}
+                >
                     Submit
                 </button>
             </form>

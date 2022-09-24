@@ -165,6 +165,11 @@ const updateUserById = async (id, updatedUser) => {
     return await createUserBody(savedUser, null);
 };
 
+/**
+ * Deletes the user with the given id from database
+ * @param {String} id Id of the user to be deleted
+ * @returns The deleted result (i.e. number of posts deleted, likes, etc.)
+ */
 const deleteUserById = async (id) => {
     const deleteResult = await deleteUserBy({ _id: id });
 
@@ -173,6 +178,34 @@ const deleteUserById = async (id) => {
     }
 
     return deleteResult;
+};
+
+/**
+ * Updates a user password
+ * @param {*} id Id of the user to be updated
+ * @param {*} oldPassword Old user password
+ * @param {*} newPassword New user password
+ */
+const updateUserPasswordById = async (id, oldPassword, newPassword) => {
+    const userFound = await getUserBy({ _id: id });
+
+    if (!userFound) {
+        throw new NotFoundError(`User with id: ${id} not found`);
+    }
+
+    if (
+        !(
+            userFound.validated &&
+            (await bcryptjs.compare(oldPassword, userFound.password))
+        )
+    ) {
+        throw new UnauthorizedError(`Incorrect password`);
+    }
+
+    await updateUserBy(
+        { _id: id },
+        { password: await bcryptjs.hash(newPassword, 12) }
+    );
 };
 
 const generateToken = (user) => {
@@ -209,6 +242,7 @@ module.exports = {
     updateUserById,
     authenticateUser,
     deleteUserById,
+    updateUserPasswordById,
     verifyUserAccount,
     getUsersByFilters,
 };

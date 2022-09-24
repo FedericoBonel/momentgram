@@ -20,6 +20,12 @@ const UserUpdateForm = ({ user, validateUser }) => {
         submitStatus: "loading",
     });
 
+    const canSave =
+        Boolean(userInfo.data.firstName) &&
+        Boolean(userInfo.data.lastName) &&
+        Boolean(userInfo.data.username) &&
+        Boolean(userInfo.submitStatus !== "loading");
+
     useEffect(() => {
         const fetchUser = async () => {
             const fetchedUsers = await getUserByUsername(
@@ -74,6 +80,91 @@ const UserUpdateForm = ({ user, validateUser }) => {
         }
     };
 
+    const renderedForm = (
+        <form className="container_usrupd-form_form" onSubmit={onSubmit}>
+            <div className="container_usrupd-usr_input">
+                <aside>
+                    <label htmlFor="firstName">First Name</label>
+                </aside>
+                <div className="container_usrup-usr_input-r">
+                    <input
+                        type="text"
+                        id="firstName"
+                        name="firstName"
+                        value={userInfo.data.firstName}
+                        onChange={onChange}
+                    />
+                    <small>
+                        Help people discover your account by using the name
+                        you're known by: either your full first name, nickname,
+                        or business name.
+                    </small>
+                </div>
+            </div>
+            <div className="container_usrupd-usr_input">
+                <aside>
+                    <label htmlFor="lastName">Last Name</label>
+                </aside>
+                <div className="container_usrup-usr_input-r">
+                    <input
+                        type="text"
+                        id="lastName"
+                        name="lastName"
+                        value={userInfo.data.lastName}
+                        onChange={onChange}
+                    />
+                    <small>
+                        Help people discover your account by using the name
+                        you're known by: either your full last name or business
+                        name.
+                    </small>
+                </div>
+            </div>
+            <div className="container_usrupd-usr_input">
+                <aside>
+                    <label htmlFor="username">Username</label>
+                </aside>
+                <div className="container_usrup-usr_input-r">
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        value={userInfo.data.username}
+                        onChange={onChange}
+                    />
+                    <small>
+                        This username will be displayed on your profile and
+                        posts.
+                    </small>
+                </div>
+            </div>
+            <div className="container_usrupd-usr_input">
+                <aside>
+                    <label htmlFor="description">Profile Description</label>
+                </aside>
+                <div className="container_usrup-usr_input-r">
+                    <textarea
+                        id="description"
+                        name="description"
+                        value={userInfo.data.description}
+                        onChange={onChange}
+                        maxLength="250"
+                    />
+                    <small>
+                        Add a description of your profile so users know what you
+                        post about.
+                    </small>
+                </div>
+            </div>
+            <button className="container_usrup-form_submit" disabled={!canSave}>
+                Submit{" "}
+                {userInfo.submitStatus === "submitting" && (
+                    <FontAwesomeIcon icon={faSpinner} spin />
+                )}
+            </button>
+        </form>
+    );
+
     return (
         <div className="container_usrupd-form">
             <div className="container_usrupd-form_usrrow">
@@ -90,88 +181,15 @@ const UserUpdateForm = ({ user, validateUser }) => {
                     <p>{user.user.username}</p>
                 </div>
             </div>
-            <form className="container_usrupd-form_form" onSubmit={onSubmit}>
-                <div className="container_usrupd-usr_input">
-                    <aside>
-                        <label htmlFor="firstName">First Name</label>
-                    </aside>
-                    <div className="container_usrup-usr_input-r">
-                        <input
-                            type="text"
-                            id="firstName"
-                            name="firstName"
-                            value={userInfo.data.firstName}
-                            onChange={onChange}
-                        />
-                        <small>
-                            Help people discover your account by using the name
-                            you're known by: either your full first name,
-                            nickname, or business name.
-                        </small>
-                    </div>
-                </div>
-                <div className="container_usrupd-usr_input">
-                    <aside>
-                        <label htmlFor="lastName">Last Name</label>
-                    </aside>
-                    <div className="container_usrup-usr_input-r">
-                        <input
-                            type="text"
-                            id="lastName"
-                            name="lastName"
-                            value={userInfo.data.lastName}
-                            onChange={onChange}
-                        />
-                        <small>
-                            Help people discover your account by using the name
-                            you're known by: either your full last name or
-                            business name.
-                        </small>
-                    </div>
-                </div>
-                <div className="container_usrupd-usr_input">
-                    <aside>
-                        <label htmlFor="username">Username</label>
-                    </aside>
-                    <div className="container_usrup-usr_input-r">
-                        <input
-                            type="text"
-                            id="username"
-                            name="username"
-                            value={userInfo.data.username}
-                            onChange={onChange}
-                        />
-                        <small>
-                            This username will be displayed on your profile and
-                            posts.
-                        </small>
-                    </div>
-                </div>
-                <div className="container_usrupd-usr_input">
-                    <aside>
-                        <label htmlFor="description">Profile Description</label>
-                    </aside>
-                    <div className="container_usrup-usr_input-r">
-                        <textarea
-                            id="description"
-                            name="description"
-                            value={userInfo.data.description}
-                            onChange={onChange}
-                            maxLength="250"
-                        />
-                        <small>
-                            Add a description of your profile so users know what
-                            you post about.
-                        </small>
-                    </div>
-                </div>
-                <button className="container_usrup-form_submit">
-                    Submit{" "}
-                    {userInfo.submitStatus === "submitting" && (
-                        <FontAwesomeIcon icon={faSpinner} spin />
-                    )}
-                </button>
-            </form>
+            {userInfo.submitStatus === "loading" && (
+                <FontAwesomeIcon
+                    icon={faSpinner}
+                    spin
+                    size={"2x"}
+                    color="gray"
+                />
+            )}
+            {userInfo.submitStatus !== "loading" && renderedForm}
         </div>
     );
 };

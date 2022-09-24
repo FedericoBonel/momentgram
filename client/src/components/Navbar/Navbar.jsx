@@ -30,6 +30,7 @@ const Navbar = ({ user, onLogout }) => {
             </li>
         </ul>
     );
+    
     return (
         <nav className="container_navbar">
             <h1 className="container_navbar-logo">MomentGram</h1>

@@ -75,3 +75,7 @@ textarea {
 .container_usrup-form_submit:active {
     filter: opacity(0.5);
 }
+
+.container_usrup-form_submit:disabled {
+    pointer-events: none;
+}
