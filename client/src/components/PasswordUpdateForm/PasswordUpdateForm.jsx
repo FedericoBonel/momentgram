@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import "./PasswordUpdateForm.css";
+import { updateUserPassword } from "../../api/UsersApi";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const PasswordUpdateForm = ({ user }) => {
+    const navigate = useNavigate();
     const [passwordData, setPasswordData] = useState({
         data: {
             oldPassword: "",
@@ -29,7 +32,33 @@ const PasswordUpdateForm = ({ user }) => {
     const onSubmit = async (e) => {
         e.preventDefault();
 
-        // Todo implement this
+        setPasswordData((prevData) => ({
+            ...prevData,
+            submitStatus: "loading",
+        }));
+
+        const { resCode } = await updateUserPassword(
+            user.token,
+            passwordData.data
+        );
+
+        if (resCode === 200) {
+            setPasswordData({
+                data: {
+                    oldPassword: "",
+                    newPassword: "",
+                    confirmPassword: "",
+                },
+                submitStatus: "success",
+            });
+        } else if (resCode === 401) {
+            setPasswordData((prevData) => ({
+                ...prevData,
+                submitStatus: "rejected",
+            }));
+        } else {
+            navigate(`/error/${resCode}`);
+        }
     };
 
     return (
@@ -39,7 +68,7 @@ const PasswordUpdateForm = ({ user }) => {
                     className="container_passupd-profimg"
                     src={
                         user.user.profileImg
-                            ? `${BACKEND_URL}/images/${user.profileImg.url}`
+                            ? `${BACKEND_URL}/images/${user.user.profileImg.url}`
                             : `${BACKEND_URL}/images/profileph.jpg`
                     }
                     alt="profile-img"
@@ -100,6 +129,16 @@ const PasswordUpdateForm = ({ user }) => {
                 >
                     Submit
                 </button>
+                {passwordData.submitStatus === "success" && (
+                    <p className="container_passupd-form_suc">
+                        Hooray! Your password was saved successfully.
+                    </p>
+                )}
+                {passwordData.submitStatus === "rejected" && (
+                    <p className="container_passupd-form_alert">
+                        Sorry, your password was incorrect, please try again.
+                    </p>
+                )}
             </form>
         </div>
     );

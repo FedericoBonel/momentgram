@@ -167,6 +167,28 @@ const updateUserInfo = async (token, updatedUser) => {
     }
 };
 
+const updateUserPassword = async (token, updatedPassword) => {
+    const usersUri = `${BACKEND_URI}/users/password`;
+    try {
+        const response = await fetch(usersUri, {
+            headers: {
+                accept: "application/json",
+                authorization: `Bearer ${token}`,
+                "content-type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify(updatedPassword),
+        });
+
+        const resCode = response.status;
+
+        return { resCode };
+    } catch (error) {
+        console.log(`An error ocurred during user update: ${error}`);
+        return { resCode: 500 };
+    }
+}
+
 export {
     authenticateUser,
     registerUser,
@@ -176,4 +198,5 @@ export {
     followUser,
     unfollowUser,
     updateUserInfo,
+    updateUserPassword
 };

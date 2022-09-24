@@ -11,7 +11,7 @@ const MomentComment = ({ comment, user, onDelete }) => {
     const [displayOptions, setDisplayOptions] = useState(false);
 
     const referenceToOptions = useRef(null);
-    OutsideClickListener(referenceToOptions, () => setDisplayOptions(false));
+    OutsideClickListener(referenceToOptions, () => options(false));
 
     const options = (show) => {
         if (show) {
