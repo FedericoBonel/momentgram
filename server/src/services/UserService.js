@@ -32,7 +32,7 @@ const getUserById = async (id, userId = null) => {
         throw new NotFoundError(`User with id: ${id} not found`);
     }
 
-    return await createUserBody(foundUser, userId);
+    return await createExposedUser(foundUser, userId);
 };
 
 const getUsersByFilters = async (
@@ -48,7 +48,7 @@ const getUsersByFilters = async (
     let usersBodies = [];
 
     for (const user of usersFound) {
-        usersBodies.push(await createUserBody(user, userId));
+        usersBodies.push(await createExposedUser(user, userId));
     }
 
     return usersBodies;
@@ -74,7 +74,9 @@ const registerUser = async (newUser, host) => {
 
     await sendVerificationEmail(newUser, host);
 
-    const savedUser = await createUser(newUser);
+    const userModel = toUserModel(newUser);
+
+    const savedUser = await createUser(userModel);
 
     return {
         _id: savedUser._id,
@@ -90,7 +92,7 @@ const authenticateUser = async (email, password) => {
         !(
             savedUser &&
             savedUser.validated &&
-            (await bcryptjs.compare(password, savedUser.password))
+            (await bcryptjs.compare(password, savedUser.password.data))
         )
     ) {
         throw new UnauthorizedError(
@@ -140,11 +142,7 @@ const verifyUserAccount = async (verificationCode) => {
  * @param {any} updatedUser updated fields of the user
  */
 const updateUserById = async (id, updatedUser) => {
-    const { email, _id, ...changes } = updatedUser;
-
-    if (changes.password) {
-        changes.password = await bcryptjs.hash(changes.password, 12);
-    }
+    const { password, email, _id, ...changes } = updatedUser;
 
     if (changes.username) {
         const foundUser = await getUserBy({ username: changes.username });
@@ -162,7 +160,7 @@ const updateUserById = async (id, updatedUser) => {
         throw new NotFoundError(`User with ${id} not found`);
     }
 
-    return await createUserBody(savedUser, null);
+    return await createExposedUser(savedUser, null);
 };
 
 /**
@@ -196,7 +194,7 @@ const updateUserPasswordById = async (id, oldPassword, newPassword) => {
     if (
         !(
             userFound.validated &&
-            (await bcryptjs.compare(oldPassword, userFound.password))
+            (await bcryptjs.compare(oldPassword, userFound.password.data))
         )
     ) {
         throw new UnauthorizedError(`Incorrect password`);
@@ -204,8 +202,23 @@ const updateUserPasswordById = async (id, oldPassword, newPassword) => {
 
     await updateUserBy(
         { _id: id },
-        { password: await bcryptjs.hash(newPassword, 12) }
+        { password: { data: await bcryptjs.hash(newPassword, 12) } }
     );
+};
+
+const validateJwtPayload = async (userId, jwtIssueDate) => {
+
+    const foundUser = await getUserBy({_id: userId});
+
+    if (!foundUser) {
+        throw new NotFoundError(`User with id: ${id} not found`)
+    }
+
+    // Verify that token has been generated after password update
+    const jwtDate = new Date(jwtIssueDate);
+    if (jwtDate.getTime() < foundUser.password.updatedAt.getTime()) {
+        throw new UnauthorizedError("Invalid Token");
+    }
 };
 
 const generateToken = (user) => {
@@ -214,7 +227,7 @@ const generateToken = (user) => {
     });
 };
 
-const createUserBody = async (foundUser, userId) => {
+const createExposedUser = async (foundUser, userId) => {
     const numberFollowers = await getNumberFollowersOf(foundUser._id);
     const numberFollowing = await getNumberFollowingOf(foundUser._id);
     const numberMoments = await getNumberMomentsOf(foundUser._id);
@@ -236,6 +249,21 @@ const createUserBody = async (foundUser, userId) => {
     };
 };
 
+const toUserModel = (user) => {
+    return {
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        description: user.description,
+        password: {
+            data: user.password,
+        },
+        birthDate: user.birthDate,
+        verificationCode: user.verificationCode,
+    };
+};
+
 module.exports = {
     getUserById,
     registerUser,
@@ -245,4 +273,5 @@ module.exports = {
     updateUserPasswordById,
     verifyUserAccount,
     getUsersByFilters,
+    validateJwtPayload
 };

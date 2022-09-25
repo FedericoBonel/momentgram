@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 const { UnauthorizedError } = require("../errors");
-const { getUserById } = require("../services/UserService");
+const { validateJwtPayload } = require("../services/UserService");
 
 const authenticateToken = async (req, res, next) => {
     const { authorization } = req.headers;
@@ -17,9 +17,10 @@ const authenticateToken = async (req, res, next) => {
     try {
         const user = jwt.verify(token, process.env.SECRET);
 
-        await getUserById(user._id);
+        await validateJwtPayload(user._id, user.iat * 1000);
 
         req.user = user;
+
     } catch (error) {
         throw new UnauthorizedError("Invalid token");
     }
