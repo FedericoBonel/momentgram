@@ -1,26 +1,31 @@
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const MomentImages = ({ images, className }) => {
-    // Check if there are multiple images
-    const renderedImages = images.length ? (
-        images.map((image) => (
+    let renderedImages;
+    if (images.length) {
+        // Check if there are multiple images
+        renderedImages = images.map((image) => (
             <img
                 className={className}
-                src={`${BACKEND_URL}${image.url}`}
+                src={`${image.url.startsWith("/") ? BACKEND_URL : ""}${
+                    image.url
+                }`}
                 alt="moment-img"
             />
-        ))
-    ) : (
+        ));
+    } else {
         // Check if there is a single image or no image at all
-        <img
-            className={className}
-            src={`${BACKEND_URL}${
-                images.url ? images.url : "/images/no-image.jpg"
-            }`}
-            alt="moment-img"
-        />
-    );
-    // TODO change this when implementing carousel to return the whole list
+        // If there's a single image check it's domain, otherwise just assign the placeholder
+        const image = images.url
+            ? `${images.url.startsWith("/") ? BACKEND_URL : ""}${images.url}`
+            : `${BACKEND_URL}/images/no-image.jpg`;
+
+        renderedImages = (
+            <img className={className} src={image} alt="moment-img" />
+        );
+    }
+
+    // TODO change this when implementing carousel to return the whole list instead of [0]
     return <>{renderedImages.length ? renderedImages[0] : renderedImages}</>;
 };
 

@@ -22,6 +22,7 @@ import {
     UserProfile,
     UserSettings,
     Error,
+    EditMoment,
 } from "./pages";
 import { PrivateLayout, PublicLayout } from "./layouts";
 
@@ -52,34 +53,37 @@ function App() {
                     {/* Home page */}
                     <Route path="/" element={<Home />} />
                     {/* Private routes */}
-                    <Route element={<PrivateRoute />}>
+                    <Route path="/" element={<PrivateRoute />}>
                         <Route element={<PrivateLayout />}>
-                            <Route path="/dashboard" element={<Dashboard />} />
+                            <Route path="dashboard" element={<Dashboard />} />
+                            <Route path="moments">
+                                <Route path="create" element={<NewMoment />} />
+                                <Route
+                                    path=":momentId"
+                                    element={<MomentPage />}
+                                />
+                                <Route path=":momentId/likes" />
+                                <Route
+                                    path=":momentId/edit"
+                                    element={<EditMoment />}
+                                />
+                            </Route>
                             <Route
-                                path="/moments/create"
-                                element={<NewMoment />}
-                            />
-                            <Route
-                                path="/moments/:momentId"
-                                element={<MomentPage />}
-                            />
-                            <Route path="/moments/:momentId/likes" />
-                            <Route
-                                path="/users/:username"
+                                path="users/:username"
                                 element={<UserProfile />}
                             />
                             <Route
-                                path="/profile/settings"
+                                path="profile/settings"
                                 element={<UserSettings />}
                             />
                         </Route>
                     </Route>
                     {/* Public routes */}
-                    <Route element={<PublicRoute />}>
+                    <Route path="/" element={<PublicRoute />}>
                         <Route element={<PublicLayout />}>
-                            <Route path="/register" element={<SignUp />} />
+                            <Route path="register" element={<SignUp />} />
                             <Route
-                                path="/users/verify/:verificationCode"
+                                path="users/verify/:verificationCode"
                                 element={<VerifyAccount />}
                             />
                         </Route>

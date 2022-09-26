@@ -33,5 +33,5 @@ export {
     ProfileHeader,
     ProfileMomentsList,
     UserUpdateForm,
-    PasswordUpdateForm
+    PasswordUpdateForm,
 };

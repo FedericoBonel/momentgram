@@ -55,7 +55,6 @@ const deleteMomentById = async (token, momentId) => {
         const payload = await response.json();
         const resCode = response.status;
 
-
         if (resCode === 200) {
             return { moment: payload.data, resCode };
         } else {
@@ -93,7 +92,7 @@ const createMoment = async (token, moment) => {
         // Save image
         const newMomentUri = `${BASE_BACKEND_URL}/moments/${payload.data._id}/images`;
         let formData = new FormData();
-        formData.append("image", moment.images);
+        moment.images.forEach(file => formData.append(file.name, file));
 
         const imageSavedRes = await fetch(newMomentUri, {
             headers: {
@@ -114,6 +113,32 @@ const createMoment = async (token, moment) => {
         }
     } catch (error) {
         console.log(`An error happened during moment creation`);
+        return { resCode: 500 };
+    }
+};
+
+const updateMoment = async (token, momentId, changes) => {
+    const momentsUri = `${BASE_BACKEND_URL}/moments/${momentId}`;
+    try {
+        const response = await fetch(momentsUri, {
+            headers: {
+                authorization: `Bearer ${token}`,
+                "content-type": "application/json",
+            },
+            method: "PUT",
+            body: JSON.stringify(changes),
+        });
+
+        const payload = await response.json();
+        const resCode = response.status;
+
+        if (resCode === 200) {
+            return { moment: payload.data, resCode };
+        } else {
+            return { resCode };
+        }
+    } catch (error) {
+        console.log(`An error happened during moment update`);
         return { resCode: 500 };
     }
 };
@@ -227,6 +252,7 @@ export {
     getMomentsFor,
     getMomentById,
     createMoment,
+    updateMoment,
     getMomentComments,
     postNewComment,
     deleteComment,
