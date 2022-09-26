@@ -84,7 +84,7 @@ const UserProfile = () => {
         if (userData.data?._id) {
             fetchUserMoments();
         }
-    }, [user, userData, navigate, momentsPage]);
+    }, [user, userData.data._id, navigate, momentsPage]);
 
     const onFollow = async (userToFollow) => {
         let resCode;
