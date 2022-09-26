@@ -10,11 +10,10 @@ import {
     MomentCommentList,
     MomentDateRow,
     MomentHeadersRow,
+    MomentImages,
 } from "../../components";
 import { getMomentById, likeMoment, disLikeMoment } from "../../api/MomentsApi";
 import { UserContext } from "../../context/Context";
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const MomentPage = () => {
     const { user } = useContext(UserContext);
@@ -61,17 +60,18 @@ const MomentPage = () => {
     const renderedMoment = moment.submitStatus === "success" && (
         <div className="container_smoment-card">
             {/* Image */}
-            <img
+            <MomentImages
+                images={moment.data.img}
                 className="container_smoment-img"
-                src={`${BACKEND_URL}${moment.data.img[0].url}`}
-                alt="moment-img"
             />
             <div className="cotainer_smoment-right">
                 {/* Headers */}
                 <MomentHeadersRow moment={moment.data} />
                 {/* Interactions */}
                 <MomentActionsRow
-                    onLike={() => onLikeMoment(moment.data._id, moment.data.isLiked)}
+                    onLike={() =>
+                        onLikeMoment(moment.data._id, moment.data.isLiked)
+                    }
                     isLiked={moment.data.isLiked}
                 />
                 {/* Likes */}

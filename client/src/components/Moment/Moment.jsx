@@ -9,10 +9,9 @@ import {
     MomentCommentForm,
     MomentDateRow,
     MomentHeadersRow,
+    MomentImages,
 } from "../";
 import { deleteComment, postNewComment } from "../../api/MomentsApi";
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 let Moment = ({ moment, user, onLikeMoment }) => {
     const navigate = useNavigate();
@@ -51,10 +50,10 @@ let Moment = ({ moment, user, onLikeMoment }) => {
             {/* Headers */}
             <MomentHeadersRow moment={moment} />
             {/* Images */}
-            <img
+            {/* TODO change this when carousel implemented */}
+            <MomentImages
                 className="container_moment-img"
-                src={`${BACKEND_URL}${moment.img[0].url}`}
-                alt="moment-img"
+                images={moment.img}
             />
             {/* Interactions */}
             <MomentActionsRow

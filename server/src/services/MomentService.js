@@ -142,9 +142,11 @@ const deleteMomentById = async (userId, momentId) => {
 };
 
 const updateMomentById = async (userId, momentId, updatedMoment) => {
+    const { _id, img, ...changes } = updatedMoment;
+
     const savedMoment = await updateMomentBy(
         { createdBy: userId, _id: momentId },
-        updatedMoment
+        changes
     );
 
     if (!savedMoment) {
@@ -214,10 +216,10 @@ const addImagesTo = async (userId, momentId, images) => {
 
         newImages.push(savedImage);
     }
-    return await addImageTo(userId, momentId, newImages);
+    return await saveImagesToDB(userId, momentId, newImages);
 };
 
-const addImageTo = async (userId, momentId, images) => {
+const saveImagesToDB = async (userId, momentId, images) => {
     // verify the moment does not have images
     const savedMoment = await getAMomentById(momentId);
 

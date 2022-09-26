@@ -3,8 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTh, faHeart, faComment } from "@fortawesome/free-solid-svg-icons";
 
 import "./ProfileMomentsList.css";
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+import { MomentImages } from "../";
 
 let ProfileMomentsList = ({ username, moments }) => {
     const renderedMoments = moments.map((moment) => (
@@ -13,7 +12,10 @@ let ProfileMomentsList = ({ username, moments }) => {
             key={moment._id}
             className="container_usrmoments-moment"
         >
-            <img src={`${BACKEND_URL}${moment.img[0].url}`} alt="moment_img" />
+            <MomentImages
+                images={moment.img.length ? moment.img[0] : moment.img}
+            />
+
             <div className="container_surmoments-moment_ovrlay">
                 <span className="container_surmoments-moment_ovrlayback"></span>
                 <p>

@@ -42,6 +42,31 @@ const getMomentById = async (token, momentId) => {
     }
 };
 
+const deleteMomentById = async (token, momentId) => {
+    const momentsUri = `${BASE_BACKEND_URL}/moments/${momentId}`;
+    try {
+        const response = await fetch(momentsUri, {
+            headers: {
+                authorization: `Bearer ${token}`,
+            },
+            method: "DELETE",
+        });
+
+        const payload = await response.json();
+        const resCode = response.status;
+
+
+        if (resCode === 200) {
+            return { moment: payload.data, resCode };
+        } else {
+            return { resCode };
+        }
+    } catch (error) {
+        console.log(`An error happened during moment deletion`);
+        return { resCode: 500 };
+    }
+};
+
 const createMoment = async (token, moment) => {
     const momentsUri = `${BASE_BACKEND_URL}/moments`;
     try {
@@ -60,8 +85,6 @@ const createMoment = async (token, moment) => {
 
         const payload = await response.json();
         const resCode = response.status;
-
-        console.log(payload);
 
         if (resCode !== 201) {
             return { resCode };
@@ -83,13 +106,14 @@ const createMoment = async (token, moment) => {
         const finalPayload = await imageSavedRes.json();
         const finalResCode = imageSavedRes.status;
 
-        if (resCode === 201) {
+        if (finalResCode === 201) {
             return { moment: finalPayload.data, resCode: finalResCode };
         } else {
             return { resCode: finalResCode };
         }
     } catch (error) {
         console.log(`An error happened during moment creation`);
+        return { resCode: 500 };
     }
 };
 
@@ -206,5 +230,5 @@ export {
     postNewComment,
     deleteComment,
     likeMoment,
-    disLikeMoment
+    disLikeMoment,
 };

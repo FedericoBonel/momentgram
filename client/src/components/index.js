@@ -10,6 +10,7 @@ import MomentDateRow from "./MomentDateRow/MomentDateRow";
 import MomentHeadersRow from "./MomentHeadersRow/MomentHeadersRow";
 import MomentForm from "./MomentForm/MomentForm";
 import MomentCommentList from "./MomentCommentList/MomentCommentList";
+import MomentImages from "./MomentImages/MomentImages";
 import ProfileHeader from "./ProfileHeader/ProfileHeader";
 import ProfileMomentsList from "./ProfileMomentList/ProfileMomentsList";
 import PasswordUpdateForm from "./PasswordUpdateForm/PasswordUpdateForm";
@@ -28,6 +29,7 @@ export {
     MomentHeadersRow,
     MomentForm,
     MomentCommentList,
+    MomentImages,
     ProfileHeader,
     ProfileMomentsList,
     UserUpdateForm,
