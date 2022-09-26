@@ -109,6 +109,7 @@ const createMoment = async (token, moment) => {
         if (finalResCode === 201) {
             return { moment: finalPayload.data, resCode: finalResCode };
         } else {
+            await deleteMomentById(token, payload.data._id);
             return { resCode: finalResCode };
         }
     } catch (error) {
