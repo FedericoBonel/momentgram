@@ -17,10 +17,9 @@ const authenticateToken = async (req, res, next) => {
     try {
         const user = jwt.verify(token, process.env.SECRET);
 
-        await validateJwtPayload(user._id, user.iat * 1000);
+        await validateJwtPayload(user._id, user.iat);
 
         req.user = user;
-
     } catch (error) {
         throw new UnauthorizedError("Invalid token");
     }

@@ -185,6 +185,7 @@ const deleteUserById = async (id) => {
  * @param {*} newPassword New user password
  */
 const updateUserPasswordById = async (id, oldPassword, newPassword) => {
+    // Verify user password
     const userFound = await getUserBy({ _id: id });
 
     if (!userFound) {
@@ -200,23 +201,36 @@ const updateUserPasswordById = async (id, oldPassword, newPassword) => {
         throw new UnauthorizedError(`Incorrect password`);
     }
 
-    await updateUserBy(
+    // Update the user
+    const savedUser = await updateUserBy(
         { _id: id },
         { password: { data: await bcryptjs.hash(newPassword, 12) } }
     );
+
+    // Generate new token and return it
+    const newToken = generateToken(savedUser);
+
+    return {
+        user: {
+            id: savedUser._id,
+            email: savedUser.email,
+            username: savedUser.username,
+        },
+        token: newToken,
+    };
 };
 
 const validateJwtPayload = async (userId, jwtIssueDate) => {
-
-    const foundUser = await getUserBy({_id: userId});
+    const foundUser = await getUserBy({ _id: userId });
 
     if (!foundUser) {
-        throw new NotFoundError(`User with id: ${id} not found`)
+        throw new NotFoundError(`User with id: ${id} not found`);
     }
 
     // Verify that token has been generated after password update
-    const jwtDate = new Date(jwtIssueDate);
-    if (jwtDate.getTime() < foundUser.password.updatedAt.getTime()) {
+    if (
+        jwtIssueDate < Math.floor(foundUser.password.updatedAt.getTime() / 1000)
+    ) {
         throw new UnauthorizedError("Invalid Token");
     }
 };
@@ -273,5 +287,5 @@ module.exports = {
     updateUserPasswordById,
     verifyUserAccount,
     getUsersByFilters,
-    validateJwtPayload
+    validateJwtPayload,
 };

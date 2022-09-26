@@ -7,7 +7,7 @@ const {
     deleteUserById,
     updateUserById,
     verifyUserAccount,
-    updateUserPasswordById
+    updateUserPasswordById,
 } = require("../services/UserService");
 const { getMomentsOf } = require("../services/MomentService");
 const {
@@ -126,13 +126,17 @@ const verifyUser = async (req, res) => {
 };
 
 const updateUserPassword = async (req, res) => {
-    const {_id: userId} = req.user;
-    const {oldPassword, newPassword} = req.body;
+    const { _id: userId } = req.user;
+    const { oldPassword, newPassword } = req.body;
 
-    await updateUserPasswordById(userId, oldPassword, newPassword);
+    const userWithToken = await updateUserPasswordById(
+        userId,
+        oldPassword,
+        newPassword
+    );
 
-    res.status(StatusCodes.OK).json(new SuccessPayload());
-}
+    res.status(StatusCodes.OK).json(new SuccessPayload(userWithToken));
+};
 
 module.exports = {
     getUser,
@@ -145,5 +149,5 @@ module.exports = {
     deleteAccount,
     updateUser,
     verifyUser,
-    updateUserPassword
+    updateUserPassword,
 };

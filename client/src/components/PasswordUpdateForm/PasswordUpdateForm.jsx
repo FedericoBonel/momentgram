@@ -6,7 +6,7 @@ import { updateUserPassword } from "../../api/UsersApi";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-const PasswordUpdateForm = ({ user }) => {
+const PasswordUpdateForm = ({ user, validateUser }) => {
     const navigate = useNavigate();
     const [passwordData, setPasswordData] = useState({
         data: {
@@ -37,12 +37,14 @@ const PasswordUpdateForm = ({ user }) => {
             submitStatus: "loading",
         }));
 
-        const { resCode } = await updateUserPassword(
+        const { data, resCode } = await updateUserPassword(
             user.token,
             passwordData.data
         );
 
         if (resCode === 200) {
+            validateUser({ token: data.token, user: data.user });
+            
             setPasswordData({
                 data: {
                     oldPassword: "",

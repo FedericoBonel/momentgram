@@ -58,6 +58,7 @@ const verifyAccount = async (verificationCode) => {
 };
 
 const getUserByUsername = async (token, username) => {
+
     const usersUri = `${BACKEND_URI}/users?username=${username}`;
     try {
         const response = await fetch(usersUri, {
@@ -71,10 +72,10 @@ const getUserByUsername = async (token, username) => {
         const payload = await response.json();
         const resCode = response.status;
 
-        return {
-            user: payload.data[0],
-            resCode: payload.data[0] ? resCode : 404,
-        };
+        return payload.data?.length
+            ? { user: payload.data[0], resCode }
+            : { resCode: 404 };
+
     } catch (error) {
         console.log(`An error ocurred during user fetching: ${error}`);
         return { resCode: 500 };
@@ -180,14 +181,16 @@ const updateUserPassword = async (token, updatedPassword) => {
             body: JSON.stringify(updatedPassword),
         });
 
+        const { data } = await response.json();
+
         const resCode = response.status;
 
-        return { resCode };
+        return { data, resCode };
     } catch (error) {
         console.log(`An error ocurred during user update: ${error}`);
         return { resCode: 500 };
     }
-}
+};
 
 export {
     authenticateUser,
@@ -198,5 +201,5 @@ export {
     followUser,
     unfollowUser,
     updateUserInfo,
-    updateUserPassword
+    updateUserPassword,
 };

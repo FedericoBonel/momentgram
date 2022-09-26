@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../../context/Context";
 
 import "./Error.css";
@@ -10,9 +10,11 @@ const Error = () => {
 
     const codeNumber = Number(code);
 
-    if (codeNumber === 401) {
-        invalidateUser();
-    }
+    useEffect(() => {
+        if (codeNumber === 401) {
+            invalidateUser();
+        }
+    }, [codeNumber, invalidateUser]);
 
     const errorMessage = (codeNumber) => {
         if (codeNumber === 400) {

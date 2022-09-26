@@ -40,7 +40,7 @@ const UserSettings = () => {
                         <UserUpdateForm user={user} validateUser={validateUser}/>
                     )}
                     {menuToDisplay === "password" && (
-                        <PasswordUpdateForm user={user}/>
+                        <PasswordUpdateForm user={user} validateUser={validateUser}/>
                     )}
                 </div>
             </div>
