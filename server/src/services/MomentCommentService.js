@@ -41,6 +41,7 @@ const createCommentBody = (commentDoc) => {
             username: comment.createdBy.username,
             email: comment.createdBy.email,
         },
+        moment: comment.moment._id,
     };
 };
 
@@ -65,19 +66,35 @@ const updateCommentById = async (
 };
 
 const deleteCommentById = async (userId, momentId, commentId) => {
-    const deletedComment = await deleteCommentBy({
+    // Check if the user made the comment
+    const ownCommentDeleted = await deleteCommentBy({
         createdBy: userId,
         moment: momentId,
         _id: commentId,
     });
 
-    if (!deletedComment) {
+    if (ownCommentDeleted) {
+        return ownCommentDeleted;
+    }
+
+    // Otherwise check if the user is the owner of the moment
+    const foundComment = await getCommentBy({
+        moment: momentId,
+        _id: commentId,
+    });
+
+    if (!foundComment.length || foundComment[0].moment.createdBy.toString() !== userId) {
         throw new NotFoundError(
             `Comment with id ${commentId} and momentId: ${momentId} not found!`
         );
     }
 
-    return deletedComment;
+    const ownMomentCommentDeleted = await deleteCommentBy({
+        moment: momentId,
+        _id: commentId,
+    });
+
+    return ownMomentCommentDeleted;
 };
 
 module.exports = {

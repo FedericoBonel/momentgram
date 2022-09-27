@@ -95,6 +95,7 @@ let Moment = ({ moment, user, onLikeMoment, onDelete }) => {
                         comment={newComment}
                         user={user}
                         onDelete={() => onDeleteComment(newComment._id)}
+                        momentAuthor={moment.createdBy._id}
                     />
                 </div>
             )}

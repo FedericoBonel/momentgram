@@ -5,7 +5,8 @@ const getCommentBy = async (filters, skip = 0, limit = 20) => {
         .skip(skip)
         .limit(limit)
         .sort("-createdAt")
-        .populate("createdBy");
+        .populate("createdBy")
+        .populate("moment");
 };
 
 const getNumberCommentsBy = async (filters) => {

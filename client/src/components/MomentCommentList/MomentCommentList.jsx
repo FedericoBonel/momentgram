@@ -101,6 +101,7 @@ const MomentCommentList = ({ user, moment }) => {
             key={comment._id}
             user={user}
             onDelete={() => onDeleteComment(comment._id)}
+            momentAuthor={moment.createdBy._id}
         />
     ));
 

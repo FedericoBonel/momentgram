@@ -7,7 +7,7 @@ import "./MomentComment.css";
 import { getDaysAgoFrom } from "../../api/DateApi";
 import OutsideClickListener from "../OutsideClickListener/OutsideClickListener";
 
-const MomentComment = ({ comment, user, onDelete }) => {
+const MomentComment = ({ comment, user, onDelete, momentAuthor }) => {
     const [displayOptions, setDisplayOptions] = useState(false);
 
     const referenceToOptions = useRef(null);
@@ -45,13 +45,15 @@ const MomentComment = ({ comment, user, onDelete }) => {
                     <p className="container_comment-date">{`${getDaysAgoFrom(
                         comment.createdAt
                     )}d`}</p>
-                    {user.user.id === comment.createdBy._id && onDelete && (
-                        <FontAwesomeIcon
-                            onClick={() => options(true)}
-                            icon={faEllipsis}
-                            className="container_comment-optionsbtn"
-                        />
-                    )}
+                    {(user.user.id === comment.createdBy._id ||
+                        user.user.id === momentAuthor) &&
+                        onDelete && (
+                            <FontAwesomeIcon
+                                onClick={() => options(true)}
+                                icon={faEllipsis}
+                                className="container_comment-optionsbtn"
+                            />
+                        )}
                 </div>
             </div>
         </div>
