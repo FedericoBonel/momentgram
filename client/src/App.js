@@ -62,7 +62,6 @@ function App() {
                                     path=":momentId"
                                     element={<MomentPage />}
                                 />
-                                <Route path=":momentId/likes" />
                                 <Route
                                     path=":momentId/edit"
                                     element={<EditMoment />}
