@@ -4,7 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 import "./Dashboard.css";
-import { getMomentsFor, likeMoment, disLikeMoment } from "../../api/MomentsApi";
+import {
+    getMomentsFor,
+    likeMoment,
+    disLikeMoment,
+    deleteMomentById,
+} from "../../api/MomentsApi";
 import { UserContext } from "../../context/Context";
 import { Moment } from "../../components";
 
@@ -73,12 +78,28 @@ const Dashboard = () => {
         [user.token, navigate]
     );
 
+    const onDeleteMoment = useCallback(async (momentId) => {
+        const { resCode } = await deleteMomentById(user.token, momentId);
+
+        if (resCode === 200) {
+            setMoments((prevMoments) => ({
+                ...prevMoments,
+                data: prevMoments.data.filter(
+                    (moment) => moment._id !== momentId
+                ),
+            }));
+        } else {
+            navigate(`/error/${resCode}`);
+        }
+    }, [user.token, navigate]);
+
     const renderedMoments = moments.data.map((moment) => (
         <Moment
             moment={moment}
             key={moment._id}
             user={user}
             onLikeMoment={onLikeMoment}
+            onDelete={onDeleteMoment}
         />
     ));
 

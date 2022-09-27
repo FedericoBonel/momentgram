@@ -73,7 +73,7 @@ const MomentPage = () => {
     };
 
     const renderedMoment = moment.submitStatus === "success" && (
-        <div className="container_smoment-card">
+        <div className="container_smoment-card scale-in-center">
             {/* Image */}
             <MomentImages
                 images={moment.data.img}

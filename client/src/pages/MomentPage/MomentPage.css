@@ -33,3 +33,34 @@
 .cotainer_smoment-right {
     width: 35%;
 }
+
+.scale-in-center {
+    -webkit-animation: scale-in-center 0.15s
+        cubic-bezier(0.25, 0.46, 0.45, 0.94) none;
+    animation: scale-in-center 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94) none;
+}
+
+@-webkit-keyframes scale-in-center {
+    0% {
+        -webkit-transform: scale(0.8);
+        transform: scale(0.8);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+@keyframes scale-in-center {
+    0% {
+        -webkit-transform: scale(0.8);
+        transform: scale(0.8);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        opacity: 1;
+    }
+}

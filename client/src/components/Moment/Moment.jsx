@@ -14,10 +14,9 @@ import {
 import {
     deleteComment,
     postNewComment,
-    deleteMomentById,
 } from "../../api/MomentsApi";
 
-let Moment = ({ moment, user, onLikeMoment }) => {
+let Moment = ({ moment, user, onLikeMoment, onDelete }) => {
     const navigate = useNavigate();
     const [newComment, setNewComment] = useState();
 
@@ -32,16 +31,6 @@ let Moment = ({ moment, user, onLikeMoment }) => {
             setNewComment(postedComment.comment);
         } else {
             navigate(`/error/${newComment.resCode}`);
-        }
-    };
-
-    const onDeleteMoment = async () => {
-        const { resCode } = await deleteMomentById(user.token, moment._id);
-
-        if (resCode === 200) {
-            navigate("/dashboard");
-        } else {
-            navigate(`/error/${resCode}`);
         }
     };
 
@@ -65,7 +54,7 @@ let Moment = ({ moment, user, onLikeMoment }) => {
             <MomentHeadersRow
                 moment={moment}
                 user={user.user}
-                onDelete={onDeleteMoment}
+                onDelete={() => onDelete(moment._id)}
             />
             {/* Images */}
             {/* TODO change this when carousel implemented */}
