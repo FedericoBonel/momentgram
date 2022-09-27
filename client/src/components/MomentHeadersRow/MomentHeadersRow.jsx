@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
@@ -9,6 +9,7 @@ import OutsideClickListener from "../OutsideClickListener/OutsideClickListener";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const MomentHeadersRow = ({ moment, user, onDelete }) => {
+    const navigate = useNavigate();
     const [showEdit, setShowEdit] = useState();
 
     const referenceToOptions = useRef(null);
@@ -27,6 +28,11 @@ const MomentHeadersRow = ({ moment, user, onDelete }) => {
     const deleteMoment = () => {
         setShowOptions(false);
         onDelete();
+    };
+
+    const editMoment = () => {
+        setShowOptions(false);
+        navigate(`/moments/${moment._id}/edit`);
     };
 
     const renderedHeader = (
@@ -67,8 +73,11 @@ const MomentHeadersRow = ({ moment, user, onDelete }) => {
                 ref={referenceToOptions}
                 className="container_headerrow-options"
             >
-                <button className="container_headerrow-options_edit">
-                    <Link to={`/moments/${moment._id}/edit`}>Edit</Link>
+                <button
+                    className="container_headerrow-options_edit"
+                    onClick={editMoment}
+                >
+                    Edit
                 </button>
                 <button
                     className="container_headerrow-options_del"

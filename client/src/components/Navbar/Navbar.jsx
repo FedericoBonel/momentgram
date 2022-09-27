@@ -9,15 +9,15 @@ import OutsideClickListener from "../OutsideClickListener/OutsideClickListener";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const Navbar = ({ user, onLogout }) => {
-    const [showMenu, setShowMenu] = useState(false);
+    const [showMenu, setShowMenu] = useState("loading"); // loading || show || hidden
 
     const referenceToMenu = useRef(null);
-    OutsideClickListener(referenceToMenu, () => setShowMenu(false));
+    OutsideClickListener(referenceToMenu, () => setShowMenu(prev => prev === "loading" ? prev : "hidden"));
 
     const menu = (
         <ul
-            className="container_popup-menu swing-in-top-fwd"
-            onClick={() => setShowMenu(false)}
+            className={`container_popup-menu container_popup-${showMenu}`}
+            onClick={() => setShowMenu("hidden")}
         >
             <Link to={`/users/${user.username}`}>
                 <li>Profile</li>
@@ -30,7 +30,7 @@ const Navbar = ({ user, onLogout }) => {
             </li>
         </ul>
     );
-    
+
     return (
         <nav className="container_navbar">
             <h1 className="container_navbar-logo">MomentGram</h1>
@@ -40,12 +40,12 @@ const Navbar = ({ user, onLogout }) => {
                 className="container_navbar-search"
             />
             <ul className="container_navbar-links">
-                <li>
+                <li className="container_navbar-link_clickable">
                     <Link to="/dashboard">
                         <FontAwesomeIcon icon={faHome} />
                     </Link>
                 </li>
-                <li>
+                <li className="container_navbar-link_clickable">
                     <Link to="/moments/create">
                         <div className="container_navbar-addbtn">
                             <FontAwesomeIcon icon={faPlus} />
@@ -60,10 +60,14 @@ const Navbar = ({ user, onLogout }) => {
                                 : `${BACKEND_URL}/images/profileph.jpg`
                         }
                         alt="profile-img"
-                        className="container_navbar-profimg"
-                        onClick={() => setShowMenu((prevShow) => !prevShow)}
+                        className="container_navbar-profimg container_navbar-link_clickable"
+                        onClick={() =>
+                            setShowMenu((prevShow) =>
+                                prevShow === "show" ? "hidden" : "show"
+                            )
+                        }
                     />
-                    {showMenu && menu}
+                    {menu}
                 </li>
             </ul>
         </nav>

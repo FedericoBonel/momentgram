@@ -142,7 +142,7 @@ const MomentForm = ({ momentId, user }) => {
                 <FontAwesomeIcon icon={faSpinner} spin />
             )}
             {moment.submitStatus !== "loading" && (
-                <form className="container_momentform-card" onSubmit={onSubmit}>
+                <form className="container_momentform-card scale-in-center" onSubmit={onSubmit}>
                     <div className="container_momentform-cardcontrol">
                         <p>{momentId ? "Edit Post" : "Create New Post"}</p>
                         <button disabled={!canUpload}>Share</button>

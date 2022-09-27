@@ -88,7 +88,12 @@ const getMomentsFor = async (userId, page = 1, limit = 20) => {
 
     // Select the moments that were created by any of those ids in date order
     const momentsForUser = await getMomentBy(
-        { createdBy: { $in: userFollowings.map((u) => u._id) } },
+        {
+            $or: [
+                { createdBy: { $in: userFollowings.map((u) => u._id) } },
+                { createdBy: userId },
+            ],
+        },
         skip,
         limit,
         "-createdAt"

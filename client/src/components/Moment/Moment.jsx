@@ -94,8 +94,11 @@ let Moment = ({ moment, user, onLikeMoment }) => {
                 className="container_moment-comments"
                 to={`/moments/${moment._id}`}
             >
-                View all {moment.numberComments} comment
-                {moment.numberComments > 1 && "s"}
+                {moment.numberComments
+                    ? `View ${moment.numberComments} comment${
+                          moment.numberComments > 1 ? "s" : ""
+                      }`
+                    : "View moment"}
             </Link>
             {newComment && (
                 <div className="container_moment-newcmmt">
