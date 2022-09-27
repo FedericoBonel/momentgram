@@ -12,7 +12,12 @@ import {
     MomentHeadersRow,
     MomentImages,
 } from "../../components";
-import { getMomentById, likeMoment, disLikeMoment } from "../../api/MomentsApi";
+import {
+    getMomentById,
+    likeMoment,
+    disLikeMoment,
+    deleteMomentById,
+} from "../../api/MomentsApi";
 import { UserContext } from "../../context/Context";
 
 const MomentPage = () => {
@@ -42,6 +47,16 @@ const MomentPage = () => {
         fetchMoment();
     }, [momentId, user, navigate]);
 
+    const onDeleteMoment = async () => {
+        const { resCode } = await deleteMomentById(user.token, moment.data._id);
+
+        if (resCode === 200) {
+            navigate("/dashboard");
+        } else {
+            navigate(`/error/${resCode}`);
+        }
+    };
+
     const onLikeMoment = async (momentId, isLiked) => {
         const { resCode } = isLiked
             ? await disLikeMoment(user.token, momentId)
@@ -66,7 +81,11 @@ const MomentPage = () => {
             />
             <div className="cotainer_smoment-right">
                 {/* Headers */}
-                <MomentHeadersRow moment={moment.data} />
+                <MomentHeadersRow
+                    moment={moment.data}
+                    user={user.user}
+                    onDelete={onDeleteMoment}
+                />
                 {/* Interactions */}
                 <MomentActionsRow
                     onLike={() =>

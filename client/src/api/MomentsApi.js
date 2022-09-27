@@ -253,6 +253,7 @@ export {
     getMomentById,
     createMoment,
     updateMoment,
+    deleteMomentById,
     getMomentComments,
     postNewComment,
     deleteComment,

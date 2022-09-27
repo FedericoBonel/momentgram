@@ -14,7 +14,12 @@ const {
     getNumberLikesOf,
     getLikeByUserAndMoment,
 } = require("./MomentLikeService");
-const { NotFoundError, BadRequestError } = require("../errors");
+const { deleteFiles } = require("./FileService");
+const {
+    NotFoundError,
+    BadRequestError,
+    InternalServerError,
+} = require("../errors");
 
 /**
  * Creates a new moment for a specific user
@@ -129,14 +134,36 @@ const getNumberMomentsOf = async (userId) => {
  * @returns The deleted moment and the number of likes and comments associated with it that have been deleted
  */
 const deleteMomentById = async (userId, momentId) => {
+    // Find the moment
+    const foundMoments = await getMomentBy({ _id: momentId });
+
+    if (!foundMoments.length) {
+        throw new NotFoundError(`Moment with id ${momentId} not found`);
+    }
+
+    const foundMoment = foundMoments[0];
+
+    // Delete its images from hard drive
+    let pathsToDelete = [];
+    for (const image of foundMoment.img) {
+        const imageName = image.url.substring(8);
+        const dir = path.join(
+            __dirname,
+            "..",
+            "..",
+            "public",
+            "images",
+            imageName
+        );
+        pathsToDelete.push(dir);
+    }
+    await deleteFiles(pathsToDelete);
+
+    // Delete Moment
     const deleteResult = await deleteMomentBy({
         createdBy: userId,
         _id: momentId,
     });
-
-    if (!deleteResult) {
-        throw new NotFoundError(`Moment with id ${momentId} not found`);
-    }
 
     return deleteResult;
 };

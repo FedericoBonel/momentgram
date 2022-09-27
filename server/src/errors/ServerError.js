@@ -1,4 +1,4 @@
-const {StatusCodes} = require("http-status-codes");
+const { StatusCodes } = require("http-status-codes");
 const ApiError = require("./ApiError");
 
 class ServerError extends ApiError {
@@ -6,3 +6,5 @@ class ServerError extends ApiError {
         super(message, StatusCodes.INTERNAL_SERVER_ERROR);
     }
 }
+
+module.exports = ServerError;

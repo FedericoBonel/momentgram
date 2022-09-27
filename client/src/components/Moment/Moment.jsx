@@ -11,7 +11,11 @@ import {
     MomentHeadersRow,
     MomentImages,
 } from "../";
-import { deleteComment, postNewComment } from "../../api/MomentsApi";
+import {
+    deleteComment,
+    postNewComment,
+    deleteMomentById,
+} from "../../api/MomentsApi";
 
 let Moment = ({ moment, user, onLikeMoment }) => {
     const navigate = useNavigate();
@@ -28,6 +32,16 @@ let Moment = ({ moment, user, onLikeMoment }) => {
             setNewComment(postedComment.comment);
         } else {
             navigate(`/error/${newComment.resCode}`);
+        }
+    };
+
+    const onDeleteMoment = async () => {
+        const { resCode } = await deleteMomentById(user.token, moment._id);
+
+        if (resCode === 200) {
+            navigate("/dashboard");
+        } else {
+            navigate(`/error/${resCode}`);
         }
     };
 
@@ -48,7 +62,11 @@ let Moment = ({ moment, user, onLikeMoment }) => {
     return (
         <article className="container_moment">
             {/* Headers */}
-            <MomentHeadersRow moment={moment} />
+            <MomentHeadersRow
+                moment={moment}
+                user={user.user}
+                onDelete={onDeleteMoment}
+            />
             {/* Images */}
             {/* TODO change this when carousel implemented */}
             <MomentImages
