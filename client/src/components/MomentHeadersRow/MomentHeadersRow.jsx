@@ -12,23 +12,13 @@ const MomentHeadersRow = ({ moment, user, onDelete }) => {
     const navigate = useNavigate();
     const [showEdit, setShowEdit] = useState();
 
-    const setShowOptions = (show) => {
-        if (show) {
-            document.body.style.overflow = "hidden";
-            setShowEdit(true);
-        } else {
-            document.body.style.overflow = "auto";
-            setShowEdit(false);
-        }
-    };
-
     const deleteMoment = () => {
-        setShowOptions(false);
+        setShowEdit(false);
         onDelete();
     };
 
     const editMoment = () => {
-        setShowOptions(false);
+        setShowEdit(false);
         navigate(`/moments/${moment._id}/edit`);
     };
 
@@ -57,7 +47,7 @@ const MomentHeadersRow = ({ moment, user, onDelete }) => {
                 <FontAwesomeIcon
                     icon={faEllipsis}
                     className="container_headerrow-editbtn"
-                    onClick={() => setShowOptions(true)}
+                    onClick={() => setShowEdit(true)}
                 />
             )}
         </div>
@@ -65,7 +55,7 @@ const MomentHeadersRow = ({ moment, user, onDelete }) => {
 
     const renderedMenu = (
         <>
-            <Overlay onClick={() => setShowOptions(false)}/>
+            <Overlay onClick={() => setShowEdit(false)}/>
             <div
                 className="container_headerrow-options"
             >
@@ -83,7 +73,7 @@ const MomentHeadersRow = ({ moment, user, onDelete }) => {
                 </button>
                 <button
                     className="container_headerrow-options_cancel"
-                    onClick={() => setShowOptions(false)}
+                    onClick={() => setShowEdit(false)}
                 >
                     Cancel
                 </button>

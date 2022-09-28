@@ -5,20 +5,13 @@ import MomentLikesCard from "../MomentLikesCard/MomentLikesCard";
 
 const MomentLikesRow = ({ moment, token }) => {
     const [displayMomentLikes, setDisplayMomentLikes] = useState(false);
-
-    const showMoments = (show) => {
-        if (show) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "auto";
-        }
-
-        setDisplayMomentLikes(show);
-    };
-
+    
     return (
         <>
-            <p className="container_likes" onClick={() => showMoments(true)}>
+            <p
+                className="container_likes"
+                onClick={() => setDisplayMomentLikes(true)}
+            >
                 Liked by {moment.numberLikes}{" "}
                 {moment.numberLikes !== 1 ? "people" : "person"}
             </p>
@@ -26,7 +19,7 @@ const MomentLikesRow = ({ moment, token }) => {
                 <MomentLikesCard
                     momentId={moment._id}
                     token={token}
-                    onClose={() => showMoments(false)}
+                    onClose={() => setDisplayMomentLikes(false)}
                 />
             )}
         </>

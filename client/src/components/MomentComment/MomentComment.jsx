@@ -10,18 +10,8 @@ import Overlay from "../Overlay/Overlay";
 const MomentComment = ({ comment, user, onDelete, momentAuthor }) => {
     const [displayOptions, setDisplayOptions] = useState(false);
 
-    const options = (show) => {
-        if (show) {
-            document.body.style.overflow = "hidden";
-            setDisplayOptions(true);
-        } else {
-            document.body.style.overflow = "auto";
-            setDisplayOptions(false);
-        }
-    };
-
     const deleteComment = () => {
-        options(false);
+        setDisplayOptions(false);
         onDelete();
     };
 
@@ -48,7 +38,7 @@ const MomentComment = ({ comment, user, onDelete, momentAuthor }) => {
                 user.user.id === momentAuthor) &&
                 onDelete && (
                     <FontAwesomeIcon
-                        onClick={() => options(true)}
+                        onClick={() => setDisplayOptions(true)}
                         icon={faEllipsis}
                         className="container_comment-optionsbtn"
                     />
@@ -58,7 +48,7 @@ const MomentComment = ({ comment, user, onDelete, momentAuthor }) => {
 
     const renderedOptions = (
         <>
-            <Overlay onClick={() => options(false)}/>
+            <Overlay onClick={() => setDisplayOptions(false)}/>
             <div className="container_comment-options">
                 <button
                     className="container_comment-options-delete"
@@ -68,7 +58,7 @@ const MomentComment = ({ comment, user, onDelete, momentAuthor }) => {
                 </button>
                 <button
                     className="container_comment-options-cancel"
-                    onClick={() => options(false)}
+                    onClick={() => setDisplayOptions(false)}
                 >
                     Cancel
                 </button>

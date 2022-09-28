@@ -1,3 +1,4 @@
+const { Error } = require("mongoose");
 const { StatusCodes, ReasonPhrases } = require("http-status-codes");
 
 const { ApiError } = require("../errors");
@@ -14,6 +15,9 @@ const handleErrors = async (err, req, res, next) => {
             err.keyValue
         )}, please provide another value/s`;
         customError.status = StatusCodes.BAD_REQUEST;
+    } else if (err instanceof Error.CastError) {
+        customError.message = `Entity with id: ${err.stringValue} not found.`;
+        customError.status = StatusCodes.NOT_FOUND;
     }
 
     res.status(customError.status).json(new ErrorPayload(customError.message));
