@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 import "./MomentLikesCard.css";
 import { getMomentLikes } from "../../api/MomentsApi";
-import OutsideClickListener from "../OutsideClickListener/OutsideClickListener";
+import Overlay from "../Overlay/Overlay";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -17,9 +17,6 @@ const MomentLikesCard = ({ momentId, token, onClose }) => {
     });
     const [page, setPage] = useState(1);
     const [noMoreLikes, setNoMoreLikes] = useState(false);
-
-    const referenceToCard = useRef(null);
-    OutsideClickListener(referenceToCard, onClose);
 
     useEffect(() => {
         const fetchLikes = async () => {
@@ -73,8 +70,8 @@ const MomentLikesCard = ({ momentId, token, onClose }) => {
 
     return (
         <>
-            <div className="container_likesbg"></div>
-            <div className="container_likescard" ref={referenceToCard}>
+            <Overlay onClick={onClose}/>
+            <div className="container_likescard">
                 <div className="container_likescard-topbr">
                     <p className="container_likescard-topbr_title">Likes</p>
                     <FontAwesomeIcon

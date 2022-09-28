@@ -1,0 +1,10 @@
+.overlay_back {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-height: 100%;
+    width: 100%;
+    background: black;
+    filter: opacity(0.5);
+    z-index: 9;
+}

@@ -1,19 +1,16 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
 import "./MomentHeadersRow.css";
-import OutsideClickListener from "../OutsideClickListener/OutsideClickListener";
+import Overlay from "../Overlay/Overlay";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const MomentHeadersRow = ({ moment, user, onDelete }) => {
     const navigate = useNavigate();
     const [showEdit, setShowEdit] = useState();
-
-    const referenceToOptions = useRef(null);
-    OutsideClickListener(referenceToOptions, () => setShowOptions(false));
 
     const setShowOptions = (show) => {
         if (show) {
@@ -68,9 +65,8 @@ const MomentHeadersRow = ({ moment, user, onDelete }) => {
 
     const renderedMenu = (
         <>
-            <div className="container_headerrow-options_back"></div>
+            <Overlay onClick={() => setShowOptions(false)}/>
             <div
-                ref={referenceToOptions}
                 className="container_headerrow-options"
             >
                 <button

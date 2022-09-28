@@ -1,14 +1,3 @@
-.container_likesbg {
-    position: fixed;
-    background: black;
-    filter: opacity(0.5);
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    z-index: 9;
-}
-
 .container_likescard {
     position: fixed;
     top:50%;
