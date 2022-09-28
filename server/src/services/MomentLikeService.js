@@ -34,7 +34,7 @@ const createLikeBody = (like) => {
         createdBy: {
             _id: like.createdBy._id,
             username: like.createdBy.username,
-            email: like.createdBy.username,
+            email: like.createdBy.email,
         },
         createdAt: like.createdAt,
     };

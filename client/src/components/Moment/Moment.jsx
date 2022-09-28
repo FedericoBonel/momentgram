@@ -68,7 +68,7 @@ let Moment = ({ moment, user, onLikeMoment, onDelete }) => {
                 onLike={() => onLikeMoment(moment._id, moment.isLiked)}
             />
             {/* Likes */}
-            <MomentLikesRow moment={moment} />
+            {moment.numberLikes > 0 && <MomentLikesRow moment={moment} token={user.token}/>}
             {/* Description */}
             <p className="container_moment-description">
                 <b>

@@ -94,7 +94,9 @@ const MomentPage = () => {
                     isLiked={moment.data.isLiked}
                 />
                 {/* Likes */}
-                <MomentLikesRow moment={moment.data} />
+                {moment.data.numberLikes > 0 && (
+                    <MomentLikesRow moment={moment.data} token={user.token} />
+                )}
                 {/* Date */}
                 <MomentDateRow dateString={moment.data.createdAt} />
                 {/* Comments */}

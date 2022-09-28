@@ -1,13 +1,35 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
 
 import "./MomentLikesRow.css";
+import MomentLikesCard from "../MomentLikesCard/MomentLikesCard";
 
-const MomentLikesRow = ({ moment }) => {
+const MomentLikesRow = ({ moment, token }) => {
+    const [displayMomentLikes, setDisplayMomentLikes] = useState(false);
+
+    const showMoments = (show) => {
+        if (show) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+
+        setDisplayMomentLikes(show);
+    };
+
     return (
-        <Link to={`/moments/${moment._id}/likes`} className="container_likes">
-            Liked by {moment.numberLikes}{" "}
-            {moment.numberLikes !== 1 ? "people" : "person"}
-        </Link>
+        <>
+            <p className="container_likes" onClick={() => showMoments(true)}>
+                Liked by {moment.numberLikes}{" "}
+                {moment.numberLikes !== 1 ? "people" : "person"}
+            </p>
+            {displayMomentLikes && (
+                <MomentLikesCard
+                    momentId={moment._id}
+                    token={token}
+                    onClose={() => showMoments(false)}
+                />
+            )}
+        </>
     );
 };
 

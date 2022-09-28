@@ -208,6 +208,27 @@ const deleteComment = async (token, momentId, commentId) => {
     }
 };
 
+const getMomentLikes = async (token, momentId, page) => {
+    const momentUri = `${BASE_BACKEND_URL}/moments/${momentId}/likes?page=${page}`;
+    try {
+        const response = await fetch(momentUri, {
+            headers: {
+                accept: "application/json",
+                authorization: `Bearer ${token}`,
+            },
+            method: "GET",
+        });
+
+        const payload = await response.json();
+        const resCode = response.status;
+
+        return { likes: payload.data, resCode };
+    } catch (error) {
+        console.log(`An error ocurred during moment likes fetching: ${error}`);
+        return { resCode: 500 };
+    }
+}
+
 const likeMoment = async (token, momentId) => {
     const momentUri = `${BASE_BACKEND_URL}/moments/${momentId}/likes`;
     try {
@@ -257,6 +278,7 @@ export {
     getMomentComments,
     postNewComment,
     deleteComment,
+    getMomentLikes,
     likeMoment,
     disLikeMoment,
 };

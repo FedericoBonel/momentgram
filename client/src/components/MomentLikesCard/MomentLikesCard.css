@@ -1,0 +1,87 @@
+.container_likesbg {
+    position: fixed;
+    background: black;
+    filter: opacity(0.5);
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 9;
+}
+
+.container_likescard {
+    position: fixed;
+    top:50%;
+    left: 50%;
+    transform:translate(-50%, -50%);
+    background-color: white;
+    z-index: 10;
+    height: 400px;
+    width: 90%;
+    max-width: 350px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.container_likescard-topbr {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px lightgray solid;
+    padding: 8px 16px;
+}
+
+.container_likescard-topbr_title {
+    flex: 1;
+}
+
+.container_likescard-topbr_close {
+    margin: auto;
+    flex: 0;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.container_likescard-list {
+    flex-grow: 1;
+    padding: 8px 16px 0 16px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.container_likescard-list::-webkit-scrollbar {
+    display: none;
+}
+
+.container_likescard-list a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.container_likescard-usr {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-bottom: 16px;
+}
+
+.container_likescard-usr img {
+    width: 38px;
+    border-radius: 100%
+}
+
+.container_likescard-usr p{ 
+    margin-left: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.container_likescard-load {
+    color: var(--color-button);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+}

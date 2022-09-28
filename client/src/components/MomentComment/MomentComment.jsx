@@ -45,17 +45,17 @@ const MomentComment = ({ comment, user, onDelete, momentAuthor }) => {
                     <p className="container_comment-date">{`${getDaysAgoFrom(
                         comment.createdAt
                     )}d`}</p>
-                    {(user.user.id === comment.createdBy._id ||
-                        user.user.id === momentAuthor) &&
-                        onDelete && (
-                            <FontAwesomeIcon
-                                onClick={() => options(true)}
-                                icon={faEllipsis}
-                                className="container_comment-optionsbtn"
-                            />
-                        )}
                 </div>
             </div>
+            {(user.user.id === comment.createdBy._id ||
+                user.user.id === momentAuthor) &&
+                onDelete && (
+                    <FontAwesomeIcon
+                        onClick={() => options(true)}
+                        icon={faEllipsis}
+                        className="container_comment-optionsbtn"
+                    />
+                )}
         </div>
     );
 
