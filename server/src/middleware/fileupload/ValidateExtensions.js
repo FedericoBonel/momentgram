@@ -10,7 +10,7 @@ const checkFileExtensions = (validExtensions) => {
         for (const file of Object.keys(files)) {
             const currExtension = path.extname(files[file].name);
 
-            if (!validExtensions.includes(currExtension)) {
+            if (!validExtensions.includes(currExtension.toLowerCase())) {
                 invalidFiles.push(files[file].name);
             }
         }

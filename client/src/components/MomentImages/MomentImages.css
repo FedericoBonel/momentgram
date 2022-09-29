@@ -1,0 +1,42 @@
+.momentimage_container {
+    background-color: black;
+}
+
+.page {
+    width: 6px;
+    height: 6px;
+    background-color: gray;
+    border-radius: 100%;
+}
+
+.page:hover {
+    filter:brightness(1.5);
+}
+
+.dots {
+    position: absolute;
+    bottom: 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    list-style: none;
+}
+
+.slick-prev {
+    position: absolute;
+    left: 16px;
+    z-index: 8;
+}
+
+.slick-next {
+    position: absolute;
+    right: 16px;
+    z-index: 8;
+}
+
+.slick-active > .page {
+    background-color: var(--color-button);
+}

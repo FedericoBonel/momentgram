@@ -77,7 +77,13 @@ const MomentPage = () => {
             {/* Image */}
             <MomentImages
                 images={moment.data.img}
-                className="container_smoment-img"
+                imgClass={
+                    moment.data.img.length > 1
+                        ? "container_smoment-imgs"
+                        : "container_smoment-img"
+                }
+                containerClass={"container_smoment-contimg"}
+                sliderClass={"container_smoment-slider"}
             />
             <div className="cotainer_smoment-right">
                 {/* Headers */}

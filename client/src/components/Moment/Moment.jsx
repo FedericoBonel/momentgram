@@ -11,10 +11,7 @@ import {
     MomentHeadersRow,
     MomentImages,
 } from "../";
-import {
-    deleteComment,
-    postNewComment,
-} from "../../api/MomentsApi";
+import { deleteComment, postNewComment } from "../../api/MomentsApi";
 
 let Moment = ({ moment, user, onLikeMoment, onDelete }) => {
     const navigate = useNavigate();
@@ -59,7 +56,12 @@ let Moment = ({ moment, user, onLikeMoment, onDelete }) => {
             {/* Images */}
             {/* TODO change this when carousel implemented */}
             <MomentImages
-                className="container_moment-img"
+                imgClass={
+                    moment.img.length > 1
+                        ? "container_moment-imgs"
+                        : "container_moment-img"
+                }
+                sliderClass="container_moment-slider"
                 images={moment.img}
             />
             {/* Interactions */}
@@ -68,7 +70,9 @@ let Moment = ({ moment, user, onLikeMoment, onDelete }) => {
                 onLike={() => onLikeMoment(moment._id, moment.isLiked)}
             />
             {/* Likes */}
-            {moment.numberLikes > 0 && <MomentLikesRow moment={moment} token={user.token}/>}
+            {moment.numberLikes > 0 && (
+                <MomentLikesRow moment={moment} token={user.token} />
+            )}
             {/* Description */}
             <p className="container_moment-description">
                 <b>

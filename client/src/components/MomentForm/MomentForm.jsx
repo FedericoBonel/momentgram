@@ -1,7 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileAlt, faMapMarkerAlt, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+    faFileAlt,
+    faMapMarkerAlt,
+    faSpinner,
+    faPlus,
+    faTrash
+} from "@fortawesome/free-solid-svg-icons";
 
 import "./MomentForm.css";
 import {
@@ -15,6 +21,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const MomentForm = ({ momentId, user }) => {
     const navigate = useNavigate();
+    const fileInput = useRef(null);
     const [moment, setMoment] = useState({
         data: {
             description: "",
@@ -23,6 +30,7 @@ const MomentForm = ({ momentId, user }) => {
         },
         submitStatus: "loading",
     });
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
     useEffect(() => {
         const fetchMoment = async () => {
@@ -91,10 +99,52 @@ const MomentForm = ({ momentId, user }) => {
                 ...prevMoment.data,
                 [e.target.name]:
                     e.target.name === "img"
-                        ? prevMoment.data.img.concat(Array.from(e.target.files))
+                        ? addImage(prevMoment.data.img, e.target.files)
                         : e.target.value,
             },
         }));
+    };
+
+    const onRemoveImage = (e) => {
+        e.preventDefault();
+
+        setSelectedIndex((prevIndex) => {
+            if (prevIndex && prevIndex === moment.data.img.length - 1) {
+                return prevIndex - 1;
+            } else if (0 < prevIndex) {
+                return prevIndex
+            } else {
+                return 0;
+            }
+        });
+
+        setMoment((prevMoment) => ({
+            ...prevMoment,
+            data: {
+                ...prevMoment.data,
+                img: prevMoment.data.img.filter(
+                    (image, index) => selectedIndex !== index
+                ),
+            },
+        }));
+    };
+
+    const addImage = (prevFiles, files) => {
+        let finalFiles = [];
+        const fileArray = Array.from(files);
+        if (prevFiles.length > 0) {
+            finalFiles = prevFiles.concat(fileArray).slice(0, 4);
+        } else {
+            finalFiles = fileArray.slice(0, 4);
+        }
+        
+        return finalFiles;
+    };
+
+    const onAddImage = (e) => {
+        e.preventDefault();
+
+        fileInput.current.click();
     };
 
     const renderedImage =
@@ -103,27 +153,55 @@ const MomentForm = ({ momentId, user }) => {
             <div className="container_momentform-fileinp">
                 <MomentImages
                     images={moment.data.img}
-                    className="container_momentform-preview"
+                    imgClass={`container_momentform-preview_img ${
+                        moment.data.img.length > 1
+                            ? `container_momentform-preview_imgs`
+                            : "container_momentform-preview"
+                    }`}
+                    sliderClass="container_momentform-preview"
+                    containerClass="container_momentform-preview_imgcont"
                 />
             </div>
         ) : (
             <div className="container_momentform-fileinp">
                 <input
+                    multiple
+                    ref={fileInput}
                     type="file"
                     name="img"
                     id="images"
                     accept="image/png, image/jpg, image/jpeg"
                     onChange={onChange}
                     disabled={!canAddFile}
+                    value=""
                 />
 
                 {moment.data.img.length ? (
-                    <MomentImages
-                        images={moment.data.img.map((file) => ({
-                            url: URL.createObjectURL(file),
-                        }))}
-                        className="container_momentform-preview"
-                    />
+                    <>
+                        <MomentImages
+                            images={moment.data.img.map((file) => ({
+                                _id: file.name,
+                                url: URL.createObjectURL(file),
+                            }))}
+                            imgClass="container_momentform-preview_img container_momentform-preview_imgs"
+                            sliderClass="container_momentform-preview"
+                            containerClass="container_momentform-preview_imgcont"
+                            afterSliding={setSelectedIndex}
+                        />
+                        <button
+                            className="container_momentform-addimg"
+                            disabled={!canAddFile}
+                            onClick={onAddImage}
+                        >
+                            <FontAwesomeIcon icon={faPlus} />
+                        </button>
+                        <button
+                            className="container_momentform-rmvimg"
+                            onClick={onRemoveImage}
+                        >
+                            <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                    </>
                 ) : (
                     <>
                         <FontAwesomeIcon
@@ -142,7 +220,10 @@ const MomentForm = ({ momentId, user }) => {
                 <FontAwesomeIcon icon={faSpinner} spin />
             )}
             {moment.submitStatus !== "loading" && (
-                <form className="container_momentform-card scale-in-center" onSubmit={onSubmit}>
+                <form
+                    className="container_momentform-card scale-in-center"
+                    onSubmit={onSubmit}
+                >
                     <div className="container_momentform-cardcontrol">
                         <p>{momentId ? "Edit Post" : "Create New Post"}</p>
                         <button disabled={!canUpload}>Share</button>
