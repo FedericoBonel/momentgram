@@ -10,11 +10,9 @@
 .container_profileheader-img {
     object-fit: cover;
     min-width: 175px;
-    width: 175px;
     max-width: 175px;
     min-height: 175px;
-    height: 175px;
-    max-width: 175px;
+    max-height: 175px;
     border-radius: 50%;
     flex: 1;
 }

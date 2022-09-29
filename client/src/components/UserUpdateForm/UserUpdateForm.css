@@ -17,11 +17,9 @@
 
 .container_usrupd-form_profimg {
     object-fit: cover;
-    min-width: 42px;
-    width: 42px;
-    max-width: 42px;
     min-height: 42px;
-    height: 42px;
+    max-height: 42px;
+    min-width: 42px;
     max-width: 42px;
     border-radius: 50%;
     margin-right: 16px;
