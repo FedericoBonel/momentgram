@@ -70,7 +70,7 @@ const PasswordUpdateForm = ({ user, validateUser }) => {
                     className="container_passupd-profimg"
                     src={
                         user.user.profileImg
-                            ? `${BACKEND_URL}/images/${user.user.profileImg.url}`
+                            ? `${BACKEND_URL}${user.user.profileImg.url}`
                             : `${BACKEND_URL}/images/profileph.jpg`
                     }
                     alt="profile-img"

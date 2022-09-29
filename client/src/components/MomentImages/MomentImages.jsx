@@ -9,6 +9,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const MomentImages = ({ images, imgClass, containerClass, sliderClass, afterSliding }) => {
     let renderedImages;
     if (images.length === 1) {
+        // If there's only 1 picture we don't need the slider
         renderedImages = (
             <img
                 className={imgClass}
@@ -20,6 +21,7 @@ const MomentImages = ({ images, imgClass, containerClass, sliderClass, afterSlid
         );
     } else if (images.length > 1) {
         renderedImages = images.map((image) => (
+            // If there are more, then use the slider
             <div
                 className={`momentimage_container ${containerClass}`}
                 key={image._id}
@@ -47,6 +49,7 @@ const MomentImages = ({ images, imgClass, containerClass, sliderClass, afterSlid
             </Slider>
         );
     } else {
+        // If it's not an array, then check if there's a url and return only an image
         const image = images.url
             ? `${images.url.startsWith("/") ? BACKEND_URL : ""}${images.url}`
             : `${BACKEND_URL}/images/no-image.jpg`;

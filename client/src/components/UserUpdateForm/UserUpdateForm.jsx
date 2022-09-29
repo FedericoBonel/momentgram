@@ -172,7 +172,7 @@ const UserUpdateForm = ({ user, validateUser }) => {
                     className="container_usrupd-form_profimg"
                     src={
                         user.user.profileImg
-                            ? `${BACKEND_URL}/images/${user.user.profileImg.url}`
+                            ? `${BACKEND_URL}${user.user.profileImg.url}`
                             : `${BACKEND_URL}/images/profileph.jpg`
                     }
                     alt="profile-img"

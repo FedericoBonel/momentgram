@@ -1,5 +1,6 @@
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const path = require("path");
 const { nanoid } = require("nanoid");
 
 const {
@@ -16,6 +17,7 @@ const {
 } = require("./FollowerService");
 const { getNumberMomentsOf } = require("./MomentService");
 const { sendVerificationEmail } = require("./EmailService");
+const { deleteFile } = require("./FileService");
 const {
     NotFoundError,
     BadRequestError,
@@ -107,6 +109,7 @@ const authenticateUser = async (email, password) => {
             id: savedUser._id,
             email: savedUser.email,
             username: savedUser.username,
+            profileImg: savedUser.profileImg,
         },
         token: newToken,
     };
@@ -220,6 +223,62 @@ const updateUserPasswordById = async (id, oldPassword, newPassword) => {
     };
 };
 
+const addProfileImage = async (userId, image) => {
+    // Get the user and delete existing image
+    const foundUser = await getUserBy({ _id: userId });
+
+    if (!foundUser) {
+        throw new NotFoundError(`User with id: ${id} not found`);
+    }
+
+    if (foundUser.profileImg) {
+        const imageName = foundUser.profileImg.url.substring(8);
+        const directory = path.join(
+            __dirname,
+            "..",
+            "..",
+            "public",
+            "images",
+            imageName
+        );
+
+        await deleteFile(directory);
+    }
+
+    // Save the file and store it's registry in db
+    const fileKey = Object.keys(image)[0];
+    image[fileKey].id = nanoid();
+    image[fileKey].extension = path.extname(image[fileKey].name);
+
+    const directory = path.join(
+        __dirname,
+        "..",
+        "..",
+        "public",
+        "images",
+        `${image[fileKey].id}${image[fileKey].extension}`
+    );
+
+    try {
+        await image[fileKey].mv(directory);
+    } catch (error) {
+        throw new InternalServerError(
+            "An error happened during file upload, please retry again"
+        );
+    }
+
+    const profileImg = {
+        url: `/images/${image[fileKey].id}${image[fileKey].extension}`,
+        byteSize: image[fileKey].size,
+    };
+
+    const updatedUser = await updateUserBy(
+        { _id: userId },
+        { profileImg: profileImg }
+    );
+    return await createExposedUser(updatedUser, userId);
+};
+
 const validateJwtPayload = async (userId, jwtIssueDate) => {
     const foundUser = await getUserBy({ _id: userId });
 
@@ -260,6 +319,7 @@ const createExposedUser = async (foundUser, userId) => {
         numberFollowing,
         numberMoments,
         isFollowing,
+        profileImg: foundUser.profileImg,
     };
 };
 
@@ -288,4 +348,5 @@ module.exports = {
     verifyUserAccount,
     getUsersByFilters,
     validateJwtPayload,
+    addProfileImage,
 };

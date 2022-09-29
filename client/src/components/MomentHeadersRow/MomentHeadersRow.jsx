@@ -28,8 +28,8 @@ const MomentHeadersRow = ({ moment, user, onDelete }) => {
                 <Link to={`/users/${moment.createdBy.username}`}>
                     <img
                         src={
-                            user.profileImg?.url
-                                ? `${BACKEND_URL}${user.profileImg.url}`
+                            moment.createdBy.profileImg
+                                ? `${BACKEND_URL}${moment.createdBy.profileImg.url}`
                                 : `${BACKEND_URL}/images/profileph.jpg`
                         }
                         alt="profile-img"

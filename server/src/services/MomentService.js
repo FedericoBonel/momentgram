@@ -212,14 +212,25 @@ const createSingleMomentBody = async (momentDoc, userId = null) => {
             _id: momentDoc.createdBy._id,
             username: momentDoc.createdBy.username,
             email: momentDoc.createdBy.email,
+            profileImg: momentDoc.createdBy.profileImg
         },
         isLiked,
     };
 };
 
 const addImagesTo = async (userId, momentId, images) => {
+    // verify the moment does not have images
+    const savedMoment = await getAMomentById(momentId);
+
+    if (savedMoment.img?.length) {
+        throw new BadRequestError(
+            `Moment with id ${momentId} already has images`
+        );
+    }
+
     const fileNames = Object.keys(images);
 
+    // Create the images paths and save them in file system
     let newImages = [];
     for (let file of fileNames) {
         const extension = path.extname(images[file].name);
@@ -252,15 +263,6 @@ const addImagesTo = async (userId, momentId, images) => {
 };
 
 const saveImagesToDB = async (userId, momentId, images) => {
-    // verify the moment does not have images
-    const savedMoment = await getAMomentById(momentId);
-
-    if (savedMoment.img?.length) {
-        throw new BadRequestError(
-            `Moment with id ${momentId} already has images`
-        );
-    }
-
     const updatedMoment = await updateMomentBy(
         { createdBy: userId, _id: momentId },
         { $push: { img: images } }

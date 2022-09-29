@@ -40,6 +40,7 @@ const createCommentBody = (commentDoc) => {
             _id: comment.createdBy._id,
             username: comment.createdBy.username,
             email: comment.createdBy.email,
+            profileImg: comment.createdBy.profileImg
         },
         moment: comment.moment._id,
     };

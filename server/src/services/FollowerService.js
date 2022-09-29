@@ -23,6 +23,7 @@ const getFollowersOf = async (userId, page = 1, limit = 20) => {
         _id: follower._id,
         email: follower.email,
         username: follower.username,
+        profileImg: follower.profileImg
     }));
 };
 
@@ -43,6 +44,7 @@ const getFollowingsOf = async (userId, page = 1, limit = 20) => {
         _id: followed._id,
         email: followed.email,
         username: followed.username,
+        profileImg: followed.profileImg
     }));
 };
 

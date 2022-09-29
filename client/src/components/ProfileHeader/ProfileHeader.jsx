@@ -28,7 +28,7 @@ const ProfileHeader = ({ user, userData, onFollow }) => {
                 className="container_profileheader-img"
                 src={
                     userData.profileImg
-                        ? `${BACKEND_URL}/images/${userData.profileImg.url}`
+                        ? `${BACKEND_URL}${userData.profileImg.url}`
                         : `${BACKEND_URL}/images/profileph.jpg`
                 }
                 alt="user-profileimg"

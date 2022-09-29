@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const fileUpload = require("express-fileupload");
 
 const {
     getUser,
@@ -12,8 +13,14 @@ const {
     updateUser,
     verifyUser,
     updateUserPassword,
+    uploadImage,
 } = require("../controllers/UserController");
 const authenticateToken = require("../middleware/JwtAuth");
+const {
+    validateExtensions,
+    checkFileExists,
+    checkFileLimit,
+} = require("../middleware/fileupload");
 
 const userRouter = Router();
 
@@ -25,6 +32,16 @@ userRouter
     .delete(deleteAccount)
     .put(updateUser);
 userRouter.route("/password").all(authenticateToken).post(updateUserPassword);
+userRouter
+    .route("/image")
+    .all(authenticateToken)
+    .post(
+        fileUpload({ createParentPath: true }),
+        checkFileExists,
+        validateExtensions([".jpg", ".jpeg", ".png"]),
+        checkFileLimit,
+        uploadImage
+    );
 userRouter.route("/:id").get(authenticateToken, getUser);
 // User followers -------------------------------------------------------------
 userRouter

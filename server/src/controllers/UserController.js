@@ -8,6 +8,7 @@ const {
     updateUserById,
     verifyUserAccount,
     updateUserPasswordById,
+    addProfileImage,
 } = require("../services/UserService");
 const { getMomentsOf } = require("../services/MomentService");
 const {
@@ -138,6 +139,15 @@ const updateUserPassword = async (req, res) => {
     res.status(StatusCodes.OK).json(new SuccessPayload(userWithToken));
 };
 
+const uploadImage = async (req, res) => {
+    const { _id: userId } = req.user;
+    const files = req.files;
+    
+    const updatedUser = await addProfileImage(userId, files);
+
+    res.status(StatusCodes.CREATED).json(new SuccessPayload(updatedUser));
+};
+
 module.exports = {
     getUser,
     getUsersByQuery,
@@ -150,4 +160,5 @@ module.exports = {
     updateUser,
     verifyUser,
     updateUserPassword,
+    uploadImage
 };

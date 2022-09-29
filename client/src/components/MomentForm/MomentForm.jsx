@@ -6,7 +6,7 @@ import {
     faMapMarkerAlt,
     faSpinner,
     faPlus,
-    faTrash
+    faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./MomentForm.css";
@@ -112,7 +112,7 @@ const MomentForm = ({ momentId, user }) => {
             if (prevIndex && prevIndex === moment.data.img.length - 1) {
                 return prevIndex - 1;
             } else if (0 < prevIndex) {
-                return prevIndex
+                return prevIndex;
             } else {
                 return 0;
             }
@@ -137,7 +137,7 @@ const MomentForm = ({ momentId, user }) => {
         } else {
             finalFiles = fileArray.slice(0, 4);
         }
-        
+
         return finalFiles;
     };
 
@@ -188,13 +188,14 @@ const MomentForm = ({ momentId, user }) => {
                             containerClass="container_momentform-preview_imgcont"
                             afterSliding={setSelectedIndex}
                         />
-                        <button
-                            className="container_momentform-addimg"
-                            disabled={!canAddFile}
-                            onClick={onAddImage}
-                        >
-                            <FontAwesomeIcon icon={faPlus} />
-                        </button>
+                        {canAddFile && (
+                            <button
+                                className="container_momentform-addimg"
+                                onClick={onAddImage}
+                            >
+                                <FontAwesomeIcon icon={faPlus} />
+                            </button>
+                        )}
                         <button
                             className="container_momentform-rmvimg"
                             onClick={onRemoveImage}
@@ -235,7 +236,7 @@ const MomentForm = ({ momentId, user }) => {
                                 <img
                                     src={
                                         user.user.profileImg
-                                            ? `${BACKEND_URL}/images/${user.user.profileImg.url}`
+                                            ? `${BACKEND_URL}${user.user.profileImg.url}`
                                             : `${BACKEND_URL}/images/profileph.jpg`
                                     }
                                     alt="user-profile-img"

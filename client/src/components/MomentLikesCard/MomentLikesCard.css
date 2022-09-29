@@ -58,8 +58,14 @@
 }
 
 .container_likescard-usr img {
+    object-fit: cover;
+    min-width: 38px;
     width: 38px;
-    border-radius: 100%
+    max-width: 38px;
+    min-height: 38px;
+    height: 38px;
+    max-width: 38px;
+    border-radius: 50%;
 }
 
 .container_likescard-usr p{ 

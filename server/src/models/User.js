@@ -7,8 +7,19 @@ const passwordSchema = new mongoose.Schema(
             required: [true, "Please provide a password"],
         },
     },
-    { _id:false, timestamps: { createdAt: false, updatedAt: true } }
+    { _id: false, timestamps: { createdAt: false, updatedAt: true } }
 );
+
+const profileImgSchema = new mongoose.Schema({
+    url: {
+        type: String,
+        required: [true, "Please provide a profile image url"],
+    },
+    byteSize: {
+        type: Number,
+        required: [true, "Please provide an image size in bytes"],
+    },
+});
 
 const userSchema = new mongoose.Schema(
     {
@@ -56,6 +67,7 @@ const userSchema = new mongoose.Schema(
         },
         validated: { type: Boolean, default: false },
         verificationCode: { type: String },
+        profileImg: profileImgSchema,
     },
     { timestamps: true }
 );
