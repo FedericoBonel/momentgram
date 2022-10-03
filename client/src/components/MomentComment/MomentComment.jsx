@@ -7,6 +7,8 @@ import "./MomentComment.css";
 import { getDaysAgoFrom } from "../../api/DateApi";
 import Overlay from "../Overlay/Overlay";
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const MomentComment = ({ comment, user, onDelete, momentAuthor }) => {
     const [displayOptions, setDisplayOptions] = useState(false);
 
@@ -18,9 +20,14 @@ const MomentComment = ({ comment, user, onDelete, momentAuthor }) => {
     const renderedComment = (
         <div className="container_comment">
             <Link to={`/users/${comment.createdBy.username}`}>
-                <FontAwesomeIcon
+                <img
                     className="container_comment-usrimg"
-                    icon={faUserCircle}
+                    src={
+                        comment.createdBy.profileImg
+                            ? `${BACKEND_URL}${comment.createdBy.profileImg.url}`
+                            : `${BACKEND_URL}/images/profileph.jpg`
+                    }
+                    alt="profile-img"
                 />
             </Link>
             <div className="container_comment-usrinfo">

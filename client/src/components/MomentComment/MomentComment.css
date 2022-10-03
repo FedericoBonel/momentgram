@@ -12,10 +12,12 @@
 }
 
 .container_comment-usrimg {
+    object-fit: cover;
     min-width: 30px;
     max-width: 30px;
     min-height: 30px;
     max-height: 30px;
+    border-radius: 50%;
     margin: 0 16px 0 0;
 }
 

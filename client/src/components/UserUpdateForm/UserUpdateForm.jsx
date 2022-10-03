@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 import "./UserUpdateForm.css";
+import ProfilePhotoUpdateForm from "../ProfilePhotoUpdateForm/ProfilePhotoUpdateForm";
 import { getUserByUsername, updateUserInfo } from "../../api/UsersApi";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -19,6 +20,7 @@ const UserUpdateForm = ({ user, validateUser }) => {
         },
         submitStatus: "loading",
     });
+    const [showProfilePhotoForm, setShowProfilePhotoForm] = useState(false);
 
     const canSave =
         Boolean(userInfo.data.firstName) &&
@@ -28,18 +30,18 @@ const UserUpdateForm = ({ user, validateUser }) => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const fetchedUsers = await getUserByUsername(
+            const fetchedUser = await getUserByUsername(
                 user.token,
                 user.user.username
             );
 
-            if (fetchedUsers.resCode === 200) {
+            if (fetchedUser.resCode === 200) {
                 setUserInfo({
-                    data: fetchedUsers.user,
+                    data: fetchedUser.user,
                     submitStatus: "idle",
                 });
             } else {
-                navigate(`/error/${fetchedUsers.resCode}`);
+                navigate(`/error/${fetchedUser.resCode}`);
             }
         };
 
@@ -73,6 +75,7 @@ const UserUpdateForm = ({ user, validateUser }) => {
                     id: updateRes.updatedUser._id,
                     email: updateRes.updatedUser.email,
                     username: updateRes.updatedUser.username,
+                    profileImg: updateRes.updatedUser.profileImg,
                 },
             });
         } else {
@@ -177,10 +180,25 @@ const UserUpdateForm = ({ user, validateUser }) => {
                     }
                     alt="profile-img"
                 />
-                <div>
-                    <p>{user.user.username}</p>
+                <div className="container_usrupd-form_usrdata">
+                    <p className="container_usrupd-form_usrdataname">
+                        {user.user.username}
+                    </p>
+                    <p
+                        className="container_usrupd-form_usrdatabtn"
+                        onClick={() => setShowProfilePhotoForm(true)}
+                    >
+                        Change profile photo
+                    </p>
                 </div>
             </div>
+            {showProfilePhotoForm && (
+                <ProfilePhotoUpdateForm
+                    onClose={() => setShowProfilePhotoForm(false)}
+                    token={user.token}
+                    validateUser={validateUser}
+                />
+            )}
             {userInfo.submitStatus === "loading" && (
                 <FontAwesomeIcon
                     icon={faSpinner}

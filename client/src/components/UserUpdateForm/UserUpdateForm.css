@@ -11,8 +11,23 @@
     align-items: center;
 }
 
-.container_usrupd-form_usrrow p {
+.container_usrupd-form_usrdata {
+    text-align: start;
+}
+
+.container_usrupd-form_usrdataname {
     font-size: 1.3rem;
+}
+
+.container_usrupd-form_usrdatabtn {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-button);
+    cursor: pointer;
+}
+
+.container_usrupd-form_usrdatabtn:active {
+    filter: opacity(0.5);
 }
 
 .container_usrupd-form_profimg {

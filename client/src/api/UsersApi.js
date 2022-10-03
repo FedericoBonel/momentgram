@@ -58,7 +58,6 @@ const verifyAccount = async (verificationCode) => {
 };
 
 const getUserByUsername = async (token, username) => {
-
     const usersUri = `${BACKEND_URI}/users?username=${username}`;
     try {
         const response = await fetch(usersUri, {
@@ -75,7 +74,6 @@ const getUserByUsername = async (token, username) => {
         return payload.data?.length
             ? { user: payload.data[0], resCode }
             : { resCode: 404 };
-
     } catch (error) {
         console.log(`An error ocurred during user fetching: ${error}`);
         return { resCode: 500 };
@@ -192,6 +190,30 @@ const updateUserPassword = async (token, updatedPassword) => {
     }
 };
 
+const updateUserProfilePhoto = async (token, photo) => {
+    const userImgUrl = `${BACKEND_URI}/users/image`;
+    let formData = new FormData();
+    formData.append(photo.name, photo);
+    try {
+        const userImgRes = await fetch(userImgUrl, {
+            headers: {
+                authorization: `Bearer ${token}`,
+            },
+            method: "POST",
+            body: formData,
+            "content-type": "multipart/form-data",
+        });
+
+        const { data } = await userImgRes.json();
+        const resCode = userImgRes.status;
+
+        return { resCode, updatedUser: data };
+    } catch (error) {
+        console.log(`An error happened during profile photo upload`);
+        return { resCode: 500 };
+    }
+};
+
 export {
     authenticateUser,
     registerUser,
@@ -202,4 +224,5 @@ export {
     unfollowUser,
     updateUserInfo,
     updateUserPassword,
+    updateUserProfilePhoto,
 };
