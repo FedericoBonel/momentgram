@@ -9,7 +9,7 @@ const PrivateLayout = () => {
     
     return (
         <>
-            <Navbar user={user.user} onLogout={invalidateUser}/>
+            <Navbar user={user} onLogout={invalidateUser}/>
             <Outlet />
         </>
     );

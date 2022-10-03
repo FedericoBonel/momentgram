@@ -13,6 +13,8 @@
 .container_comtslist-spinner {
     color: var(--color-button);
     font-size: 1.5rem;
+    margin: auto;
+    width: 100%;
 }
 
 .container_dashboard-loadbtn {
@@ -21,4 +23,7 @@
     border: none;
     cursor: pointer;
     font-weight: 600;
+    font-size: 1.5rem;
+    margin: auto;
+    width: 100%;
 }

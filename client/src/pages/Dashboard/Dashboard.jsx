@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faSpinner, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 
 import "./Dashboard.css";
 import {
@@ -108,7 +108,7 @@ const Dashboard = () => {
             className="container_dashboard-loadbtn"
             onClick={() => setPage((prevPage) => prevPage + 1)}
         >
-            Load more
+            <FontAwesomeIcon icon={faPlusCircle}/>
         </button>
     ) : (
         <p>You've reached the end of your feed!</p>

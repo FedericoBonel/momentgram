@@ -29,23 +29,26 @@ const getUser = async (req, res) => {
 
 const getUsersByQuery = async (req, res) => {
     const { _id: userId } = req.user;
-    const { username, email, firstName, lastName, page, limit } = req.query;
+    const { username, email, firstName, lastName, page, limit, q } = req.query;
 
     let filters = {};
+    if (!q) {
+        username && (filters.username = username);
+        email && (filters.email = email);
+        firstName && (filters.firstName = firstName);
+        lastName && (filters.lastName = lastName);
+    } else {
+        filters.username = { $regex: q, $options: "i" };
+    }
 
-    username && (filters.username = username);
-    email && (filters.email = email);
-    firstName && (filters.firstName = firstName);
-    lastName && (filters.lastName = lastName);
-
-    const user = await getUsersByFilters(
+    const users = await getUsersByFilters(
         filters,
         page && page,
         limit && limit,
         userId
     );
 
-    res.status(StatusCodes.OK).json(new SuccessPayload(user));
+    res.status(StatusCodes.OK).json(new SuccessPayload(users));
 };
 
 const getUserFollowers = async (req, res) => {
@@ -142,7 +145,7 @@ const updateUserPassword = async (req, res) => {
 const uploadImage = async (req, res) => {
     const { _id: userId } = req.user;
     const files = req.files;
-    
+
     const updatedUser = await addProfileImage(userId, files);
 
     res.status(StatusCodes.CREATED).json(new SuccessPayload(updatedUser));
@@ -160,5 +163,5 @@ module.exports = {
     updateUser,
     verifyUser,
     updateUserPassword,
-    uploadImage
+    uploadImage,
 };

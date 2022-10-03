@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faClose, faSpinner, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 
 import "./MomentLikesCard.css";
 import { getMomentLikes } from "../../api/MomentsApi";
@@ -90,7 +90,7 @@ const MomentLikesCard = ({ momentId, token, onClose }) => {
                             onClick={() => setPage((prevPage) => prevPage + 1)}
                             className="container_likescard-load"
                         >
-                            Load more
+                            <FontAwesomeIcon icon={faPlusCircle}/>
                         </p>
                     )}
                 </div>

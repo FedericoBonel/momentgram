@@ -80,6 +80,28 @@ const getUserByUsername = async (token, username) => {
     }
 };
 
+const getUsersByUsernameLike = async (token, username) => {
+    const usersUri = `${BACKEND_URI}/users?q=${username}&limit=5`;
+
+    try {
+        const response = await fetch(usersUri, {
+            headers: {
+                accept: "application/json",
+                authorization: `Bearer ${token}`,
+            },
+            method: "GET",
+        });
+
+        const payload = await response.json();
+        const resCode = response.status;
+
+        return { userList: payload.data, resCode };
+    } catch (error) {
+        console.log(`An error ocurred during user fetching: ${error}`);
+        return { resCode: 500 };
+    }
+};
+
 const getUserMomentsById = async (token, userId, page) => {
     const usersUri = `${BACKEND_URI}/users/${userId}/moments?page=${page}`;
     try {
@@ -219,6 +241,7 @@ export {
     registerUser,
     verifyAccount,
     getUserByUsername,
+    getUsersByUsernameLike,
     getUserMomentsById,
     followUser,
     unfollowUser,

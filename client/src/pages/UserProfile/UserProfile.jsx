@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useContext, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faSpinner, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 
 import "./UserProfile.css";
 import { UserContext } from "../../context/Context";
@@ -113,11 +113,11 @@ const UserProfile = () => {
             className="container_userprof-loadmore"
             onClick={() => setMomentsPage((prevPage) => prevPage + 1)}
         >
-            Load more
+            <FontAwesomeIcon icon={faPlusCircle}/>
         </button>
     ) : (
         <p className="container_userprof-nomore">
-            You've reached the end of your feed!
+            You've reached the end of this users moments!
         </p>
     );
 

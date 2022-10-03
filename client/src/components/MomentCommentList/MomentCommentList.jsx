@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faSpinner, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 
 import "./MomentCommentList.css";
 import { MomentComment, MomentCommentForm } from "../";
@@ -110,7 +110,7 @@ const MomentCommentList = ({ user, moment }) => {
             className="container_dashboard-loadbtn"
             onClick={() => setCommentPage((prevPage) => prevPage + 1)}
         >
-            Load more
+            <FontAwesomeIcon icon={faPlusCircle}/>
         </button>
     );
 
