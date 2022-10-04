@@ -14,12 +14,8 @@ const {
     getNumberLikesOf,
     getLikeByUserAndMoment,
 } = require("./MomentLikeService");
-const { deleteFiles } = require("./FileService");
-const {
-    NotFoundError,
-    BadRequestError,
-    InternalServerError,
-} = require("../errors");
+const { deleteFiles, getDirToImagesFor, saveImage } = require("./FileService");
+const { NotFoundError, BadRequestError } = require("../errors");
 
 /**
  * Creates a new moment for a specific user
@@ -83,10 +79,10 @@ const getAllMoments = async (
 const getMomentsFor = async (userId, page = 1, limit = 20) => {
     const skip = (page - 1) * limit;
 
-    // Get all the id's of the users that this user follows and it's own
+    // Get all the id's of the users that this user follows
     const userFollowings = await getFollowingsOf(userId, 0, 0);
 
-    // Select the moments that were created by any of those ids in date order
+    // Select the moments that were created by any of those ids
     const momentsForUser = await getMomentBy(
         {
             $or: [
@@ -125,7 +121,7 @@ const getMomentByUser = async (userId, momentId) => {
         throw new NotFoundError(`Moment with id ${momentId} not found`);
     }
 
-    return savedMoment;
+    return savedMoment[0];
 };
 
 const getNumberMomentsOf = async (userId) => {
@@ -140,26 +136,13 @@ const getNumberMomentsOf = async (userId) => {
  */
 const deleteMomentById = async (userId, momentId) => {
     // Find the moment
-    const foundMoments = await getMomentBy({ _id: momentId });
-
-    if (!foundMoments.length) {
-        throw new NotFoundError(`Moment with id ${momentId} not found`);
-    }
-
-    const foundMoment = foundMoments[0];
+    const foundMoment = await getMomentByUser(userId, momentId);
 
     // Delete its images from hard drive
     let pathsToDelete = [];
     for (const image of foundMoment.img) {
         const imageName = image.url.substring(8);
-        const dir = path.join(
-            __dirname,
-            "..",
-            "..",
-            "public",
-            "images",
-            imageName
-        );
+        const dir = getDirToImagesFor(imageName);
         pathsToDelete.push(dir);
     }
     await deleteFiles(pathsToDelete);
@@ -212,7 +195,7 @@ const createSingleMomentBody = async (momentDoc, userId = null) => {
             _id: momentDoc.createdBy._id,
             username: momentDoc.createdBy.username,
             email: momentDoc.createdBy.email,
-            profileImg: momentDoc.createdBy.profileImg
+            profileImg: momentDoc.createdBy.profileImg,
         },
         isLiked,
     };
@@ -220,7 +203,7 @@ const createSingleMomentBody = async (momentDoc, userId = null) => {
 
 const addImagesTo = async (userId, momentId, images) => {
     // verify the moment does not have images
-    const savedMoment = await getAMomentById(momentId);
+    const savedMoment = await getMomentByUser(userId, momentId);
 
     if (savedMoment.img?.length) {
         throw new BadRequestError(
@@ -228,41 +211,28 @@ const addImagesTo = async (userId, momentId, images) => {
         );
     }
 
+    // Save the images in the file system
     const fileNames = Object.keys(images);
-
-    // Create the images paths and save them in file system
     let newImages = [];
     for (let file of fileNames) {
         const extension = path.extname(images[file].name);
         images[file].id = nanoid();
-        const dir = path.join(
-            __dirname,
-            "..",
-            "..",
-            "public",
-            "images",
-            `${images[file].id}${extension}`
-        );
 
-        try {
-            await images[file].mv(dir);
-        } catch (error) {
-            throw new InternalServerError(
-                "An error happened during file upload, please retry again"
-            );
-        }
+        await saveImage(images[file], `${images[file].id}${extension}`);
 
-        const savedImage = {
+        const savedImageObject = {
             url: `/images/${images[file].id}${extension}`,
             byteSize: images[file].size,
         };
 
-        newImages.push(savedImage);
+        newImages.push(savedImageObject);
     }
-    return await saveImagesToDB(userId, momentId, newImages);
+
+    // Save the images in database
+    return await addImagesToMoment(userId, momentId, newImages);
 };
 
-const saveImagesToDB = async (userId, momentId, images) => {
+const addImagesToMoment = async (userId, momentId, images) => {
     const updatedMoment = await updateMomentBy(
         { createdBy: userId, _id: momentId },
         { $push: { img: images } }

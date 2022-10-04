@@ -17,7 +17,7 @@ const {
 } = require("./FollowerService");
 const { getNumberMomentsOf } = require("./MomentService");
 const { sendVerificationEmail } = require("./EmailService");
-const { deleteFile } = require("./FileService");
+const { deleteFile, getDirToImagesFor, saveImage } = require("./FileService");
 const {
     NotFoundError,
     BadRequestError,
@@ -233,16 +233,9 @@ const addProfileImage = async (userId, image) => {
 
     if (foundUser.profileImg) {
         const imageName = foundUser.profileImg.url.substring(8);
-        const directory = path.join(
-            __dirname,
-            "..",
-            "..",
-            "public",
-            "images",
-            imageName
-        );
+        const dirOldImg = getDirToImagesFor(imageName);
 
-        await deleteFile(directory);
+        await deleteFile(dirOldImg);
     }
 
     // Save the file and store it's registry in db
@@ -250,25 +243,12 @@ const addProfileImage = async (userId, image) => {
     image[fileKey].id = nanoid();
     image[fileKey].extension = path.extname(image[fileKey].name);
 
-    const directory = path.join(
-        __dirname,
-        "..",
-        "..",
-        "public",
-        "images",
-        `${image[fileKey].id}${image[fileKey].extension}`
-    );
+    const newImageName = `${image[fileKey].id}${image[fileKey].extension}`;
 
-    try {
-        await image[fileKey].mv(directory);
-    } catch (error) {
-        throw new InternalServerError(
-            "An error happened during file upload, please retry again"
-        );
-    }
+    await saveImage(image[fileKey], newImageName);
 
     const profileImg = {
-        url: `/images/${image[fileKey].id}${image[fileKey].extension}`,
+        url: `/images/${newImageName}`,
         byteSize: image[fileKey].size,
     };
 

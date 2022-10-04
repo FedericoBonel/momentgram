@@ -25,7 +25,6 @@ const {
     validateExtensions,
     checkFileExists,
     checkFileLimit,
-    checkMomentExists,
 } = require("../middleware/fileupload");
 
 const momentRoutes = Router();
@@ -46,7 +45,6 @@ momentRoutes
 momentRoutes
     .route("/:id/images")
     .post(
-        checkMomentExists,
         fileUpload({ createParentPath: true }),
         checkFileExists,
         validateExtensions([".jpg", ".jpeg", ".png"]),

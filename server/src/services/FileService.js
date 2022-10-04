@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 
 const { InternalServerError } = require("../errors");
 
@@ -27,4 +28,20 @@ const deleteFile = (path) => {
     });
 };
 
-module.exports = { deleteFiles, deleteFile };
+const saveImage = async (imageFile, imageName) => {
+    const dir = getDirToImagesFor(imageName);
+
+    try {
+        await imageFile.mv(dir);
+    } catch (error) {
+        throw new InternalServerError(
+            "An error happened during file upload, please retry again"
+        );
+    }
+};
+
+const getDirToImagesFor = (name) => {
+    return path.join(__dirname, "..", "..", "public", "images", name);
+};
+
+module.exports = { deleteFiles, deleteFile, getDirToImagesFor, saveImage };
