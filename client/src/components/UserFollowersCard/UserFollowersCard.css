@@ -1,4 +1,4 @@
-.container_likescard {
+.container_followerscard {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -14,7 +14,7 @@
     text-align: center;
 }
 
-.container_likescard-topbr {
+.container_followerscard-topbr {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -23,41 +23,41 @@
     padding: 8px 16px;
 }
 
-.container_likescard-topbr_title {
+.container_followerscard-topbr_title {
     flex: 1;
 }
 
-.container_likescard-topbr_close {
+.container_followerscard-topbr_close {
     margin: auto;
     flex: 0;
     font-size: 1.5rem;
     cursor: pointer;
 }
 
-.container_likescard-list {
+.container_followerscard-list {
     flex-grow: 1;
     padding: 8px 16px 0 16px;
     overflow-y: auto;
     overflow-x: hidden;
 }
 
-.container_likescard-list::-webkit-scrollbar {
+.container_followerscard-list::-webkit-scrollbar {
     display: none;
 }
 
-.container_likescard-list a {
+.container_followerscard-list a {
     color: inherit;
     text-decoration: none;
 }
 
-.container_likescard-usr {
+.container_followerscard-usr {
     display: flex;
     flex-direction: row;
     align-items: center;
     padding-bottom: 16px;
 }
 
-.container_likescard-usr img {
+.container_followerscard-usr img {
     object-fit: cover;
     min-width: 38px;
     width: 38px;
@@ -68,13 +68,14 @@
     border-radius: 50%;
 }
 
-.container_likescard-usr p {
+.container_followerscard-usr p {
     margin-left: 8px;
     font-size: 0.9rem;
     font-weight: 600;
 }
 
-.container_likescard-load {
+
+.container_followerscard-load {
     color: var(--color-button);
     cursor: pointer;
     font-size: 1.5rem;

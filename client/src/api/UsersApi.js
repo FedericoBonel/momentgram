@@ -123,6 +123,46 @@ const getUserMomentsById = async (token, userId, page) => {
     }
 };
 
+const getUserFollowers = async (userId, page) => {
+    const usersUri = `${BACKEND_URI}/users/${userId}/followers?page=${page}`;
+    try {
+        const response = await fetch(usersUri, {
+            headers: {
+                accept: "application/json",
+            },
+            method: "GET",
+        });
+
+        const payload = await response.json();
+        const resCode = response.status;
+
+        return { followers: payload.data, resCode };
+    } catch (error) {
+        console.log(`An error ocurred during user moment fetching: ${error}`);
+        return { resCode: 500 };
+    }
+}
+
+const getUserFollowings = async (userId, page) => {
+    const usersUri = `${BACKEND_URI}/users/${userId}/followings?page=${page}`;
+    try {
+        const response = await fetch(usersUri, {
+            headers: {
+                accept: "application/json",
+            },
+            method: "GET",
+        });
+
+        const payload = await response.json();
+        const resCode = response.status;
+
+        return { followings: payload.data, resCode };
+    } catch (error) {
+        console.log(`An error ocurred during user moment fetching: ${error}`);
+        return { resCode: 500 };
+    }
+}
+
 const followUser = async (token, userId) => {
     const usersUri = `${BACKEND_URI}/users/${userId}/followers`;
     try {
@@ -243,6 +283,8 @@ export {
     getUserByUsername,
     getUsersByUsernameLike,
     getUserMomentsById,
+    getUserFollowers,
+    getUserFollowings,
     followUser,
     unfollowUser,
     updateUserInfo,

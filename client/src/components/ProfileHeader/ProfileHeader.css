@@ -73,3 +73,11 @@
     padding-top: 28px;
     max-width: 100%;
 }
+
+.container_profileheader-buttons {
+    cursor: pointer;
+}
+
+.container_profileheader-buttons:active {
+    filter: opacity(0.5);
+}

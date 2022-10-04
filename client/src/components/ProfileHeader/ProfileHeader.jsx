@@ -8,11 +8,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./ProfileHeader.css";
+import UserFollowersCard from "../UserFollowersCard/UserFollowersCard";
+import UserFollowingsCard from "../UserFollowingsCard/UserFollowingsCard";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const ProfileHeader = ({ user, userData, onFollow }) => {
     const [submitStatus, setSubmitStatus] = useState("idle");
+    const [showFollowers, setShowFollowers] = useState(false);
+    const [showFollowings, setShowFollowings] = useState(false);
 
     const handleFollow = async () => {
         setSubmitStatus("loading");
@@ -68,13 +72,31 @@ const ProfileHeader = ({ user, userData, onFollow }) => {
                     <p>
                         <b>{userData.numberMoments}</b> moments
                     </p>
-                    <p>
+                    <p
+                        onClick={() => setShowFollowers(true)}
+                        className="container_profileheader-buttons"
+                    >
                         <b>{userData.numberFollowers}</b> followers
                     </p>
-                    <p>
+                    <p
+                        onClick={() => setShowFollowings(true)}
+                        className="container_profileheader-buttons"
+                    >
                         <b>{userData.numberFollowing}</b> following
                     </p>
                 </div>
+                {showFollowers && (
+                    <UserFollowersCard
+                        onClose={() => setShowFollowers(false)}
+                        userId={userData._id}
+                    />
+                )}
+                {showFollowings && (
+                    <UserFollowingsCard
+                        onClose={() => setShowFollowings(false)}
+                        userId={userData._id}
+                    />
+                )}
                 {userData.description && (
                     <p className="container_profileheader-datadesc">
                         {userData.description}
