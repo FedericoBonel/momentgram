@@ -1,31 +1,10 @@
 const { Router } = require("express");
 const fileUpload = require("express-fileupload");
 
-const {
-    getMoments,
-    getMomentById,
-    createNewMoment,
-    deleteMoment,
-    updateMoment,
-    getMomentLikes,
-    likeMoment,
-    stopLikingMoment,
-    addComment,
-    getComments,
-    updateComment,
-    deleteComment,
-    uploadImage,
-} = require("../controllers/MomentController");
+const momentController = require("../controllers/MomentController");
 const authenticateToken = require("../middleware/JwtAuth");
-const {
-    validateMomentSchema,
-    validateMomentCommentSchema,
-} = require("../middleware/validators/MomentValidator");
-const {
-    validateExtensions,
-    checkFileExists,
-    checkFileLimit,
-} = require("../middleware/fileupload");
+const momentValidator = require("../middleware/validators/MomentValidator");
+const fileUploadValidator = require("../middleware/fileupload");
 
 const momentRoutes = Router();
 
@@ -34,37 +13,46 @@ momentRoutes.use(authenticateToken);
 // Moments -------------------------------------------------------------
 momentRoutes
     .route("/")
-    .get(getMoments)
-    .post(validateMomentSchema, createNewMoment);
+    .get(momentController.getMoments)
+    .post(
+        momentValidator.validateMomentSchema,
+        momentController.createNewMoment
+    );
 momentRoutes
     .route("/:id")
-    .get(getMomentById)
-    .put(validateMomentSchema, updateMoment)
-    .delete(deleteMoment);
+    .get(momentController.getMomentById)
+    .put(momentValidator.validateMomentSchema, momentController.updateMoment)
+    .delete(momentController.deleteMoment);
 // Moment images -------------------------------------------------------------
 momentRoutes
     .route("/:id/images")
     .post(
         fileUpload({ createParentPath: true }),
-        checkFileExists,
-        validateExtensions([".jpg", ".jpeg", ".png"]),
-        checkFileLimit,
-        uploadImage
+        fileUploadValidator.checkFileExists,
+        fileUploadValidator.validateExtensions([".jpg", ".jpeg", ".png"]),
+        fileUploadValidator.checkFileLimit,
+        momentController.uploadImage
     );
 // Moment likes -------------------------------------------------------------
 momentRoutes
     .route("/:id/likes")
-    .get(getMomentLikes)
-    .post(likeMoment)
-    .delete(stopLikingMoment);
+    .get(momentController.getMomentLikes)
+    .post(momentController.likeMoment)
+    .delete(momentController.stopLikingMoment);
 // Moment comments -------------------------------------------------------------
 momentRoutes
     .route("/:id/comments")
-    .post(validateMomentCommentSchema, addComment)
-    .get(getComments);
+    .post(
+        momentValidator.validateMomentCommentSchema,
+        momentController.addComment
+    )
+    .get(momentController.getComments);
 momentRoutes
     .route("/:id/comments/:commentId")
-    .put(validateMomentCommentSchema, updateComment)
-    .delete(deleteComment);
+    .put(
+        momentValidator.validateMomentCommentSchema,
+        momentController.updateComment
+    )
+    .delete(momentController.deleteComment);
 
 module.exports = momentRoutes;

@@ -1,26 +1,10 @@
 const { Router } = require("express");
 const fileUpload = require("express-fileupload");
 
-const {
-    getUser,
-    getUsersByQuery,
-    getUserFollowers,
-    getUserFollowings,
-    getUserMoments,
-    followUser,
-    unfollowUser,
-    deleteAccount,
-    updateUser,
-    verifyUser,
-    updateUserPassword,
-    uploadImage,
-} = require("../controllers/UserController");
+const userController = require("../controllers/UserController");
 const authenticateToken = require("../middleware/JwtAuth");
-const {
-    validateExtensions,
-    checkFileExists,
-    checkFileLimit,
-} = require("../middleware/fileupload");
+const fileUploadMiddleware = require("../middleware/fileupload");
+const userValidator = require("../middleware/validators/UserValidator");
 
 const userRouter = Router();
 
@@ -28,32 +12,35 @@ const userRouter = Router();
 userRouter
     .route("/")
     .all(authenticateToken)
-    .get(getUsersByQuery)
-    .delete(deleteAccount)
-    .put(updateUser);
-userRouter.route("/password").all(authenticateToken).post(updateUserPassword);
+    .get(userController.getUsersByQuery)
+    .delete(userController.deleteAccount)
+    .put(userValidator.validateUserUpdateSchema, userController.updateUser);
+userRouter
+    .route("/password")
+    .all(authenticateToken)
+    .post(userValidator.validatePasswordUpd, userController.updateUserPassword);
 userRouter
     .route("/image")
     .all(authenticateToken)
     .post(
         fileUpload({ createParentPath: true }),
-        checkFileExists,
-        validateExtensions([".jpg", ".jpeg", ".png"]),
-        checkFileLimit,
-        uploadImage
+        fileUploadMiddleware.checkFileExists,
+        fileUploadMiddleware.validateExtensions([".jpg", ".jpeg", ".png"]),
+        fileUploadMiddleware.checkFileLimit,
+        userController.uploadImage
     );
-userRouter.route("/:id").get(authenticateToken, getUser);
+userRouter.route("/:id").get(authenticateToken, userController.getUser);
 // User followers -------------------------------------------------------------
 userRouter
     .route("/:id/followers")
-    .get(getUserFollowers)
-    .post(authenticateToken, followUser)
-    .delete(authenticateToken, unfollowUser);
+    .get(userController.getUserFollowers)
+    .post(authenticateToken, userController.followUser)
+    .delete(authenticateToken, userController.unfollowUser);
 // User followings -------------------------------------------------------------
-userRouter.route("/:id/followings").get(getUserFollowings);
+userRouter.route("/:id/followings").get(userController.getUserFollowings);
 // User moments -------------------------------------------------------------
-userRouter.route("/:id/moments").get(getUserMoments);
+userRouter.route("/:id/moments").get(userController.getUserMoments);
 // User verification --------------------------------------------------------
-userRouter.route("/verify/:verificationCode").get(verifyUser);
+userRouter.route("/verify/:verificationCode").get(userController.verifyUser);
 
 module.exports = userRouter;

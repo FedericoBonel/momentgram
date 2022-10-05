@@ -1,21 +1,12 @@
 const path = require("path");
 const { nanoid } = require("nanoid");
 
-const {
-    getNumberMomentsBy,
-    getMomentBy,
-    create,
-    deleteMomentBy,
-    updateMomentBy,
-} = require("../repositories/MomentRepository");
-const { getFollowingsOf } = require("./FollowerService");
-const { getNumberCommentsOf } = require("./MomentCommentService");
-const {
-    getNumberLikesOf,
-    getLikeByUserAndMoment,
-} = require("./MomentLikeService");
-const { deleteFiles, getDirToImagesFor, saveImage } = require("./FileService");
-const { NotFoundError, BadRequestError } = require("../errors");
+const momentRepository = require("../repositories/MomentRepository");
+const followerRepository = require("./FollowerService");
+const momentCommentRepository = require("./MomentCommentService");
+const momentLikeService = require("./MomentLikeService");
+const fileService = require("./FileService");
+const errors = require("../errors");
 
 /**
  * Creates a new moment for a specific user
@@ -26,9 +17,9 @@ const { NotFoundError, BadRequestError } = require("../errors");
 const createMoment = async (userId, newMoment) => {
     const momentToSave = { ...newMoment, createdBy: userId };
 
-    const savedMoment = await create(momentToSave);
+    const savedMoment = await momentRepository.create(momentToSave);
 
-    return createSingleMomentBody(savedMoment);
+    return toMomentDTO(savedMoment);
 };
 
 /**
@@ -39,13 +30,13 @@ const createMoment = async (userId, newMoment) => {
  * @returns The moment if it exists
  */
 const getAMomentById = async (momentId, userId = null) => {
-    const foundMoment = await getMomentBy({ _id: momentId });
+    const foundMoment = await momentRepository.getMomentBy({ _id: momentId });
 
     if (foundMoment.length === 0) {
-        throw new NotFoundError(`Moment with id: ${momentId} not found`);
+        throw new errors.NotFoundError(`Moment with id: ${momentId} not found`);
     }
 
-    return createSingleMomentBody(foundMoment[0], userId);
+    return toMomentDTO(foundMoment[0], userId);
 };
 
 /**
@@ -64,9 +55,14 @@ const getAllMoments = async (
 ) => {
     const skip = (page - 1) * limit;
 
-    const storedMoments = await getMomentBy(filter, skip, limit, order);
+    const storedMoments = await momentRepository.getMomentBy(
+        filter,
+        skip,
+        limit,
+        order
+    );
 
-    return await createListOfMomentBodies(storedMoments);
+    return await toListOfMomentsDTOs(storedMoments);
 };
 
 /**
@@ -80,10 +76,14 @@ const getMomentsFor = async (userId, page = 1, limit = 20) => {
     const skip = (page - 1) * limit;
 
     // Get all the id's of the users that this user follows
-    const userFollowings = await getFollowingsOf(userId, 0, 0);
+    const userFollowings = await followerRepository.getFollowingsOf(
+        userId,
+        0,
+        0
+    );
 
     // Select the moments that were created by any of those ids
-    const momentsForUser = await getMomentBy(
+    const momentsForUser = await momentRepository.getMomentBy(
         {
             $or: [
                 { createdBy: { $in: userFollowings.map((u) => u._id) } },
@@ -95,12 +95,12 @@ const getMomentsFor = async (userId, page = 1, limit = 20) => {
         "-createdAt"
     );
 
-    return await createListOfMomentBodies(momentsForUser, userId);
+    return await toListOfMomentsDTOs(momentsForUser, userId);
 };
 
 /**
  * Gets all the moments of a specific user
- * @param {*} userId Id of the user you wish to get the moments from
+ * @param {String} userId Id of the user you wish to get the moments from
  * @param {Number} page Number of the page of moments (defaults to first page)
  * @param {Number} limit Limit of moments per page (defaults to 20)
  * @returns All the moments of that user
@@ -108,30 +108,49 @@ const getMomentsFor = async (userId, page = 1, limit = 20) => {
 const getMomentsOf = async (userId, page = 1, limit = 20) => {
     const skip = (page - 1) * limit;
 
-    const storedMoments = await getMomentBy({ createdBy: userId }, skip, limit);
+    const storedMoments = await momentRepository.getMomentBy(
+        { createdBy: userId },
+        skip,
+        limit
+    );
 
     // Get the number of likes and comments
-    return await createListOfMomentBodies(storedMoments, userId);
+    return await toListOfMomentsDTOs(storedMoments, userId);
 };
 
+/**
+ * Gets a moment by the authors id and moment id
+ * @param {String} userId Authors id
+ * @param {String} momentId Moment id
+ * @throws {NotFoundError} if no such moment was found
+ * @returns The found user
+ */
 const getMomentByUser = async (userId, momentId) => {
-    const savedMoment = await getMomentBy({ createdBy: userId, _id: momentId });
+    const savedMoment = await momentRepository.getMomentBy({
+        createdBy: userId,
+        _id: momentId,
+    });
 
     if (savedMoment.length === 0) {
-        throw new NotFoundError(`Moment with id ${momentId} not found`);
+        throw new errors.NotFoundError(`Moment with id ${momentId} not found`);
     }
 
     return savedMoment[0];
 };
 
+/**
+ * Gets the number of moments of a specific user
+ * @param {String} userId Id of the user
+ * @returns The number of moments of that specific user
+ */
 const getNumberMomentsOf = async (userId) => {
-    return await getNumberMomentsBy({ createdBy: userId });
+    return await momentRepository.getNumberMomentsBy({ createdBy: userId });
 };
 
 /**
  * Deletes a moment that the userId user created
- * @param {*} userId Id of the creator
- * @param {*} momentId Id of the moment to delete
+ * @param {String} userId Id of the creator
+ * @param {String} momentId Id of the moment to delete
  * @returns The deleted moment and the number of likes and comments associated with it that have been deleted
  */
 const deleteMomentById = async (userId, momentId) => {
@@ -142,13 +161,13 @@ const deleteMomentById = async (userId, momentId) => {
     let pathsToDelete = [];
     for (const image of foundMoment.img) {
         const imageName = image.url.substring(8);
-        const dir = getDirToImagesFor(imageName);
+        const dir = fileService.getDirToImagesFor(imageName);
         pathsToDelete.push(dir);
     }
-    await deleteFiles(pathsToDelete);
+    await fileService.deleteFiles(pathsToDelete);
 
     // Delete Moment
-    const deleteResult = await deleteMomentBy({
+    const deleteResult = await momentRepository.deleteMomentBy({
         createdBy: userId,
         _id: momentId,
     });
@@ -156,35 +175,59 @@ const deleteMomentById = async (userId, momentId) => {
     return deleteResult;
 };
 
+/**
+ * Updates the moment that userId user created
+ * @param {String} userId User id of the creator
+ * @param {String} momentId Moment id of the user
+ * @param {*} updatedMoment Changes to be applied to the moment
+ * @returns The updated moment
+ */
 const updateMomentById = async (userId, momentId, updatedMoment) => {
     const { _id, img, ...changes } = updatedMoment;
 
-    const savedMoment = await updateMomentBy(
+    const savedMoment = await momentRepository.updateMomentBy(
         { createdBy: userId, _id: momentId },
         changes
     );
 
     if (!savedMoment) {
-        throw new NotFoundError(`Moment with id ${momentId} not found`);
+        throw new errors.NotFoundError(`Moment with id ${momentId} not found`);
     }
 
-    return await createSingleMomentBody(savedMoment);
+    return await toMomentDTO(savedMoment);
 };
 
-const createListOfMomentBodies = async (moments, userId = null) => {
+/**
+ * Transforms the given moments to a list of moment DTOs
+ * @param {[*]} moments Moments to be transformed
+ * @param {String} userId Id of the logged user (optional, if given checks if the user liked the moments)
+ * @returns A list of the moments DTOs
+ */
+const toListOfMomentsDTOs = async (moments, userId = null) => {
     // Get the number of likes and comments
     let momentsToReturn = [];
     for (const momentDoc of moments) {
-        momentsToReturn.push(await createSingleMomentBody(momentDoc, userId));
+        momentsToReturn.push(await toMomentDTO(momentDoc, userId));
     }
     return momentsToReturn;
 };
 
-const createSingleMomentBody = async (momentDoc, userId = null) => {
-    const numberComments = await getNumberCommentsOf(momentDoc._id);
-    const numberLikes = await getNumberLikesOf(momentDoc._id);
+/**
+ * Transforms a moment to a moment DTO
+ * @param {*} momentDoc Document of the moment to be transformed
+ * @param {*} userId Id of the logged user (Optional, if given checks if the moment was liked by the user)
+ * @returns Moment DTO
+ */
+const toMomentDTO = async (momentDoc, userId = null) => {
+    const numberComments = await momentCommentRepository.getNumberCommentsOf(
+        momentDoc._id
+    );
+    const numberLikes = await momentLikeService.getNumberLikesOf(momentDoc._id);
     const isLiked = userId
-        ? (await getLikeByUserAndMoment(userId, momentDoc._id)) !== undefined
+        ? (await momentLikeService.getLikeByUserAndMoment(
+              userId,
+              momentDoc._id
+          )) !== undefined
         : undefined;
 
     return {
@@ -201,12 +244,19 @@ const createSingleMomentBody = async (momentDoc, userId = null) => {
     };
 };
 
+/**
+ * Adds the given images to the userId user's moment
+ * @param {String} userId Id of the author
+ * @param {String} momentId Id of the moment
+ * @param {[UploadedFile]} images Array of images to be added
+ * @returns Updated moment
+ */
 const addImagesTo = async (userId, momentId, images) => {
     // verify the moment does not have images
     const savedMoment = await getMomentByUser(userId, momentId);
 
     if (savedMoment.img?.length) {
-        throw new BadRequestError(
+        throw new errors.BadRequestError(
             `Moment with id ${momentId} already has images`
         );
     }
@@ -218,7 +268,10 @@ const addImagesTo = async (userId, momentId, images) => {
         const extension = path.extname(images[file].name);
         images[file].id = nanoid();
 
-        await saveImage(images[file], `${images[file].id}${extension}`);
+        await fileService.saveImage(
+            images[file],
+            `${images[file].id}${extension}`
+        );
 
         const savedImageObject = {
             url: `/images/${images[file].id}${extension}`,
@@ -232,14 +285,21 @@ const addImagesTo = async (userId, momentId, images) => {
     return await addImagesToMoment(userId, momentId, newImages);
 };
 
+/**
+ * Adds the given images objects to the authors moment
+ * @param {String} userId Id of the author
+ * @param {String} momentId Id of the moment
+ * @param {[*]} images Array of images objects to be added
+ * @returns The updated moment
+ */
 const addImagesToMoment = async (userId, momentId, images) => {
-    const updatedMoment = await updateMomentBy(
+    const updatedMoment = await momentRepository.updateMomentBy(
         { createdBy: userId, _id: momentId },
         { $push: { img: images } }
     );
 
     if (!updatedMoment) {
-        throw new NotFoundError(`Moment with id ${momentId} not found`);
+        throw new errors.NotFoundError(`Moment with id ${momentId} not found`);
     }
 
     return updatedMoment;

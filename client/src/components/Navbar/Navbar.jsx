@@ -94,6 +94,7 @@ const Navbar = ({ user, onLogout }) => {
                     to={`/users/${foundUser.username}`}
                     className="container_navbar-search_resusr"
                     onClick={hideSearch}
+                    key={foundUser._id}
                 >
                     <img
                         src={`${BACKEND_URL}${foundUser.profileImg.url}`}

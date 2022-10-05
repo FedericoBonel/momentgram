@@ -3,6 +3,7 @@ const { StatusCodes } = require("http-status-codes");
 const { registerUser, authenticateUser } = require("../services/UserService");
 const { SuccessPayload } = require("../payloads");
 
+/** Authenticates a user by password and email */
 const verifyEmailPassword = async (req, res) => {
     const { email, password } = req.body;
 
@@ -11,6 +12,7 @@ const verifyEmailPassword = async (req, res) => {
     res.status(StatusCodes.OK).json(new SuccessPayload(userAndToken));
 };
 
+/** Registers a new user */
 const signUpUser = async (req, res) => {
     const newUser = req.body;
 

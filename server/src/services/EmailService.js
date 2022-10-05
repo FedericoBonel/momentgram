@@ -12,6 +12,11 @@ const transporter = nodemailer.createTransport({
     secure: true,
 });
 
+/**
+ * Sends a verification email to the given user with a link to the given host under /users/verify/:verificationCode
+ * @param {*} user User to be sent the verification code
+ * @param {*} host Host to which the user is to be linked
+ */
 const sendVerificationEmail = async (user, host) => {
     const emailContent = {
         from: process.env.EMAIL_USER,
