@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose, faSpinner, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+    faClose,
+    faSpinner,
+    faPlusCircle,
+} from "@fortawesome/free-solid-svg-icons";
 
 import "./MomentLikesCard.css";
 import { getMomentLikes } from "../../api/MomentsApi";
 import Overlay from "../Overlay/Overlay";
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+import UserList from "../UserList/UserList";
 
 const MomentLikesCard = ({ momentId, token, onClose }) => {
     const navigate = useNavigate();
@@ -52,25 +55,9 @@ const MomentLikesCard = ({ momentId, token, onClose }) => {
         fetchLikes();
     }, [momentId, token, page, navigate]);
 
-    const renderedLikes = momentLikes.data.map((like) => (
-        <Link to={`/users/${like.createdBy.username}`} key={like._id}>
-            <div className="container_likescard-usr">
-                <img
-                    src={
-                        like.createdBy.profileImg
-                            ? `${BACKEND_URL}${like.createdBy.profileImg.url}`
-                            : `${BACKEND_URL}/images/profileph.jpg`
-                    }
-                    alt="profile-img"
-                />
-                <p>{like.createdBy.username}</p>
-            </div>
-        </Link>
-    ));
-
     return (
         <>
-            <Overlay onClick={onClose}/>
+            <Overlay onClick={onClose} />
             <div className="container_likescard">
                 <div className="container_likescard-topbr">
                     <p className="container_likescard-topbr_title">Likes</p>
@@ -81,16 +68,20 @@ const MomentLikesCard = ({ momentId, token, onClose }) => {
                     />
                 </div>
                 <div className="container_likescard-list">
-                    {renderedLikes}
+                    <UserList
+                        users={momentLikes.data.map((like) => like.createdBy)}
+                    />
                     {momentLikes.submitStatus === "loading" && (
                         <FontAwesomeIcon icon={faSpinner} spin />
                     )}
-                    {!(noMoreLikes || momentLikes.submitStatus === "loading") && (
+                    {!(
+                        noMoreLikes || momentLikes.submitStatus === "loading"
+                    ) && (
                         <p
                             onClick={() => setPage((prevPage) => prevPage + 1)}
                             className="container_likescard-load"
                         >
-                            <FontAwesomeIcon icon={faPlusCircle}/>
+                            <FontAwesomeIcon icon={faPlusCircle} />
                         </p>
                     )}
                 </div>

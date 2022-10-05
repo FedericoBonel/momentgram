@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose, faSpinner, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+    faClose,
+    faSpinner,
+    faPlusCircle,
+} from "@fortawesome/free-solid-svg-icons";
 
 import "./UserFollowersCard.css";
 import Overlay from "../Overlay/Overlay";
+import UserList from "../UserList/UserList";
 import { getUserFollowers } from "../../api/UsersApi";
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const UserFollowersCard = ({ userId, onClose }) => {
     const navigate = useNavigate();
@@ -49,28 +52,14 @@ const UserFollowersCard = ({ userId, onClose }) => {
         fetchFollowers();
     }, [userId, page, navigate]);
 
-    const renderedFollowers = followers.data.map((user) => (
-        <Link to={`/users/${user.username}`} key={user._id}>
-            <div className="container_followerscard-usr">
-                <img
-                    src={
-                        user.profileImg
-                            ? `${BACKEND_URL}${user.profileImg.url}`
-                            : `${BACKEND_URL}/images/profileph.jpg`
-                    }
-                    alt="profile-img"
-                />
-                <p>{user.username}</p>
-            </div>
-        </Link>
-    ));
-
     return (
         <>
             <Overlay onClick={onClose} />
             <div className="container_followerscard">
                 <div className="container_followerscard-topbr">
-                    <p className="container_followerscard-topbr_title">Followers</p>
+                    <p className="container_followerscard-topbr_title">
+                        Followers
+                    </p>
                     <FontAwesomeIcon
                         icon={faClose}
                         className="container_followerscard-topbr_close"
@@ -78,16 +67,18 @@ const UserFollowersCard = ({ userId, onClose }) => {
                     />
                 </div>
                 <div className="container_followerscard-list">
-                    {renderedFollowers}
+                    <UserList users={followers.data} />
                     {followers.submitStatus === "loading" && (
                         <FontAwesomeIcon icon={faSpinner} spin />
                     )}
-                    {!(noMoreFollowers || followers.submitStatus === "loading") && (
+                    {!(
+                        noMoreFollowers || followers.submitStatus === "loading"
+                    ) && (
                         <p
                             onClick={() => setPage((prevPage) => prevPage + 1)}
                             className="container_followerscard-load"
                         >
-                            <FontAwesomeIcon icon={faPlusCircle}/>
+                            <FontAwesomeIcon icon={faPlusCircle} />
                         </p>
                     )}
                 </div>

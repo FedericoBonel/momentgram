@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faClose,
@@ -10,10 +10,9 @@ import {
 import "./UserFollowingsCard.css";
 import Overlay from "../Overlay/Overlay";
 import { getUserFollowings } from "../../api/UsersApi";
+import UserList from "../UserList/UserList";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-
-const UserFollowingsCard = ({userId, onClose}) => {
+const UserFollowingsCard = ({ userId, onClose }) => {
     const navigate = useNavigate();
 
     const [followings, setFollowings] = useState({
@@ -56,22 +55,6 @@ const UserFollowingsCard = ({userId, onClose}) => {
         fetchFollowings();
     }, [userId, page, navigate]);
 
-    const renderedFollowings = followings.data.map((user) => (
-        <Link to={`/users/${user.username}`} key={user._id}>
-            <div className="container_followingscard-usr">
-                <img
-                    src={
-                        user.profileImg
-                            ? `${BACKEND_URL}${user.profileImg.url}`
-                            : `${BACKEND_URL}/images/profileph.jpg`
-                    }
-                    alt="profile-img"
-                />
-                <p>{user.username}</p>
-            </div>
-        </Link>
-    ));
-
     return (
         <>
             <Overlay onClick={onClose} />
@@ -87,7 +70,7 @@ const UserFollowingsCard = ({userId, onClose}) => {
                     />
                 </div>
                 <div className="container_followingscard-list">
-                    {renderedFollowings}
+                    <UserList users={followings.data} />
                     {followings.submitStatus === "loading" && (
                         <FontAwesomeIcon icon={faSpinner} spin />
                     )}

@@ -77,3 +77,17 @@
     width: 100%;
     height: 100%;
 }
+
+.container_usrmoments-loadmore {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-top: 24px;
+    color: var(--color-button);
+}
+
+.container_usrmoments-nomore {
+    margin-top: 24px;
+}

@@ -45,36 +45,6 @@
     display: none;
 }
 
-.container_followingscard-list a {
-    color: inherit;
-    text-decoration: none;
-}
-
-.container_followingscard-usr {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding-bottom: 16px;
-}
-
-.container_followingscard-usr img {
-    object-fit: cover;
-    min-width: 38px;
-    width: 38px;
-    max-width: 38px;
-    min-height: 38px;
-    height: 38px;
-    max-width: 38px;
-    border-radius: 50%;
-}
-
-.container_followingscard-usr p {
-    margin-left: 8px;
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-
-
 .container_followingscard-load {
     color: var(--color-button);
     cursor: pointer;
