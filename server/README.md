@@ -54,6 +54,20 @@ So this way Controller calls to Service, Service may call to other Services and/
 
 This separation of concerns is very traditional (used quite a bit in Java Spring based systems) and we could argue that the repository layer may not be necessary since Mongoose is providing us with a clear API to access the database through our models. While this is true, in this project we do have documents with references to other documents, and cascading operations are not performed by Mongoose. For this reason I think having that extra layer of logic to handle any kind of cascading or reference change is important and allows for clearer more maintainable code.
 
+## Image storage
+
+I'm currently storing the images in the file system wherever the server is running.
+
+Storing images in the file system?
+
+![ew](https://media1.giphy.com/media/aNtt9T8SqGNK8/giphy.gif?cid=ecf05e47z438tprfv6ux49e8yray5qoonl4ugkzot6xmummj&rid=giphy.gif&ct=g)
+
+I know. This is not optimal for multiple reasons, one is that this makes our solution more tightly coupled: if in the future we change how we store the images or add logic to it (i.g. we save multiple sizes of the same image for thumbnails, etc.), that has to increment the server's code size, complexity, and give an extra responsibility to it and that's no bueno because of maintenance cost, team management, and so on.
+
+Another reason is that if we were to run this app in a cluster of servers with the code as it is, the images are not going to be consistent. Multiple cluster nodes will have (most likely) multiple file systems, and this will mean that if "user x" connects to node 1 of our cluster and creates a post, it will get persisted in the database but the image will be only in node 1's file system, hence when "user y" connects to the node 2 of our cluster and goes to "user x"'s profile, they will see a bunch of broken link images.
+
+In the future I plan to address this by using some cloud store like Amazon S3. That will delegate the storage to amazon and make our app more scalable overall, besides if we consider that this is "Instagram" having to use the file system of our server will make our solution incredibly capped in terms of scalability because of the millions of users, the space we will need and so on, you name it.
+
 ## Data model
 
 The data model is very straight forward and clear in the Model layer.
