@@ -1,6 +1,13 @@
 import { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faPlus, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+    faHome,
+    faPlus,
+    faSpinner,
+    faGear,
+    faUserAlt,
+    faSignOut,
+} from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 
 import "./Navbar.css";
@@ -69,13 +76,13 @@ const Navbar = ({ user, onLogout }) => {
             onClick={() => setShowMenu("hidden")}
         >
             <Link to={`/users/${user.user.username}`}>
-                <li>Profile</li>
+                <li>{<FontAwesomeIcon icon={faUserAlt} />} Profile</li>
             </Link>
             <Link to={`/profile/settings`}>
-                <li>Settings</li>
+                <li>{<FontAwesomeIcon icon={faGear} />} Settings</li>
             </Link>
             <li onClick={onLogout} className="container_popup-menulogout">
-                Log Out
+                {<FontAwesomeIcon icon={faSignOut} />} Log Out
             </li>
         </ul>
     );

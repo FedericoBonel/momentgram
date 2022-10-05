@@ -164,6 +164,19 @@
     width: 100%;
 }
 
+.container_popup-menu li > svg {
+    padding-right: 8px;
+    margin: 0;
+}
+
+.container_popup-menu li:hover {
+    background: var(--color-background);
+}
+
+.container_popup-menu li:active {
+    filter: opacity(0.5);
+}
+
 .container_popup-menulogout {
     border-top: 1px lightgray solid;
 }
