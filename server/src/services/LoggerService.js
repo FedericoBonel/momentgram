@@ -24,13 +24,17 @@ winston.addColors(colors);
 // Use timestamps as well as json
 const format = winston.format.combine(
     winston.format.timestamp(),
-    winston.format.json()
+    winston.format.json(),
+    winston.format.prettyPrint()
 );
 
 // Define where the logs are going to be made
 const transports = [
     new winston.transports.Console(),
-    new winston.transports.File({ level: "error", filename: "logs/errors.log" }),
+    new winston.transports.File({
+        level: "error",
+        filename: "logs/errors.log",
+    }),
     new winston.transports.File({ filename: "logs/all.log" }),
 ];
 

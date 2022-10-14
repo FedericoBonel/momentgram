@@ -3,6 +3,7 @@ const { StatusCodes, ReasonPhrases } = require("http-status-codes");
 
 const { ApiError } = require("../errors");
 const { ErrorPayload } = require("../payloads");
+const logger = require("../services/LoggerService");
 
 const handleErrors = async (err, req, res, next) => {
     const customError = new ApiError(
@@ -19,6 +20,13 @@ const handleErrors = async (err, req, res, next) => {
         customError.message = `Entity with id: ${err.stringValue} not found.`;
         customError.status = StatusCodes.NOT_FOUND;
     }
+
+    logger.error(`Error while handling request: '${customError.message || err.message}'`, {
+        userId: `${req.user?.id}`,
+        resStatus: `${customError.status}`,
+        ip: `${req.headers["x-forwarded-for"] || req.socket.remoteAddress}`,
+        stack: `${err.stack}`,
+    });
 
     res.status(customError.status).json(new ErrorPayload(customError.message));
 };
