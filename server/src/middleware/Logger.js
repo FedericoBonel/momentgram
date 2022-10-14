@@ -1,5 +1,13 @@
-const morgan = require('morgan');
+const morgan = require("morgan");
 
-const logger = morgan("tiny");
+const logger = require("../services/LoggerService");
 
-module.exports = logger;
+// Tell morgan to use winston
+const httpLogger = morgan(
+    ":remote-addr :url :method :status :res[content-length] :response-time ms",
+    {
+        stream: { write: (message) => logger.http(message) },
+    }
+);
+
+module.exports = httpLogger;
