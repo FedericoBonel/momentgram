@@ -11,16 +11,6 @@ const levels = {
     debug: 4,
 };
 
-// Colorations for different logs
-const colors = {
-    error: "red",
-    warn: "yellow",
-    info: "green",
-    http: "magenta",
-    debug: "white",
-};
-winston.addColors(colors);
-
 // Use timestamps as well as json
 const format = winston.format.combine(
     winston.format.timestamp(),

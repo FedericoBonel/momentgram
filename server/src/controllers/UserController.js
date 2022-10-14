@@ -21,7 +21,7 @@ const getUser = async (req, res) => {
         {
             ...extractReqOriginData(req),
             action: "readUserById",
-            id: userId,
+            target: userId,
         }
     );
 };
@@ -127,7 +127,7 @@ const getUserMoments = async (req, res) => {
         `User: ${req.user?.id} 
         Successfully got ${moments.length} 
         moments in page ${page} of user: ${userId}`,
-        { ...extractReqOriginData(req), action: "readMoments", target: userId }
+        { ...extractReqOriginData(req), action: "readUserMoments", target: userId }
     );
 
     res.status(StatusCodes.OK).json(new SuccessPayload(moments));
