@@ -1,6 +1,6 @@
 const morgan = require("morgan");
 
-const logger = require("../services/LoggerService");
+const { logger } = require("../services/LoggerService");
 
 // Tell morgan to use winston
 const httpLogger = morgan(

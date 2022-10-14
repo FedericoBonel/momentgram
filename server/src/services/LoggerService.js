@@ -28,14 +28,55 @@ const format = winston.format.combine(
     winston.format.prettyPrint()
 );
 
+// Filters to separate loggins into different files
+const errorFilter = winston.format((info, opts) => {
+    return info.level === "error" ? info : false;
+});
+
+const warnFilter = winston.format((info, opts) => {
+    return info.level === "warn" ? info : false;
+});
+
+const infoFilter = winston.format((info, opts) => {
+    return info.level === "info" ? info : false;
+});
+
+const httpFilter = winston.format((info, opts) => {
+    return info.level === "http" ? info : false;
+});
+
+const debugFilter = winston.format((info, opts) => {
+    return info.level === "debug" ? info : false;
+});
+
 // Define where the logs are going to be made
 const transports = [
     new winston.transports.Console(),
     new winston.transports.File({
         level: "error",
         filename: "logs/errors.log",
+        format: winston.format.combine(errorFilter()),
     }),
-    new winston.transports.File({ filename: "logs/all.log" }),
+    new winston.transports.File({
+        level: "warn",
+        filename: "logs/warn.log",
+        format: winston.format.combine(warnFilter()),
+    }),
+    new winston.transports.File({
+        level: "info",
+        filename: "logs/info.log",
+        format: winston.format.combine(infoFilter()),
+    }),
+    new winston.transports.File({
+        level: "http",
+        filename: "logs/http.log",
+        format: winston.format.combine(httpFilter()),
+    }),
+    new winston.transports.File({
+        level: "debug",
+        filename: "logs/debug.log",
+        format: winston.format.combine(debugFilter()),
+    }),
 ];
 
 const logger = winston.createLogger({
@@ -45,4 +86,11 @@ const logger = winston.createLogger({
     transports,
 });
 
-module.exports = logger;
+const extractReqOriginData = (req) => {
+    return {
+        userId: req.user ? req.user._id : undefined,
+        ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
+    };
+};
+
+module.exports = { logger, extractReqOriginData };

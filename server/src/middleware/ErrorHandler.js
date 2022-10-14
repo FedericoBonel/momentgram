@@ -3,7 +3,7 @@ const { StatusCodes, ReasonPhrases } = require("http-status-codes");
 
 const { ApiError } = require("../errors");
 const { ErrorPayload } = require("../payloads");
-const logger = require("../services/LoggerService");
+const { logger, extractReqOriginData } = require("../services/LoggerService");
 
 const handleErrors = async (err, req, res, next) => {
     const customError = new ApiError(
@@ -21,12 +21,14 @@ const handleErrors = async (err, req, res, next) => {
         customError.status = StatusCodes.NOT_FOUND;
     }
 
-    logger.error(`Error while handling request: '${customError.message || err.message}'`, {
-        userId: `${req.user?.id}`,
-        resStatus: `${customError.status}`,
-        ip: `${req.headers["x-forwarded-for"] || req.socket.remoteAddress}`,
-        stack: `${err.stack}`,
-    });
+    logger.error(
+        `Error while handling request: '${customError.message || err.message}'`,
+        {
+            resStatus: `${customError.status}`,
+            stack: `${err.stack}`,
+            ...extractReqOriginData(req),
+        }
+    );
 
     res.status(customError.status).json(new ErrorPayload(customError.message));
 };
