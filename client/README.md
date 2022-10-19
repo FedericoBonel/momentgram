@@ -40,7 +40,7 @@ There are some extra folders and packages but those are mostly utils and such.
 
 ## A word on state and context
 
-This client is not using Redux or some other fancy package to keep a global state. For an example to keep a global access to the user token, we are using only the React Context. This of course is viable for now, but I'm well aware that at some point it'll be better to start managing a global normalized state and reducers to change it, hence, beware that this app is destined to change at some point or another.
+This client is not using Redux or some other fancy package to keep a global state. This means that, for an example, to keep a global access to the user token, we are using only the React Context. This of course is feasible for now, but I'm well aware that at some point it'll be better to start managing a global normalized state and reducers to change it, hence, beware that this app is destined to change at some point or another.
 
 ## Available Scripts
 
