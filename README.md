@@ -8,7 +8,7 @@ This repository is a memories and pictures sharing web application (i.e. an inst
 
 All the system required to deploy your own instagram clone and the documentation on how to do it.
 
-## Features
+## Current Available Features
 
 * User authentication and authorization
 * User registration
