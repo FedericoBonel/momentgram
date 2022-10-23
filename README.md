@@ -6,7 +6,12 @@ This repository is a memories and pictures sharing web application (i.e. an inst
 
 ## What is included in this repo?
 
-All the system required to deploy your own instagram clone and the documentation on how to do it.
+All the system required to deploy your own Instagram clone and the documentation on how to do it and some of the caveats of the solution.
+
+## Where do I start?
+
+Go first into the [back-end](https://github.com/FedericoBonel/momentgram/tree/master/server) code and run it (since the front end needs it to work properly) and then go into the [front-end](https://github.com/FedericoBonel/momentgram/tree/master/client) code and run it.
+More information about how to run each side and deploy it is included in each folder.
 
 ## Current Available Features
 
@@ -18,10 +23,5 @@ All the system required to deploy your own instagram clone and the documentation
 * Post comments
 * Post likes
 * User Followers
-
-## Where do I start?
-
-Go first into the [back-end](https://github.com/FedericoBonel/momentgram/tree/master/server) code and run it (since the front end needs it to work properly) and then go into the [front-end](https://github.com/FedericoBonel/momentgram/tree/master/client) code and run it.
-More information about how to run each side and deploy it is included in each folder.
 
 > Note: 👷 This app is still being maintained and updated, this means that what you see on READMEs maybe out of date 👷
