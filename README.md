@@ -16,7 +16,7 @@ More information about how to run each side and deploy it is included in each fo
 ## Current Available Features
 
 * User authentication and authorization
-* User registration
+* User registration and email verification
 * User profiles
 * User searching
 * Post creation with descriptions, locations and multiple images
