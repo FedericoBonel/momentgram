@@ -23,6 +23,6 @@ More information about how to run each side and deploy it is included in each fo
 * Post comments
 * Post likes
 * User Followers
-* Audit for all back-end server requests
+* Logging for all back-end server requests
 
 > Note: 👷 This app is still being maintained and updated, this means that what you see on READMEs maybe out of date 👷
